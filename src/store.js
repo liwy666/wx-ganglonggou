@@ -54,7 +54,7 @@ let store = new Vuex.Store({
             use_integral: 0,//使用积分数量
             order_price: '0'//订单价格
         }//提交订单的页面信息
-        , integral_name: "优点"//积分名称
+        , integral_name: "岗隆积分"//积分名称
         , order_list: []//订单列表
         ,cmd_keyword:['苹果','Mix3','平衡车','vivo','车载手机支架','华为nova4','mate20','mate20pro','iphone xs']//推荐搜索关键词
         ,hits_keyword:hits_keyword_//搜索历史记录

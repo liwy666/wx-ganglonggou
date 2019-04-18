@@ -27,7 +27,7 @@
         </div>
         <!--积分信息-->
         <div class="integral-box" v-if="goods_info.give_integral_desc !==''">
-            <van-tag plain type="danger">{{this.$store.state.integral_name}}</van-tag>
+           <!-- <van-tag plain type="danger">{{this.$store.state.integral_name}}</van-tag>-->
             {{goods_info.give_integral_desc}}
         </div>
         <!--库存、销量信息-->
@@ -304,6 +304,7 @@
         background-color: white;
         height: 30px;
         padding: 10px;
+        color: red;
     }
 
     .d {
