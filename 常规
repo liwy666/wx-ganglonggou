@@ -85,6 +85,7 @@ compare(property) {
         return value1 - value2;
     }
 },
+
 middeleArray.sort((this.compare('coupon_id')));
 
  order_list.forEach(item => {

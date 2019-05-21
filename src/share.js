@@ -9,7 +9,6 @@ import {fetch} from './http'
  * @param shareDesc 描述
  */
 export const commonShare = (_this, shareTitle, shareUrl, shareImg, shareDesc) => {
-
     let  now_url =encodeURIComponent(window.location.href.split('#')[0]);
     fetch('get_WxJsSdk', {url: now_url})
         .then((msg) => {

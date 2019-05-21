@@ -34,7 +34,7 @@
         },
         props:["goods_id","evaluate_count"],
         created() {
-
+					
         },
         methods: {
             onLoad(){

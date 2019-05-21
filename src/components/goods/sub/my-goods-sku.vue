@@ -8,15 +8,17 @@
 					<p class="goods_price"><span>￥</span>{{this.goods_info.goods_price}}
 					<p/>
 					<p class="goods_sn">商品编号：{{this.goods_info.goods_sn}}
+					<p class="goods_sn">库存：{{this.goods_info.goods_stock}}
 					<p/>
 				</div>
 			</div>
 			<div class="goods-sku-body">
 				<div class="goods-sku-row" v-for="(item,i) in goods_sku" :key="i">
-					<p class="goods-sku-row-title">{{item.sku_title}}</p>
+					<p class="goods-sku-row-title">{{item.attribute_name}}</p>
 					<div class="goods-sku-row-item-box">
-						<span :class="['goods-sku-row-item',item2.xz_flag ? 'xz':'']" v-for="(item2,i2) in item.sku_info"
-						      :key="item2.goods_attr_id" @click="replAttr(i,i2)">{{item2.attr_value}}</span>
+						<span :class="['goods-sku-row-item',item2.xz_flag ? 'xz':'']"
+							  v-for="(item2,i2) in item.attribute_value"
+							  :key="i2" @click="replAttr(i,i2)">{{item2.name}}</span>
 					</div>
 				</div>
 			</div>
@@ -53,7 +55,7 @@
             },
             goods_info: {
                 get: function () {
-
+                    console.log(this.$store.getters.getGoodsInfo);
                     return this.$store.getters.getGoodsInfo
 
                 }

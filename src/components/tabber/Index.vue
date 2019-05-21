@@ -8,9 +8,9 @@
 		<transition name="name2">
 			<router-view class="router-view" v-if="!$route.meta.keepAlive"></router-view>
 		</transition>
-		
+
 		<div class="support"></div>
-		<van-tabbar v-model="active" :fixed="fixed" active-color="#cc0001">
+		<!--<van-tabbar v-model="active" :fixed="fixed" active-color="#cc0001">
 			<van-tabbar-item icon="shop-collect" to="first">首页</van-tabbar-item>
 			<van-tabbar-item icon="service"
 			                 :to="{path:'myIframe',query:{src:'https://p.qiao.baidu.com/cps2/mobileChat?siteId=11040705&userId=24298402&type=1&reqParam=&appId=&referer='}}">
@@ -20,6 +20,16 @@
 			<van-tabbar-item icon="shopping-cart" to="cart" :info="this.$store.getters.getCartsGoodsNumberCount">购物车
 			</van-tabbar-item>
 			<van-tabbar-item icon="manager" to="home">个人中心</van-tabbar-item>
+		</van-tabbar>-->
+		<van-tabbar v-model="active" :fixed="fixed" active-color="#cc0001">
+			<van-tabbar-item icon="service"
+							 :to="{path:'myIframe',query:{src:'https://p.qiao.baidu.com/cps2/mobileChat?siteId=11040705&userId=24298402&type=1&reqParam=&appId=&referer='}}">
+				客服
+			</van-tabbar-item>
+			<van-tabbar-item icon="phone-o"
+							 url="tel:400-828-2323">
+				电话客服
+			</van-tabbar-item>
 		</van-tabbar>
 	</div>
 
@@ -36,7 +46,7 @@
             };
         },
         created() {
-            commonShare(this, '岗隆数码', window.location.href, 'https://api.ganglonggou.com/images/wx_share_img.png', '岗隆数码分期商城');
+            //commonShare(this, '岗隆数码', window.location.href, 'https://api.ganglonggou.com/images/wx_share_img.png', '岗隆数码农行专区');
         },
         computed: {
             /*头部轮播*/
@@ -81,39 +91,39 @@
 		z-index: 999 !important;
 		box-shadow: 1px 1px 10px 1px rgba(0, 0, 0, 0.2);
 	}
-	
+
 	.name1-enter {
 		//opacity: 0;
 		transform: translateX(100%);
 	}
-	
+
 	.name1-leave-to {
 		//opacity: 0;
 		transform: translateX(-100%);
 		position: absolute;
 	}
-	
+
 	.name2-enter-active,
 	.name2-leave-active {
 		transition: all 0.3s ease;
 	}
-	
+
 	.name2-enter {
 		//opacity: 0;
 		transform: translateX(100%);
 	}
-	
+
 	.name2-leave-to {
 		//opacity: 0;
 		transform: translateX(-100%);
 		position: absolute;
 	}
-	
+
 	.name1-enter-active,
 	.name1-leave-active {
 		transition: all 0.3s ease;
 	}
-	
+
 	.support {
 		height: 80px;
 	}

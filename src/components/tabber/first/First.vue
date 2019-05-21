@@ -1,64 +1,23 @@
 <template>
 	<div class="mian">
 		<!--搜索框-->
-		<mySearch></mySearch>
+		<!--<mySearch></mySearch>-->
 		<!--头部轮播图-->
 		<van-swipe :autoplay="3000" indicator-color="white">
-			<van-swipe-item v-for="(item) in head_swipe" :key="item.index_id" @click="toControl(item)"><img
-							:src="item.index_img" alt=""></van-swipe-item>
+			<van-swipe-item v-for="(item, index) in swipe_img" :key="index">
+				<img v-lazy="item.ad_img" @click="toTestControl(item)"/>
+			</van-swipe-item>
 		</van-swipe>
-		<!--商城申明-->
-		<div class="declare-box">
-			<div><img v-lazy="this.declare.index_img" alt=""></div>
-		</div>
-		<!--通告-->
-		<div class="my-panel">
-			<van-notice-bar
-							text="热烈祝贺岗隆优选第三家线下实体店在江苏宜兴成立!"
-							left-icon="volume-o"
-							color="#cc0001"
-			/>
-		</div>
-		<!--领券轮播-->
-		<div class="my-panel">
-			<swiper class="coupon_swiper" :options="coupon_swiper" ref="mySwiperLeft">
-				<swiper-slide v-for="(item) in coupon_swipe" :key="item.index_id">
-					<img :src="item.index_img" @click="toControl(item)">
-				</swiper-slide>
-			</swiper>
-		</div>
-		<!--分类-->
-		<div class="my-panel">
-			<div class="classify-box">
-				<div class="classify" v-for="(item) in classify" :key="item.index_id" @click="toControl(item)"><img
-								v-lazy="item.index_img" alt=""></div>
+		<div class="my-tab-box">
+			<div class="my-tab" v-for="(item,i) in get_info.cat_list" :key="item.cat_id"
+				 @click="cat_index = i"
+				 :class="[i === cat_index ? 'xz':'']">
+				{{item.cat_name}}
 			</div>
 		</div>
-		<!--合作伙伴-->
-		<van-panel title="合作伙伴" desc="在全球构建开放，合作，共赢的华为云生态，助力合作伙伴快速融入当地生态圈。">
-			<div class="cooperation-box">
-				<div class="cooperation" v-for="(item) in cooperation" :key="item.index_id" @click="toControl(item)"><img
-								v-lazy="item.index_img" alt=""></div>
-			</div>
-		</van-panel>
-		<!--通栏1-->
-		<div class="banner" @click="toControl(banner)"><img v-lazy="this.banner.index_img" alt=""></div>
-		<!--品牌入口-->
-		<div class="my-panel">
-			<div class="brand-box">
-				<div class="brand" v-for="(item) in brand" :key="item.index_id" @click="toControl(item)"><img
-								v-lazy="item.index_img" alt=""></div>
-			</div>
-		</div>
-		<!--产品分类-->
-		<div class="" v-for="(item) in goods_classify" :key="item.index_id">
-			<div class="goods-classify-box">
-				<div class="banner" @click="toControl(item)"><img v-lazy="item.index_img" alt=""></div>
-				<div class="goods-box">
-					<oneGoods v-for="(item2) in item.goods_list" :key="item2.goods_id" :goods_info_="item2"></oneGoods>
-				</div>
-			</div>
-		</div>
+		<transition-group class="my-goods-box" name="flip-list">
+			<oneGoods v-for="(item) in goods_list" :key="item.goods_id" :goods_info_="item"></oneGoods>
+		</transition-group>
 	</div>
 
 </template>
@@ -69,12 +28,13 @@
     export default {
         data() {
             return {
-                msg: "",
+                get_info: {},
                 coupon_swiper: {
                     slidesPerView: 2.5,
                     spaceBetween: 10,
                 },
-                radio: "1"
+                radio: "1",
+				cat_index:0
             };
         },
         created() {
@@ -82,131 +42,42 @@
         },
         activated() {
             /*获取Url参数信息*/
-           let goods_id = this.GetQueryString('gl_goods_id');
-           if(goods_id!= null && goods_id.length>1){
-               if ((/(^[1-9]\d*$)/.test( parseInt(goods_id)))) {//验证正整数
-									this.$router.push('/goods/' + goods_id);
-               }
-           }
-          
+            let goods_id = this.GetQueryString('gl_goods_id');
+            if (goods_id != null && goods_id.length > 1) {
+                if ((/(^[1-9]\d*$)/.test(parseInt(goods_id)))) {//验证正整数
+                    this.$router.push('/goods/' + goods_id);
+                }
+            }
+
         },
         computed: {
             /*头部轮播*/
-            head_swipe: {
+            swipe_img: {
                 get: function () {
-                    var result = [];
-                    if (this.msg !== "") {
-                        this.msg.ad_list.forEach(item => {
-                            if (item.position_type === "顶部广告轮播图") {
+                    let result = [];
+                    if (JSON.stringify(this.get_info) !== '{}') {
+                        console.log(this.get_info);
+                        this.get_info.ad_list.forEach(item => {
+                            if (item.position_type === '顶部广告轮播图') {
                                 result.push(item);
                             }
-                        });
+                        })
                     }
                     return result;
                 }
             },
-            /*商城申明*/
-            declare: {
+            goods_list: {
                 get: function () {
-                    var result = "";
-                    if (this.msg !== "") {
-                        this.msg.ad_list.forEach(item => {
-                            if (item.position_type === "商城申明") {
-                                result = item;
-                            }
-                        });
-                    }
-                    return result;
-                }
-            }
-            /*领券轮播*/
-            , coupon_swipe: {
-                get: function () {
-                    var result = [];
-                    if (this.msg !== "") {
-                        this.msg.ad_list.forEach(item => {
-                            if (item.position_type === "领券区域") {
-                                result.push(item);
-                            }
-                        });
-                    }
-                    return result;
-                }
-            }
-            /*分类入口*/
-            , classify: {
-                get: function () {
-                    var result = [];
-                    if (this.msg !== "") {
-                        this.msg.ad_list.forEach(item => {
-                            if (item.position_type === "分类入口") {
-                                result.push(item);
-                            }
-                        });
-                    }
-                    return result;
-                }
-            }
-            /*合作伙伴*/
-            , cooperation: {
-                get: function () {
-                    var result = [];
-                    if (this.msg !== "") {
-                        this.msg.ad_list.forEach(item => {
-                            if (item.position_type === "合作伙伴") {
-                                result.push(item);
-                            }
-                        });
-                    }
-                    return result;
-                }
-            }
-            /*通栏1*/
-            , banner: {
-                get: function () {
-                    var result = "";
-                    if (this.msg !== "") {
-                        this.msg.ad_list.forEach(item => {
-                            if (item.position_type === "通栏位置1") {
-                                result = item;
-                            }
-                        });
-                    }
-                    return result;
-                }
-            }
-            /*品牌*/
-            , brand: {
-                get: function () {
-                    var result = [];
-                    if (this.msg !== "") {
-                        this.msg.ad_list.forEach(item => {
-                            if (item.position_type === "品牌入口") {
-                                result.push(item);
-                            }
-                        });
-                    }
-                    return result;
-                }
-            }
-            /*分类详情列表*/
-            , goods_classify: {
-                get: function () {
-                    var result = [];
-                    if (this.msg !== "") {
-                        this.msg.ad_list.forEach(item => {
-                            if (item.position_type === "品牌分类上方通栏") {
-                                result.push(item);
-                            }
-                        });
-                        result.forEach((item, i) => {
-                            result[i]["goods_list"] = [];
-                            this.msg.goods_list.forEach(item2 => {
-                                if (item.cat_name === item2.cat_name) {
-                                    result[i]["goods_list"].push(item2);
+                    let result = [];
+                    if (JSON.stringify(this.get_info) !== '{}') {
+                        if (this.get_info.cat_list.length > 0 && this.get_info.goods_list.length > 0) {
+                            let cat_id = this.get_info.cat_list[this.cat_index].cat_id;
+                            this.get_info.goods_list.forEach(item => {
+                                if (item.cat_id === cat_id) {
+                                    result.push(item);
                                 }
                             })
-                        })
+                        }
                     }
                     return result;
                 }
@@ -218,14 +89,14 @@
         },
         methods: {
             getIndexAd() {
-                this.$fetch("index_ad", {index_type: this.$store.getters.getLoginType}).then((msg) => {
-                    this.msg = msg;
+                this.$fetch("get_index_info", {into_type: this.$store.getters.getIntoType}).then((msg) => {
+                    this.get_info = msg;
                     this.$set(this.$store.state, 'goods_list', msg.goods_list);//赋值商品列表
                 })
             },
             toControl(ad_info) {
                 if (ad_info.ad_type === "商品ID") {
-                    if (ad_info.index_goods_id != null && ad_info.index_goods_id !== ''&& ad_info.index_goods_id !== 0) {
+                    if (ad_info.index_goods_id != null && ad_info.index_goods_id !== '' && ad_info.index_goods_id !== 0) {
                         this.$router.push('goods/' + ad_info.index_goods_id)
                     }
                 } else if (ad_info.ad_type === "分类ID") {
@@ -258,21 +129,24 @@
                             query: {src: ad_info.index_url}
                         })
                     }
-                }else if (ad_info.ad_type === "内部文章") {
+                } else if (ad_info.ad_type === "内部文章") {
                     console.log(ad_info);
-                    if (ad_info.index_article_id != null && ad_info.index_article_id !== ''&& ad_info.index_article_id !== 0) {
+                    if (ad_info.index_article_id != null && ad_info.index_article_id !== '' && ad_info.index_article_id !== 0) {
                         this.$router.push('article/' + ad_info.index_article_id)
                     }
-                }
-                else {
+                } else {
                     console.log(ad_info.ad_type);
                     return false;
                 }
             },
+            toTestControl() {
+                return false;
+            },
             GetQueryString(name) {
-                let reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+                let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
                 let r = window.location.search.substr(1).match(reg);
-                if(r!=null)return  unescape(r[2]); return null;
+                if (r != null) return unescape(r[2]);
+                return null;
             }
         },
     };
@@ -284,7 +158,7 @@
 			width: 100%;
 		}
 	}
-	
+
 	.declare-box {
 		background-color: white;
 		//height: 50px;
@@ -296,17 +170,17 @@
 			width: 100%;
 		}
 	}
-	
+
 	.coupon_swiper {
 		img {
 			width: 100%;
 		}
 	}
-	
+
 	.van-panel {
 		margin-top: 20px;
 	}
-	
+
 	.my-panel {
 		width: 95%;
 		margin-left: 1.5%;
@@ -316,65 +190,80 @@
 		padding: 1%;
 		margin-top: 5px;
 	}
-	
+
 	.classify-box {
 		display: flex;
 		flex-wrap: wrap;
 		justify-content: space-around;
-		
+
 		.classify {
 			width: 170px;
-			
+
 			img {
 				width: 100%;
 			}
 		}
-		
+
 	}
-	
+
 	.cooperation-box {
 		display: flex;
 		flex-wrap: wrap;
 		justify-content: flex-start;
-		
+
 		.cooperation {
 			width: 70px;
 			margin-left: 4px;
-			
+
 			img {
 				width: 100%;
 			}
 		}
 	}
-	
+
 	.banner {
 		width: 100%;
-		
+
 		img {
 			width: 100%;
 		}
 	}
-	
+
 	.brand-box {
 		display: flex;
 		flex-wrap: wrap;
 		justify-content: flex-start;
-		
+
 		.brand {
 			width: 110px;
 			margin-left: 7px;
-			
+
 			img {
 				width: 100%;
 			}
 		}
 	}
-	
+	.my-goods-box {
+		display: flex;
+		flex-wrap: wrap;
+	}
+	.flip-list-move {
+		transition: transform 0.5s;
+	}
+
+	.lflip-list-enter-active, .flip-list-leave-active {
+		transition: all 0.3s;
+	}
+
+	.flip-list-enter, .flip-list-leave-to {
+		//opacity: 0;
+		transform: translateY(60px);
+	}
+
 	.goods-box {
 		display: flex;
 		flex-wrap: wrap;
 		justify-content: flex-start;
-		
 		.goods {
 			width: 45%;
 			margin-left: 3.33%;
@@ -383,16 +272,16 @@
 			margin-bottom: 8px;
 			border-radius: 5px;
 			overflow: hidden;
-			
+
 			.goods-img {
 				margin-top: 5px;
 				width: 100%;
-				
+
 				img {
 					width: 100%;
 				}
 			}
-			
+
 			.goods-name {
 				white-space: pre-wrap;
 				border: 0px solid black;
@@ -413,7 +302,7 @@
 				-webkit-line-clamp: 2;
 				overflow: hidden;
 			}
-			
+
 			.goods-price {
 				white-space: pre-wrap;
 				border: 0px solid black;
@@ -431,7 +320,7 @@
 				line-height: 30.912px;
 				margin-left: 11.04px;
 			}
-			
+
 			.goods-stages {
 				background: url("../../../assets/goods-stages.jpg") no-repeat;
 				background-size: 100% 100%;
@@ -441,12 +330,34 @@
 				color: white;
 				font-size: 10px;
 				padding-left: 8px;
-				
+
 				i {
 					font-style: normal;
 					font-size: 24px;
 				}
 			}
+		}
+	}
+	.my-tab-box {
+		display: flex;
+		margin-top: 5px;
+		box-shadow: 0 0 1px 1px rgba(0, 0, 0, .3);
+		background-color: $main-color0;
+
+		.my-tab {
+			background-color: $main-color0;
+			color: white;
+			height: 40px;
+			line-height: 40px;
+			width: 50%;
+			text-align: center;
+			transition: all ease 0.3s;
+		}
+
+		.xz {
+			/*box-shadow: 0px -5px 1px 1px rgba(0,0,0,.3);*/
+			color: $main-color0;
+			background-color: white;
 		}
 	}
 

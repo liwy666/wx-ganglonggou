@@ -3,7 +3,8 @@ import Qs from 'qs'
 import {Toast} from 'vant';
 
 axios.defaults.timeout = 5000;
-axios.defaults.baseURL = 'https://api.ganglonggou.com/api/v1';
+//axios.defaults.baseURL = 'https://api.ganglonggou.com/api/v1';
+axios.defaults.baseURL = 'http://192.168.0.158:8004/api/v1';
 
 
 //http request 拦截器
@@ -18,8 +19,6 @@ axios.interceptors.request.use(
                 'Content-Type': 'application/x-www-form-urlencoded'
             };
         }
-
-
         config.validateStatus = function (status) {
             return status >= 200 && status <= 400; // 默认的
         };
@@ -98,7 +97,6 @@ export function imgUpload(url, data = {}) {
  * @param data
  * @returns {Promise}
  */
-
 export function post(url, data = {}) {
     return new Promise((resolve, reject) => {
         axios.post(url, Qs.stringify(data))

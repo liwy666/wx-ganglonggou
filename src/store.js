@@ -2,7 +2,6 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import VueCookies from 'vue-cookies'
 import {fetch} from './http'
-
 import {Toast} from 'vant';
 
 Vue.use(Vuex);
@@ -24,11 +23,30 @@ var hits_keyword_ = JSON.parse(localStorage.getItem('hits_keyword') || '[]');
 let store = new Vuex.Store({
     state: {
         user_token: user_token_,//用户token
-        login_type: "wxgllogin"//登录方式
-        ,api_url:"https://api.ganglonggou.com"
+        into_type: "abc"//入口方式
+       // ,api_url:"https://api.ganglonggou.com"
+       ,api_url:"http://192.168.0.158:8004"
         , parent_id: 203//主类
         ,goods_list:[]//商品列表
-        , goods_info: {}//单个商品信息
+        , goods_info: {
+            goods_gallery: [],//商品相册
+            goods_sku_list: [],//sku表
+            goods_number: 1,//商品数量
+            goods_sn: '',
+            goods_name: '',
+            goods_id: 0,
+            goods_head_name: '',
+            goods_price: 0,//商品价格
+            one_goods_price: 0,//商品单价
+            market_price: 0,//划线价
+            goods_stock: 0,//商品库存
+            goods_sales_volume: 0,//销量（预约量）
+            goods_attribute_img: '',//当前属性图片
+            sku_id: 0,//所选属性id
+            attr_desc: '',//所选属性详情
+            is_promote:0,//是否秒杀商品
+        }//单个商品信息
+        , goods_sku_options: []//sku选项
         , goods_sku: []//单个商品规格
         , carts: carts_//购物车
         , carts_selected: carts_selected_ //选中的购物车
@@ -73,91 +91,51 @@ let store = new Vuex.Store({
          * @param state
          * @param new_goods_info
          */
-        setGoodsInfo(state, new_goods_info) {
-            state.goods_info = {};
-            if (new_goods_info !== "" && new_goods_info !== null) {
-                Vue.set(state.goods_info, 'goods_name', new_goods_info.goods_name);
-                Vue.set(state.goods_info, 'goods_id', new_goods_info.goods_id);
-                Vue.set(state.goods_info, 'goods_sn', new_goods_info.goods_sn);
-                Vue.set(state.goods_info, 'goods_morn_price', parseFloat(new_goods_info.shop_price));//商品底价
-                Vue.set(state.goods_info, 'goods_stock', parseInt(new_goods_info.goods_number));//商品库存
-                Vue.set(state.goods_info, 'one_goods_price', parseFloat(new_goods_info.shop_price));//当前商品单价
-                Vue.set(state.goods_info, 'goods_price', parseFloat(new_goods_info.shop_price));//当前商品价格
-                Vue.set(state.goods_info, 'promote_price', parseFloat(new_goods_info.promote_price));//预计库存
-                Vue.set(state.goods_info, 'promote_start_date', parseFloat(new_goods_info.promote_start_date));//开始时间
-                Vue.set(state.goods_info, 'promote_end_date', parseFloat(new_goods_info.promote_end_date));//结束时间
-                Vue.set(state.goods_info, 'is_promote', parseFloat(new_goods_info.is_promote));//是否秒杀
-                Vue.set(state.goods_info, 'goods_attribute_img', "");//当前属性图片
-                Vue.set(state.goods_info, 'goods_number', 1);//所选商品数量
-                Vue.set(state.goods_info, 'attr_desc', "");//所选属性详情
-                Vue.set(state.goods_info, 'goods_attr_id', []);//所选属性id
-                Vue.set(state.goods_info, 'give_integral', new_goods_info.give_integral);//购买商品可得积分
-                Vue.set(state.goods_info, 'integral', new_goods_info.integral);//此件商品可用积分
-                Vue.set(state.goods_info, 'give_integral_desc', "");//展现在页面上的此件商品可用积分
-                Vue.set(state.goods_info, 'cat_id', new_goods_info.cat_id);//商品分类id
-            }
+        initGoodsInfo(state, new_goods_info) {
+            Vue.set(state, 'goods_info', {
+                goods_gallery: [],//商品相册
+                goods_sku_list: [],//sku表
+                goods_number: 1,//商品数量
+                goods_sn: '',
+                goods_name: '',
+                goods_head_name: '',
+                goods_price: 0,//商品价格
+                one_goods_price: 0,//商品单价
+                market_price: 0,//划线价
+                goods_stock: 0,//商品库存
+                goods_sales_volume: 0,//销量（预约量）
+                goods_attribute_img: '',//当前属性图片
+                sku_id: 0,//所选属性id
+                attr_desc: '',//所选属性详情
+                is_promote:0,//是否秒杀商品
+            });
+            Vue.set(state.goods_info, 'goods_price', new_goods_info.shop_price);
+            Vue.set(state.goods_info, 'market_price', new_goods_info.market_price);
+            Vue.set(state.goods_info, 'goods_sn', new_goods_info.goods_sn);
+            Vue.set(state.goods_info, 'goods_id', new_goods_info.goods_id);
+            Vue.set(state.goods_info, 'goods_name', new_goods_info.goods_name);
+            Vue.set(state.goods_info, 'goods_head_name', new_goods_info.goods_head_name);
+            Vue.set(state.goods_info, 'goods_sales_volume', new_goods_info.goods_sales_volume);
+            Vue.set(state.goods_info, 'is_promote', new_goods_info.is_promote);
+            state.goods_info.goods_gallery.push(new_goods_info.goods_img);
         },
         /**
          * 初始化商品Sku
          * @param state
          * @param new_goods_info
          */
-        initGoodsSku(state, new_goods_info) {
-            state.goods_sku = [];
+        initGoodsSkuOptions(state, new_goods_info) {
+            state.goods_sku_options = [];
             if (new_goods_info !== "" && new_goods_info !== null) {
-                if (new_goods_info.attr !== "" && new_goods_info.attr !== null && new_goods_info.attr.length !== 0) {//有规格
-                    //遍历规格
-                    Object.values(new_goods_info.attr).forEach(item => {
-                        let idl1 = [];//临时容器
-                        idl1.sku_title = item[0].attribute[0].attr_name;
-                        idl1.sku_info = [];
-                        item.forEach((item2, i) => {
-                            let idl2 = {};//临时容器2
-                            idl2.xz_flag = i === 0 ? true : false;
-                            idl2.goods_attr_id = item2.goods_attr_id;
-                            idl2.attr_id = item2.attr_id;
-                            idl2.attr_value = item2.attr_value;
-                            idl2.attr_price = item2.attr_price === "" ? 0 : parseFloat(item2.attr_price);
-                            idl2.goods_attr_img = item2.goods_gallery === null ?
-                                new_goods_info.goods_gallery[0].img_url : item2.goods_gallery.img_url;
-                            idl1.sku_info.push(idl2);
-                        });
-                        state.goods_sku.push(idl1);
+                new_goods_info.attribute.forEach((item) => {
+                    let attribute_name = item.attribute_name;
+                    let attribute_value = [];
+                    item.attribute_value.forEach((item2, i2) => {
+                        attribute_value.push({name: item2, xz_flag: i2 === 0 ? true : false})
                     });
-                    //遍历goods_sku得到最终商品价格
-                    state.goods_sku.forEach((item, i) => {
-                        if (i === 0) {
-                            state.goods_info.attr_desc += item.sku_info[0].attr_value;
-                        } else {
-                            state.goods_info.attr_desc += "," + item.sku_info[0].attr_value;
-                        }
-                        item.sku_info.forEach((item2, i2) => {
-                            if (i2 === 0) {
-                                state.goods_info.goods_price = state.goods_info.goods_price
-                                    + item2.attr_price;
-                            }
-                        });
-                    });
-                    state.goods_info.one_goods_price = (state.goods_info.goods_price).toFixed(2);
-                    state.goods_info.goods_price = (state.goods_info.goods_price).toFixed(2);
-                    state.goods_info.goods_attribute_img = state.goods_sku[0].sku_info[0].goods_attr_img;
-                } else {//没有规格
-                    state.goods_info.goods_attribute_img = new_goods_info.goods_gallery[0].img_url;
-                    state.goods_info.goods_price = (parseFloat(new_goods_info.shop_price)).toFixed(2);
-                }
-
-                if (new_goods_info.give_integral === -1) {
-                    state.goods_info.give_integral_desc = '购买可得' + parseInt(state.goods_info.goods_price) + state.integral_name;
-                } else if (new_goods_info.give_integral > 0) {
-                    state.goods_info.give_integral_desc = '购买可得' + parseInt(new_goods_info.give_integral) + state.integral_name;
-                } else {
-                    state.goods_info.give_integral_desc = '';
-                }
-
+                    state.goods_sku_options.push({attribute_name: attribute_name, attribute_value: attribute_value});
+                })
             }
-            //更新goods_info
-            this.dispatch('updGoodsInfo');
-
         },
         /**
          * 切换商品属性
@@ -165,16 +143,16 @@ let store = new Vuex.Store({
          * @param key
          */
         updGoodsSkuAttr(state, key) {
-            if (state.goods_sku.length > 0) {
+            if (state.goods_sku_options.length > 0) {
                 //遍历对应goods_sku,将所有xz_flag赋值为false
-                state.goods_sku[key.key1].sku_info.forEach((item2, i2) => {
-                    Vue.set(state.goods_sku[key.key1].sku_info[i2], 'xz_flag', false)
+                state.goods_sku_options[key.key1].attribute_value.forEach((item2, i2) => {
+                    Vue.set(state.goods_sku_options[key.key1].attribute_value[i2], 'xz_flag', false)
                 });
                 //赋值对应xz_flag为true
-                Vue.set(state.goods_sku[key.key1].sku_info[key.key2], 'xz_flag', true);
-                let goods_sku_ = state.goods_sku;
-                state.goods_sku = [];
-                state.goods_sku = goods_sku_;
+                Vue.set(state.goods_sku_options[key.key1].attribute_value[key.key2], 'xz_flag', true);
+                let goods_sku_ = state.goods_sku_options;
+                state.goods_sku_options = [];
+                state.goods_sku_options = goods_sku_;
                 //更新goods_info
                 this.dispatch('updGoodsInfo');
             }
@@ -472,43 +450,29 @@ let store = new Vuex.Store({
          * @param context
          */
         updGoodsInfo(context) {
-            let data = {};
-            data.goods_price = context.state.goods_info.goods_morn_price;
-            data.give_integral_desc = '';
-            data.goods_attr_id = [];
-            context.state.goods_sku.forEach((item, i) => {
-                item.sku_info.forEach((itme2) => {
-                    if (itme2.xz_flag === true) {
-                        //改变sku头部图片
-                        data.goods_attribute_img = itme2.goods_attr_img;
-                        //改变属性详情
-                        if (i === 0) {
-                            data.attr_desc = itme2.attr_value;
-                        } else {
-                            data.attr_desc += ',' + itme2.attr_value;
-                        }
-                        //改变商品价格
-                        data.goods_price += parseFloat(itme2.attr_price);
-                        //改变商品属性id
-                        data.goods_attr_id.push(itme2.goods_attr_id);
+            /*拼接选中sku_desc*/
+            let sku_desc_array = [];
+            context.state.goods_sku_options.forEach(item => {
+                item.attribute_value.forEach(item2 => {
+                    if (item2.xz_flag) {
+                        sku_desc_array.push(item2.name);
                     }
-
                 })
             });
-            //格式化商品价格和乘以数量
-            data.goods_price = (data.goods_price * parseInt(context.state.goods_info.goods_number)).toFixed(2);
+            let sku_desc = sku_desc_array.join(',');
+            context.state.goods_info.goods_sku_list.forEach(item => {
+                if (item.sku_desc === sku_desc) {
+                    Vue.set(context.state.goods_info, 'one_goods_price', item.sku_shop_price);
+                    Vue.set(context.state.goods_info, 'market_price', item.sku_market_price);
+                    Vue.set(context.state.goods_info, 'goods_stock', item.sku_stock);
+                    Vue.set(context.state.goods_info, 'goods_attribute_img', item.img_url);
+                    Vue.set(context.state.goods_info, 'sku_id', item.sku_id);
+                    Vue.set(context.state.goods_info, 'attr_desc', item.sku_desc);
+                }
+            });
+            //商品价格
+            Vue.set(context.state.goods_info, 'goods_price', parseFloat(context.state.goods_info.one_goods_price * context.state.goods_info.goods_number).toFixed(2));
 
-            if (context.state.goods_info.give_integral === -1) {
-                data.give_integral_desc = '购买可得' + parseInt(data.goods_price) + context.state.integral_name;
-            } else if (context.state.give_integral > 0) {
-                data.give_integral_desc = '购买可得' + parseInt(context.state.goods_info.give_integral) + context.state.integral_name;
-            } else {
-                data.give_integral_desc = '';
-            }
-
-            let obj = Object.assign({}, context.state.goods_info, data);
-            context.state.goods_info = {};
-            context.state.goods_info = obj;
         }
 
         /**
@@ -656,7 +620,6 @@ let store = new Vuex.Store({
             });
             fetch('user_get_balance_list', {user_token:user_token})
                 .then((msg) => {
-                    console.log(msg);
                     Vue.set(context.state, 'balance_list', msg);
                     toast1.clear();
                 })
@@ -664,14 +627,14 @@ let store = new Vuex.Store({
 
     },
     getters: {
-        getLoginType(state) {
-            return state.login_type;
+        getIntoType(state) {
+            return state.into_type;
         },
         getParentId(state) {
             return state.parent_id;
         },
         getGoodsSku(state) {
-            return state.goods_sku;
+            return state.goods_sku_options;
         },
         getGoodsInfo(state) {
             return state.goods_info;
