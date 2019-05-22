@@ -1,6 +1,6 @@
 <template>
-	<!--<div class="goods" @click="$router.push({ path: 'goods/'+goods_info.goods_id, query: { goods_info: JSON.stringify(goods_info_) }})">-->
-	<div class="goods" @click="showTxt">
+	<div class="goods" @click="$router.push({ path: 'goods/'+goods_info.goods_id, query: { goods_info: JSON.stringify(goods_info_) }})">
+	<!--<div class="goods" @click="showTxt">-->
 		<div class="goods-img"><img v-lazy="goods_info.goods_img"></div>
 		<div class="goods-name">
 			<van-tag type="danger" v-if="goods_info.goods_head_name!==''&&goods_info.goods_head_name!==null">

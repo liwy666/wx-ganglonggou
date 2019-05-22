@@ -1,11 +1,11 @@
 <template>
 	<div class="mian">
 		<!--搜索框-->
-		<!--<mySearch></mySearch>-->
+		<mySearch></mySearch>
 		<!--头部轮播图-->
 		<van-swipe :autoplay="3000" indicator-color="white">
 			<van-swipe-item v-for="(item, index) in swipe_img" :key="index">
-				<img v-lazy="item.ad_img" @click="toTestControl(item)"/>
+				<img v-lazy="item.ad_img" @click="toControl(item)"/>
 			</van-swipe-item>
 		</van-swipe>
 		<div class="my-tab-box">
