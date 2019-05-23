@@ -45,6 +45,9 @@ let store = new Vuex.Store({
             sku_id: 0,//所选属性id
             attr_desc: '',//所选属性详情
             is_promote:0,//是否秒杀商品
+            give_integral:0,//返积分
+            integral:0,//用积分
+            integral_desc:'',//积分描述
         }//单个商品信息
         , goods_sku_options: []//sku选项
         , goods_sku: []//单个商品规格
@@ -108,6 +111,9 @@ let store = new Vuex.Store({
                 sku_id: 0,//所选属性id
                 attr_desc: '',//所选属性详情
                 is_promote:0,//是否秒杀商品
+                give_integral:0,//返积分
+                integral:0,//用积分
+                integral_desc:'',//积分描述
             });
             Vue.set(state.goods_info, 'goods_price', new_goods_info.shop_price);
             Vue.set(state.goods_info, 'market_price', new_goods_info.market_price);
@@ -181,13 +187,12 @@ let store = new Vuex.Store({
             let data = JSON.parse(JSON.stringify(state.carts));
             // 假设 在购物车中，没有找到对应的商品
             let flag = false;
-
             /* 购物车初始化*/
             goods_info.cart_is = true;//购物车有效
             goods_info.selected = true;//购物车被选中
 
             data.some(item => {
-                if (item.goods_id === goods_info.goods_id && item.attr_desc === goods_info.attr_desc) {
+                if (item.goods_id === goods_info.goods_id && item.sku_id === goods_info.sku_id) {
                     item.goods_number = parseInt(item.goods_number) + parseInt(goods_info.goods_number);
                     flag = true;
                     return true
@@ -238,42 +243,24 @@ let store = new Vuex.Store({
          * @param state
          * @param item
          */
-        updCart(state, item) {
-            let attr_desc = "";
-            let attr_price = 0;
-            if (item.goods_attr.length > 0) {
-                item.goods_attr.forEach((item2, i2) => {
-                    if (i2 === 0) {
-                        attr_desc = item2.attr_value;
-                    } else {
-                        attr_desc += ',' + item2.attr_value;
-                    }
-                    attr_price += item2.attr_price === "" ? 0 : parseFloat(item2.attr_price);
-                })
-            } else {
-                attr_desc = item.attr_desc;
-            }
+        updCart(state, goods_info) {
             //更新购物车
             let data = JSON.parse(JSON.stringify(state.carts));
             data.forEach((item3, i3) => {
-                if (item3.goods_id === item.goods_id && item3.attr_desc === attr_desc) {
-                    data[i3].cart_is = item.cart_is;
-                    data[i3].goods_stock = parseInt(item.goods_stock);
-                    data[i3].goods_morn_price = parseFloat(item.goods_morn_price);
-                    data[i3].goods_name = item.goods_name;
-                    data[i3].attr_desc = attr_desc;
-                    data[i3].give_integral = item.give_integral;
-                    data[i3].integral = item.integral;
-                    data[i3].goods_price = parseFloat(item.goods_morn_price) + attr_price;
-                    data[i3].one_goods_price = parseFloat(item.goods_morn_price) + attr_price;
-                    data[i3].goods_price = data[i3].goods_price * data[i3].goods_number;
-                    data[i3].goods_price = (data[i3].goods_price).toFixed(2);
+                if (item3.goods_id === goods_info.goods_id && item3.sku_id === goods_info.sku_id) {
+                    data[i3].cart_is = goods_info.cart_is;
+                    data[i3].goods_stock = parseInt(goods_info.goods_stock);
+                    data[i3].goods_name = goods_info.goods_name;
+                    data[i3].attr_desc = goods_info.attr_desc;
+                    data[i3].give_integral = goods_info.give_integral;
+                    data[i3].integral = goods_info.integral;
+                    data[i3].goods_price = goods_info.goods_price;
+                    data[i3].one_goods_price = goods_info.one_goods_price;
                 }
             });
             state.carts = JSON.parse(JSON.stringify(data));
             // 当 更新 carts 之后，把 carts 数组，存储到 本地的 localStorage 中
             localStorage.setItem('carts', JSON.stringify(state.carts));
-
         },
 
         /**
@@ -282,7 +269,7 @@ let store = new Vuex.Store({
          */
         updCartNumber(state, cart_info) {
 
-            let index = (state.carts.findIndex(item => item.goods_id === cart_info.goods_id && item.attr_desc === cart_info.attr_desc));
+            let index = (state.carts.findIndex(item => item.goods_id === cart_info.goods_id && item.sku_id === cart_info.sku_id));
             Vue.set(state.carts[index],'goods_number',cart_info.goods_number);
             //更新购物车价格
             state.carts.forEach(item => {
@@ -296,7 +283,6 @@ let store = new Vuex.Store({
                     state.carts_selected.push(item);
                 }
             });
-
             // 当 更新 carts 之后，把 carts 数组，存储到 本地的 localStorage 中
             localStorage.setItem('carts', JSON.stringify(state.carts));
         },
@@ -308,7 +294,7 @@ let store = new Vuex.Store({
          */
         delCart(state, cart_info) {
 
-            state.carts.splice(state.carts.findIndex(item => item.goods_id === cart_info.goods_id && item.attr_desc === cart_info.attr_desc), 1);
+            state.carts.splice(state.carts.findIndex(item => item.goods_id === cart_info.goods_id && item.sku_id === cart_info.sku_id), 1);
 
             // 当 更新 carts 之后，把 carts 数组，存储到 本地的 localStorage 中
             localStorage.setItem('carts', JSON.stringify(state.carts));
@@ -329,7 +315,7 @@ let store = new Vuex.Store({
          * @param cart_info
          */
         updCartSelected(state, cart_info) {
-            let index = (state.carts.findIndex(item => item.goods_id === cart_info.goods_id && item.attr_desc === cart_info.attr_desc));
+            let index = (state.carts.findIndex(item => item.goods_id === cart_info.goods_id && item.sku_id === cart_info.sku_id));
             cart_info.selected = !cart_info.selected;
             state.carts[index].selected = cart_info.selected;
 
@@ -352,7 +338,7 @@ let store = new Vuex.Store({
          * @param cart_info
          */
         openCartSelected(state, cart_info) {
-            let index = (state.carts.findIndex(item => item.goods_id === cart_info.goods_id && item.attr_desc === cart_info.attr_desc));
+            let index = (state.carts.findIndex(item => item.goods_id === cart_info.goods_id && item.sku_id === cart_info.sku_id));
             cart_info.selected = true;
             state.carts[index].selected = cart_info.selected;
 
@@ -468,11 +454,14 @@ let store = new Vuex.Store({
                     Vue.set(context.state.goods_info, 'goods_attribute_img', item.img_url);
                     Vue.set(context.state.goods_info, 'sku_id', item.sku_id);
                     Vue.set(context.state.goods_info, 'attr_desc', item.sku_desc);
+                    Vue.set(context.state.goods_info, 'integral', item.integral);
+                    Vue.set(context.state.goods_info, 'give_integral', item.give_integral);
                 }
             });
             //商品价格
             Vue.set(context.state.goods_info, 'goods_price', parseFloat(context.state.goods_info.one_goods_price * context.state.goods_info.goods_number).toFixed(2));
-
+            //积分描述
+            Vue.set(context.state.goods_info, 'integral_desc','购买可得' + parseInt(context.state.goods_info.give_integral) + context.state.integral_name);
         }
 
         /**

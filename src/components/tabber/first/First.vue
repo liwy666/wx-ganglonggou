@@ -48,7 +48,6 @@
                     this.$router.push('/goods/' + goods_id);
                 }
             }
-
         },
         computed: {
             /*头部轮播*/
@@ -56,7 +55,6 @@
                 get: function () {
                     let result = [];
                     if (JSON.stringify(this.get_info) !== '{}') {
-                        console.log(this.get_info);
                         this.get_info.ad_list.forEach(item => {
                             if (item.position_type === '顶部广告轮播图') {
                                 result.push(item);

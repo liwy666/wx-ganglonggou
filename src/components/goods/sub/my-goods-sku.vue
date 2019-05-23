@@ -30,9 +30,12 @@
 					</van-col>
 				</van-row>
 			</div>
-			<div class="button-box">
+			<div class="button-box" v-show="goods_info.goods_stock > 0">
 				<van-button block type="warning" @click="addCart(goods_info)">加入购物车</van-button>
 				<van-button block type="danger" @click="nowPay(goods_info)">立即购买</van-button>
+			</div>
+			<div class="button-box">
+				<van-button block type="danger" disabled v-show="goods_info.goods_stock === 0">已售罄</van-button>
 			</div>
 		</div>
 	</div>
@@ -55,7 +58,6 @@
             },
             goods_info: {
                 get: function () {
-                    console.log(this.$store.getters.getGoodsInfo);
                     return this.$store.getters.getGoodsInfo
 
                 }

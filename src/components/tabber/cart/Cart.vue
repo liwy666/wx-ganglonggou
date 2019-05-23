@@ -6,7 +6,7 @@
 							v-model="loading"
 							:finished="finished"
 							:error.sync="error"
-							finished-text="没有更多了"
+							finished-text=""
 							error-text="请求失败，点击重新加载"
 							@load="onLoad"
 			>
@@ -64,7 +64,7 @@
                     let carts_ = this.$store.state.carts;
                     let get_carts = carts_.slice(this.page, this.page + this.limit);
                     this.loading = true;
-                    this.$fetch('usergetcart_v2'
+                    this.$fetch('user_get_cart'
                         , {carts: get_carts})
                         .then((msg) => {
                             msg.forEach(item => {

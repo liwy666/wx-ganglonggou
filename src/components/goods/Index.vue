@@ -30,9 +30,9 @@
 			{{msg.goods_name}}
 		</div>
 		<!--积分信息-->
-		<div class="integral-box" v-if="goods_info.give_integral_desc !==''&&load_extra_goods">
-			<!-- <van-tag plain type="danger">{{this.$store.state.integral_name}}</van-tag>-->
-			{{goods_info.give_integral_desc}}
+		<div class="integral-box" v-if="goods_info.give_integral > 0&&load_extra_goods">
+			<van-tag plain type="danger">{{this.$store.state.integral_name}}</van-tag>
+			{{goods_info.integral_desc}}
 		</div>
 		<!--库存、销量信息-->
 		<van-row>
@@ -41,7 +41,7 @@
 			<van-col span="8">销量:{{this.goods_info.goods_sales_volume}}</van-col>
 		</van-row>
 		<!--领券选择-->
-		<myCouponOption :coupon_list="this.coupon_list" v-if="load_extra_goods"></myCouponOption>
+		<myCouponOption :coupon_list="coupon_list" v-if="coupon_list.length>0 &&load_extra_goods"></myCouponOption>
 		<!--规格选择-->
 		<van-cell title="已选" :value="goods_info.attr_desc + ',' +goods_info.goods_number +'件'" is-link
 				  @click="show_sku = !show_sku" v-if="load_extra_goods"/>
@@ -95,7 +95,7 @@
                     //autoplay:true,
                 },
                 show_sku: false,
-                load_extra_goods: false
+                load_extra_goods: false,
             };
         },
         computed: {
@@ -136,8 +136,8 @@
             /*优惠券列表*/
             , coupon_list: {
                 get: function () {
-                    let result = "";
-                    if (this.msg !== "") {
+                    let result = [];
+                    if ( typeof(this.msg.coupon_list)  !== "undefined") {
                         result = this.msg.coupon_list;
                     }
                     return result;
@@ -223,15 +223,19 @@
             }
             /*获取额外商品信息*/
             , getExtraGoodsInfo() {
-                this.$fetch('get_extra_goods_info', {goods_id: this.goods_id})
+                this.$fetch('get_extra_goods_info', {
+                    goods_id: this.goods_id,
+                    into_type: this.$store.state.into_type
+                })
                     .then((msg) => {
                         msg.goods_gallery.forEach(item => {
                             this.$store.state.goods_info.goods_gallery.push(item.img_url);
                         });
                         this.$set(this.$store.state.goods_info, 'goods_sku_list', msg.goods_sku);
+                        this.$set(this.msg, 'coupon_list', msg.coupon_list);
                         this.$store.dispatch("updGoodsInfo");
                         //let share_url = (this.$store.state.location_url + "?gl_goods_id="+this.goods_id);
-                        //commonShare(this, this.goods_info.goods_name,share_url,this.$store.state.goods_info.goods_attribute_img, '您身边的数码产品服务商');
+                        //commonShare(this, this.goods_info.goods_name,share_url,this.$store.state.goods_info.goods_attribute_img, '江苏岗隆数码-您身边的数码产品服务商');
                         this.load_extra_goods = true;
                     })
             }

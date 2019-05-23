@@ -14,11 +14,11 @@ module.exports = {
                 }
             },
             postcss: {
-                plugins: [
+               /* plugins: [
                     require('postcss-px2rem')({
                         remUnit: 37.5
                     }),
-                ]
+                ]*/
             },
             less: {
                 modifyVars: {

@@ -1,11 +1,11 @@
 <template>
     <transition name="img-transition"
-                enter-active-class="animated bounceInRight"
+                enter-active-class="animated fadeInRightBig"
                 leave-active-class="animated bounceOutLeft">
         <div class="one-cart-main" v-show="!delete_is">
             <div class="one-cart-box">
                 <div class="switch-box">
-                    <van-switch :value="cart_info.selected" @input="onInput(cart_info.cart_is)" active-color="#cc0001"/>
+					<van-checkbox v-model="cart_info.selected" click="onInput(cart_info.cart_is)" :checked-color="$MyCommon.$main_color0"></van-checkbox>
                 </div>
 
                 <div class="card-box">
@@ -51,7 +51,6 @@
         props: ["cart_info"],
 
         created() {
-
         },
         methods: {
             deleteCart() {

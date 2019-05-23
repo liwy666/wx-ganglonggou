@@ -9,12 +9,17 @@ import store from './store'
 //引入lib-flexible
 import 'lib-flexible';
 
+//引入功能函数和常量
+import MyCommon from './common';
+Vue.prototype.$MyCommon = MyCommon;
+
 //引入vant
 import Vant from 'vant';
 import 'vant/lib/index.css';
 import 'vant/lib/tabbar/style/less';
 
 Vue.use(Vant);
+
 
 //引入axios
 import axios from 'axios';

@@ -54,7 +54,7 @@
                     message: '正在提交评价',
                     duration: 0
                 });
-                this.$post('user_ins_evaluate?XDEBUG_SESSION_START=17663', {
+                this.$post('user_ins_evaluate', {
                     user_token: this.$store.getters.getUserToken,
                     evaluate_text: this.evaluate_text,
                     rate: this.rate,

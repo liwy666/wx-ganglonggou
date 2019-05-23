@@ -106,7 +106,6 @@
 <style lang="scss" scoped>
 	.key-word-box {
 		margin-bottom: 15px;
-		
 		p {
 			padding-left: 5px;
 			background-color: white;

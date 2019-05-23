@@ -15,7 +15,6 @@
 <script>
     import myNarBar from '../../sub/my-nav-bar';
     import areaList from './area'
-
     export default {
         data() {
             return {
@@ -122,22 +121,6 @@
 </script>
 
 <style lang="scss">
-	/*.van-picker__columns{
-		height: 200px !important;
-			.van-picker-column{
-				height: 200px !important;
-				ul{
-					li{
-						height: 44px !important;;
-						line-height: 44px !important;
-					}
-				}
-			}
-		.van-picker__frame{
-			height: 44px !important;
-			position:absolute!important;
-		}
-	}*/
 	.van-picker__columns {
 		.van-picker__frame {
 			position: absolute !important;

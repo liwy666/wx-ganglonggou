@@ -1,6 +1,7 @@
 <template>
-	<div class="goods" @click="$router.push({ path: 'goods/'+goods_info.goods_id, query: { goods_info: JSON.stringify(goods_info_) }})">
-	<!--<div class="goods" @click="showTxt">-->
+	<div class="goods"
+		 @click="$router.push({ path: 'goods/'+goods_info.goods_id, query: { goods_info: JSON.stringify(goods_info_) }})">
+		<!--<div class="goods" @click="showTxt">-->
 		<div class="goods-img"><img v-lazy="goods_info.goods_img"></div>
 		<div class="goods-name">
 			<van-tag type="danger" v-if="goods_info.goods_head_name!==''&&goods_info.goods_head_name!==null">
@@ -56,14 +57,14 @@
 
         },
         methods: {
-            showTxt(){
-				this.$dialog.alert({
+            showTxt() {
+                this.$dialog.alert({
                     message: '系统维护中'
                 }).then(() => {
                     // on close
                 })
-			}
-		},
+            }
+        },
     };
 </script>
 
@@ -106,11 +107,13 @@
 			-webkit-line-clamp: 2;
 			overflow: hidden;
 		}
-		.goods-tag-box{
-			.van-tag{
+
+		.goods-tag-box {
+			.van-tag {
 				margin-left: 5px;
 			}
 		}
+
 		.goods-price {
 			white-space: pre-wrap;
 			border: 0px solid black;
