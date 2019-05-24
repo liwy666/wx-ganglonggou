@@ -113,10 +113,12 @@
             head_imgPreview: {
                 get: function () {
                     var result = [];
-                    if (this.goods_info.goods_gallery.length > 0) {
-                        this.goods_info.goods_gallery.forEach(item => {
-                            result.push(item)
-                        });
+                    if (typeof (this.goods_info.goods_gallery) !== 'undefined') {
+                        if (this.goods_info.goods_gallery.length > 0) {
+                            this.goods_info.goods_gallery.forEach(item => {
+                                result.push(item)
+                            });
+                        }
                     }
                     return result;
                 }
@@ -130,14 +132,12 @@
                     }
                     return result;
                 }
-
-
             }
             /*优惠券列表*/
             , coupon_list: {
                 get: function () {
                     let result = [];
-                    if ( typeof(this.msg.coupon_list)  !== "undefined") {
+                    if (typeof (this.msg.coupon_list) !== "undefined") {
                         result = this.msg.coupon_list;
                     }
                     return result;
@@ -204,22 +204,39 @@
         },
         methods: {
             getGoodsInfo() {
-                this.$toast.loading({
-                    mask: true,
-                    message: '马上就来...',
-                    duration: 0
-                });
-                this.$fetch('get_goods_info', {goods_id: this.goods_id})
-                    .then((msg) => {
-                        this.msg = msg;
-                        //初始化商品信息
-                        this.$store.commit("initGoodsInfo", this.msg);
-                        //初始化商品sku
-                        this.$store.commit("initGoodsSkuOptions", this.msg);
-                        this.$toast.clear();
-                        //获取额外商品信息
-                        this.getExtraGoodsInfo();
+                //先判断有米有商品列表
+                if (this.$store.state.goods_list.length < 1) {
+                    this.$toast.loading({
+                        mask: true,
+                        message: '马上就来...',
+                        duration: 0
+                    });
+                    this.$fetch('get_goods_info', {goods_id: this.goods_id})
+                        .then((msg) => {
+                            this.msg = msg;
+                            //初始化商品信息
+                            this.$store.commit("initGoodsInfo", this.msg);
+                            //初始化商品sku
+                            this.$store.commit("initGoodsSkuOptions", this.msg);
+                            this.$toast.clear();
+                            //获取额外商品信息
+                            this.getExtraGoodsInfo();
+                        })
+                } else {
+                    //就去商品列表里面找这个商品
+                    this.$store.state.goods_list.some(item => {
+                        if (item.goods_id === parseInt(this.goods_id)) {
+                            this.msg = item;
+                            //初始化商品信息
+                            this.$store.commit("initGoodsInfo", this.msg);
+                            //初始化商品sku
+                            this.$store.commit("initGoodsSkuOptions", this.msg);
+                            //获取额外商品信息
+                            this.getExtraGoodsInfo();
+                            return true;
+                        }
                     })
+                }
             }
             /*获取额外商品信息*/
             , getExtraGoodsInfo() {

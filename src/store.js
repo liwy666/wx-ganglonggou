@@ -24,10 +24,10 @@ let store = new Vuex.Store({
     state: {
         user_token: user_token_,//用户token
         into_type: "abc"//入口方式
-       // ,api_url:"https://api.ganglonggou.com"
-       ,api_url:"http://192.168.0.158:8004"
+        // ,api_url:"https://api.ganglonggou.com"
+        , api_url: "http://192.168.0.158:8004"
         , parent_id: 203//主类
-        ,goods_list:[]//商品列表
+        , goods_list: []//商品列表
         , goods_info: {
             goods_gallery: [],//商品相册
             goods_sku_list: [],//sku表
@@ -35,6 +35,7 @@ let store = new Vuex.Store({
             goods_sn: '',
             goods_name: '',
             goods_id: 0,
+            cat_id: 0,
             goods_head_name: '',
             goods_price: 0,//商品价格
             one_goods_price: 0,//商品单价
@@ -44,10 +45,10 @@ let store = new Vuex.Store({
             goods_attribute_img: '',//当前属性图片
             sku_id: 0,//所选属性id
             attr_desc: '',//所选属性详情
-            is_promote:0,//是否秒杀商品
-            give_integral:0,//返积分
-            integral:0,//用积分
-            integral_desc:'',//积分描述
+            is_promote: 0,//是否秒杀商品
+            give_integral: 0,//返积分
+            integral: 0,//用积分
+            integral_desc: '',//积分描述
         }//单个商品信息
         , goods_sku_options: []//sku选项
         , goods_sku: []//单个商品规格
@@ -77,16 +78,16 @@ let store = new Vuex.Store({
         }//提交订单的页面信息
         , integral_name: "岗隆积分"//积分名称
         , order_list: []//订单列表
-        ,cmd_keyword:['苹果','Mix3','平衡车','vivo','车载手机支架','华为nova4','mate20','mate20pro','iphone xs']//推荐搜索关键词
-        ,hits_keyword:hits_keyword_//搜索历史记录
-        ,recharge_info:{
-            recharge_type : 'wx_0_balance',
-            pay_code : '',
-            bystages_id:'',
-            bystages_code:'',
-            recharge_price:100
+        , cmd_keyword: ['苹果', 'Mix3', '平衡车', 'vivo', '车载手机支架', '华为nova4', 'mate20', 'mate20pro', 'iphone xs']//推荐搜索关键词
+        , hits_keyword: hits_keyword_//搜索历史记录
+        , recharge_info: {
+            recharge_type: 'wx_0_balance',
+            pay_code: '',
+            bystages_id: '',
+            bystages_code: '',
+            recharge_price: 100
         }//充值信息
-        ,balance_list:[]//余额表单
+        , balance_list: []//余额表单
     },
     mutations: {
         /**
@@ -101,6 +102,8 @@ let store = new Vuex.Store({
                 goods_number: 1,//商品数量
                 goods_sn: '',
                 goods_name: '',
+                goods_id: 0,
+                cat_id: 0,
                 goods_head_name: '',
                 goods_price: 0,//商品价格
                 one_goods_price: 0,//商品单价
@@ -110,15 +113,16 @@ let store = new Vuex.Store({
                 goods_attribute_img: '',//当前属性图片
                 sku_id: 0,//所选属性id
                 attr_desc: '',//所选属性详情
-                is_promote:0,//是否秒杀商品
-                give_integral:0,//返积分
-                integral:0,//用积分
-                integral_desc:'',//积分描述
+                is_promote: 0,//是否秒杀商品
+                give_integral: 0,//返积分
+                integral: 0,//用积分
+                integral_desc: '',//积分描述
             });
             Vue.set(state.goods_info, 'goods_price', new_goods_info.shop_price);
             Vue.set(state.goods_info, 'market_price', new_goods_info.market_price);
             Vue.set(state.goods_info, 'goods_sn', new_goods_info.goods_sn);
             Vue.set(state.goods_info, 'goods_id', new_goods_info.goods_id);
+            Vue.set(state.goods_info, 'cat_id', new_goods_info.cat_id);
             Vue.set(state.goods_info, 'goods_name', new_goods_info.goods_name);
             Vue.set(state.goods_info, 'goods_head_name', new_goods_info.goods_head_name);
             Vue.set(state.goods_info, 'goods_sales_volume', new_goods_info.goods_sales_volume);
@@ -190,7 +194,6 @@ let store = new Vuex.Store({
             /* 购物车初始化*/
             goods_info.cart_is = true;//购物车有效
             goods_info.selected = true;//购物车被选中
-
             data.some(item => {
                 if (item.goods_id === goods_info.goods_id && item.sku_id === goods_info.sku_id) {
                     item.goods_number = parseInt(item.goods_number) + parseInt(goods_info.goods_number);
@@ -215,9 +218,12 @@ let store = new Vuex.Store({
                 //更新购物车价格
                 state.carts_selected = [];
                 state.carts.forEach(item => {
-                    Vue.set(item,'goods_price', (item.goods_number * item.one_goods_price).toFixed(2));
+                    Vue.set(item, 'goods_price', (item.goods_number * item.one_goods_price).toFixed(2));
                     //遍历购物车，puse到carts_selected中
                     if (item.selected) {
+                        delete item.goods_desc;
+                        delete item.goods_gallery;
+                        delete item.goods_sku_list;
                         state.carts_selected.push(item);
                     }
                 });
@@ -270,10 +276,10 @@ let store = new Vuex.Store({
         updCartNumber(state, cart_info) {
 
             let index = (state.carts.findIndex(item => item.goods_id === cart_info.goods_id && item.sku_id === cart_info.sku_id));
-            Vue.set(state.carts[index],'goods_number',cart_info.goods_number);
+            Vue.set(state.carts[index], 'goods_number', cart_info.goods_number);
             //更新购物车价格
             state.carts.forEach(item => {
-                Vue.set(item,'goods_price', (item.goods_number * item.one_goods_price).toFixed(2));
+                Vue.set(item, 'goods_price', (item.goods_number * item.one_goods_price).toFixed(2));
             });
 
             //遍历购物车，puse到carts_selected中
@@ -461,7 +467,7 @@ let store = new Vuex.Store({
             //商品价格
             Vue.set(context.state.goods_info, 'goods_price', parseFloat(context.state.goods_info.one_goods_price * context.state.goods_info.goods_number).toFixed(2));
             //积分描述
-            Vue.set(context.state.goods_info, 'integral_desc','购买可得' + parseInt(context.state.goods_info.give_integral) + context.state.integral_name);
+            Vue.set(context.state.goods_info, 'integral_desc', '购买可得' + parseInt(context.state.goods_info.give_integral) + context.state.integral_name);
         }
 
         /**
@@ -502,7 +508,7 @@ let store = new Vuex.Store({
                 message: '获取地址列表',
                 duration: 0
             });
-            fetch('usergetaddress', {user_token: user_token})
+            fetch('user_get_address', {user_token: user_token})
                 .then((msg) => {
                     Vue.set(context.state, 'address_list', msg);
                     toast1.clear();
@@ -519,7 +525,7 @@ let store = new Vuex.Store({
                 message: '获取优惠券列表',
                 duration: 0
             });
-            fetch('user_coupon_list', {user_token: user_token})
+            fetch('user_get_coupon_list', {user_token: user_token})
                 .then((msg) => {
                     Vue.set(context.state, 'coupon_list', msg);
                     toast1.clear();
@@ -583,13 +589,13 @@ let store = new Vuex.Store({
          * @param context
          * @param user_token
          */
-        , getGoodsList(context,index_type) {
+        , getGoodsList(context, index_type) {
             let toast1 = Toast.loading({
                 mask: true,
                 message: '获取商品列表',
                 duration: 0
             });
-            fetch('get_goods_list', {index_type:index_type})
+            fetch('get_goods_list', {index_type: index_type})
                 .then((msg) => {
                     Vue.set(context.state, 'goods_list', msg);
                     toast1.clear();
@@ -601,13 +607,13 @@ let store = new Vuex.Store({
          * @param context
          * @param user_token
          */
-        , getBalanceList(context,user_token) {
+        , getBalanceList(context, user_token) {
             let toast1 = Toast.loading({
                 mask: true,
                 message: '获取余额列表',
                 duration: 0
             });
-            fetch('user_get_balance_list', {user_token:user_token})
+            fetch('user_get_balance_list', {user_token: user_token})
                 .then((msg) => {
                     Vue.set(context.state, 'balance_list', msg);
                     toast1.clear();
@@ -713,7 +719,6 @@ let store = new Vuex.Store({
          * @returns {string}
          */
         , getDefaultAddress(state) {
-
             let result = "";
             if (state.address_list.length > 0) {
                 state.address_list.forEach(item => {
@@ -722,7 +727,6 @@ let store = new Vuex.Store({
                     }
                 })
             }
-
             return result;
         }
 

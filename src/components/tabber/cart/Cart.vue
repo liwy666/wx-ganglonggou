@@ -64,7 +64,7 @@
                     let carts_ = this.$store.state.carts;
                     let get_carts = carts_.slice(this.page, this.page + this.limit);
                     this.loading = true;
-                    this.$fetch('user_get_cart'
+                    this.$post('user_get_cart'
                         , {carts: get_carts})
                         .then((msg) => {
                             msg.forEach(item => {

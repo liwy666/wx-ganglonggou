@@ -77,13 +77,13 @@
                             idl_coupons[i].push(item2);
                         } else if (item2.grant_type === "classify") {
                             item2.coupon_info.forEach(item3 => {
-                                if (item3.cat_id === item.cat_id) {
+                                if (parseInt(item3.cat_id ) === parseInt(item.cat_id)) {
                                     idl_coupons[i].push(item2);
                                 }
                             })
                         } else if (item2.grant_type === "solo") {
                             item2.coupon_info.forEach(item3 => {
-                                if (item3.goods_id === item.goods_id) {
+                                if (parseInt(item3.goods_id)  === parseInt(item.goods_id)) {
                                     idl_coupons[i].push(item2);
                                 }
                             })
@@ -100,8 +100,6 @@
                     } else {
                         distinct_arr = this.coupons;
                     }
-
-                    console.log(this.coupons);
                     if (distinct_arr.length > 0) {
                         distinct_arr.forEach(item => {
                             item.reason = "所结算商品中存在不符合条件的商品";
@@ -139,8 +137,8 @@
                         item.id = item.coupon_id;
                         item.name = item.coupon_name;
                         item.condition = '单笔订单满' + item.found_sum + '元';
-                        item.startAt = item.start_use_time;
-                        item.endAt = item.end_use_time;
+                        item.startAt = this.$MyCommon.strToDateTime(item.start_use_time,'s') ;
+                        item.endAt = this.$MyCommon.strToDateTime(item.end_use_time,'s');
                         item.description = item.coupon_desc;
                         item.value = parseFloat(item.cut_sum) * 100;
                         item.valueDesc = "减" + parseFloat(item.cut_sum);
@@ -152,8 +150,8 @@
                         item.id = item.coupon_id;
                         item.name = item.coupon_name;
                         item.condition = '单笔订单满' + item.found_sum + '元';
-                        item.startAt = item.start_use_time;
-                        item.endAt = item.end_use_time;
+                        item.startAt = this.$MyCommon.strToDateTime(item.start_use_time,'s') ;
+                        item.endAt = this.$MyCommon.strToDateTime(item.end_use_time,'s');
                         item.description = item.coupon_desc;
                         item.value = parseFloat(item.cut_sum) * 100;
                         item.valueDesc = "减" + parseFloat(item.cut_sum);
@@ -212,7 +210,6 @@
             getArrDifference(arr1, arr2) {
                 if (arr1.length > 0 && arr2.length > 0) {
                     return arr1.concat(arr2).filter(function (v, i, arr) {
-                        console.log(arr.indexOf(v));
                         return arr.indexOf(v) === arr.lastIndexOf(v);
                     });
                 } else {

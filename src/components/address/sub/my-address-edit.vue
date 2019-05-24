@@ -2,11 +2,11 @@
 	<div class="main">
 		<myNarBar title="地址编辑"></myNarBar>
 		<van-address-edit
-						:area-list="areaList"
-						:address-info="address_info"
-						:show-delete="!this.address_edit.is_add"
-						@save="onSave"
-						@delete="onDelete"
+			:area-list="areaList"
+			:address-info="address_info"
+			:show-delete="!this.address_edit.is_add"
+			@save="onSave"
+			@delete="onDelete"
 		/>
 	</div>
 
@@ -15,11 +15,12 @@
 <script>
     import myNarBar from '../../sub/my-nav-bar';
     import areaList from './area'
+
     export default {
         data() {
             return {
-                areaList,
-                address_edit: ""
+                areaList,//地址数据库
+                address_edit: {},
             };
         },
         computed: {
@@ -27,14 +28,15 @@
                 get: function () {
                     var result = {};
                     if (!this.address_edit.is_add) {
-                        result.id = this.address_edit.address_info.address_id;
-                        result.name = this.address_edit.address_info.name;
-                        result.tel = this.address_edit.address_info.phone;
-                        result.province = this.address_edit.address_info.province;
-                        result.city = this.address_edit.address_info.city;
-                        result.county = this.address_edit.address_info.town;
-                        result.areaCode = this.address_edit.address_info.area_code;
-                        result.addressDetail = this.address_edit.address_info.address_list;
+                        console.log(this.address_edit);
+                        result.id = this.address_edit.address_info.address_id;//id
+                        result.name = this.address_edit.address_info.name;//收件人
+                        result.tel = this.address_edit.address_info.tel;//电话
+                        result.province = this.address_edit.address_info.province;//省份
+                        result.city = this.address_edit.address_info.city;//市
+                        result.county = this.address_edit.address_info.county;//县
+                        result.areaCode = this.address_edit.address_info.area_code;//编号
+                        result.addressDetail = this.address_edit.address_info.address_detail;//地址详情
                     }
                     return result;
                 }
@@ -55,21 +57,24 @@
                         message: '保存中',
                         duration: 0
                     });
-                    this.$post('userinsaddress', {
+                    let post_info = {
                         user_token: this.$store.getters.getUserToken,
                         name: content.name,
-                        phone: content.tel,
+                        tel: content.tel,
                         province: content.province,
                         city: content.city,
-                        town: content.county,
-                        address_list: content.addressDetail,
+                        county: content.county,
+                        address_detail: content.addressDetail,
                         area_code: content.areaCode
-                    })
+                    };
+                    this.$post('user_add_address', post_info)
                         .then((msg) => {
-                            //push到地址列表之中
-                            this.$store.commit('addAddress', msg);
-                            toast1.clear();
-                            this.$router.go(-1);
+                            //这里会返回地址id
+                            if (msg) {
+                                toast1.clear();
+                                this.$router.go(-1);
+                            }
+
                         })
 
                 } else {
@@ -79,15 +84,15 @@
                         message: '保存中',
                         duration: 0
                     });
-                    this.$post('userupdaddress', {
+                    this.$post('user_upd_address', {
                         user_token: this.$store.getters.getUserToken,
                         address_id: content.id,
                         name: content.name,
-                        phone: content.tel,
+                        tel: content.tel,
                         province: content.province,
                         city: content.city,
-                        town: content.county,
-                        address_list: content.addressDetail,
+                        county: content.county,
+                        address_detail: content.addressDetail,
                         area_code: content.areaCode
                     })
                         .then(() => {
@@ -104,7 +109,7 @@
                     message: '正在删除',
                     duration: 0
                 });
-                this.$post('userdeladdress', {
+                this.$post('user_del_address', {
                     user_token: this.$store.getters.getUserToken,
                     address_id: content.id
                 })

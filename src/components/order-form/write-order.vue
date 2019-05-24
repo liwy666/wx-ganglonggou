@@ -3,17 +3,17 @@
 		<myNarBar title="订单详情"></myNarBar>
 		<!--收货地址-->
 		<van-contact-card
-						:type="default_address===''? 'add' : 'edit'"
-						:name="default_address.name +'（'+default_address.province+default_address.city+default_address.town+default_address.address_list+'）'"
-						:tel="default_address.phone"
-						add-text="添加收货人"
-						@click="updDefaultAddress()"
+			:type="default_address===''? 'add' : 'edit'"
+			:name="default_address.name +'（'+default_address.province+default_address.city+default_address.county+default_address.address_detail+'）'"
+			:tel="default_address.tel"
+			add-text="添加收货人"
+			@click="updDefaultAddress()"
 		/>
 		<!--商品列表-->
 		<GoodsList></GoodsList>
 		<!--支付选项-->
 		<payOption :pay_list_="msg.pay_list"
-		           v-if="msg.pay_list && JSON.stringify(this.$store.state.user_info) !== '{}'"></payOption>
+				   v-if="msg.pay_list && JSON.stringify(this.$store.state.user_info) !== '{}'"></payOption>
 		<!--开票方式选项-->
 		<invoice></invoice>
 		<!--优惠券选项-->
@@ -21,8 +21,7 @@
 		<!--积分使用-->
 		<integralOption v-if="JSON.stringify(this.$store.state.user_info) !== '{}'"></integralOption>
 		<!--费用清单-->
-		<orderList
-						v-if="JSON.stringify(this.$store.state.user_info) !== '{}'"></orderList>
+		<orderList v-if="JSON.stringify(this.$store.state.user_info) !== '{}'"></orderList>
 		<div class="d"></div>
 		<div class="button-box">
 			<div class="button-box-l"><span>￥</span>{{this.order_price}}</div>
@@ -102,7 +101,7 @@
                     this.$toast("余额不足");
                     return false;
                 }
-                if (this.$store.state.address_list.length <1) {
+                if (this.$store.state.address_list.length < 1) {
                     this.$toast("您需要添加一个收货地址");
                     return false;
                 }
@@ -118,7 +117,7 @@
                     return false;
                 }
                 this.$dialog.confirm({
-                    message: '当前支付方式为：'+write_order_info.pay_info.pay_name+'('+write_order_info.pay_info.bystages_val+')，提交订单后不可更改，请确认'
+                    message: '当前支付方式为：' + write_order_info.pay_info.pay_name + '(' + write_order_info.pay_info.bystages_val + ')，提交订单后不可更改，请确认'
                 }).then(() => {
                     let toast1 = this.$toast.loading({
                         mask: true,
@@ -144,11 +143,10 @@
                             toast1.clear();
                         })
                 }).catch(() => {
-                
+
                 });
-                
-                
-               
+
+
             }
 
 
@@ -171,7 +169,7 @@
 		width: 100%;
 		height: 50px;
 	}
-	
+
 	.button-box {
 		width: 100%;
 		height: 50px;
@@ -179,7 +177,7 @@
 		position: fixed;
 		display: flex;
 		box-shadow: 0px 0px 1px 0px rgba(0, 0, 0, 0.1);
-		
+
 		.button-box-l {
 			height: 100%;
 			flex: 2;
@@ -189,12 +187,12 @@
 			background-color: white;
 			font-weight: bold;
 			color: red;
-			
+
 			span {
 				font-size: 16px;
 			}
 		}
-		
+
 		.button-box-r {
 			flex: 1;
 		}
