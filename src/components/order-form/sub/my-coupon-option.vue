@@ -2,20 +2,20 @@
 	<div class="main">
 		<!-- 优惠券单元格 -->
 		<van-coupon-cell
-						:coupons="coupons"
-						:chosen-coupon="chosen_coupon"
-						@click="show = true"
+			:coupons="coupons"
+			:chosen-coupon="chosen_coupon"
+			@click="show = true"
 		/>
 		<!-- 优惠券列表 -->
 		<van-popup v-model="show" position="bottom">
 			<van-coupon-list
-							show-close-button
-							:show-exchange-bar="show_exchange_bar"
-							:coupons="coupons"
-							:chosen-coupon="chosen_coupon"
-							:disabled-coupons="disabled_coupons"
-							:close-button-text="coupons.length >0 ? '任性，不使用优惠券': '关闭' "
-							@change="onChange"
+				show-close-button
+				:show-exchange-bar="show_exchange_bar"
+				:coupons="coupons"
+				:chosen-coupon="chosen_coupon"
+				:disabled-coupons="disabled_coupons"
+				:close-button-text="coupons.length >0 ? '任性，不使用优惠券': '关闭' "
+				@change="onChange"
 			/>
 		</van-popup>
 	</div>
@@ -53,197 +53,183 @@
                     this.$store.commit("setCouponInfo", coupon_info_);
                 }
             },
-
             screenCouponList() {
                 if (this.coupon_list.length < 1) {
                     return false
                 }
                 //1.检查是否符合优惠券使用金额
                 let carts_selected_price = parseFloat(this.$store.getters.getCartsSelectedPrice);
+                let coupons_id_array = {
+                    legal: []//合法的
+                    , insufficient_amount: []//金额不满足
+                    , insufficient_goods: []//商品类型不满足
+                };
+
+                //检查订单金额
                 this.coupon_list.forEach(item => {
-                    if (parseFloat(item.found_sum) <= carts_selected_price) {
-                        this.coupons.push(item);
-                    } else {
-                        item.reason = "订单金额不满足";
-                        this.disabled_coupons.push(item);
+                    if (parseFloat(item.found_sum) > carts_selected_price) {
+                        coupons_id_array.insufficient_amount.push(item.coupon_id)
                     }
+                    coupons_id_array.legal.push(item.coupon_id)
                 });
-                //2.检查是否符合优惠券使用范围
-                let idl_coupons = [];
-                this.goods_list.forEach((item, i) => {
-                    idl_coupons[i] = [];
-                    this.coupons.forEach(item2 => {
-                        if (item2.grant_type === "all") {
-                            idl_coupons[i].push(item2);
-                        } else if (item2.grant_type === "classify") {
-                            item2.coupon_info.forEach(item3 => {
-                                if (parseInt(item3.cat_id ) === parseInt(item.cat_id)) {
-                                    idl_coupons[i].push(item2);
-                                }
-                            })
-                        } else if (item2.grant_type === "solo") {
-                            item2.coupon_info.forEach(item3 => {
-                                if (parseInt(item3.goods_id)  === parseInt(item.goods_id)) {
-                                    idl_coupons[i].push(item2);
-                                }
-                            })
+                coupons_id_array.legal = this.getArrDifference1D(coupons_id_array.legal, coupons_id_array.insufficient_amount);
+                //格式化
+                let coupons_array = this.formatCoupon(coupons_id_array);
+                //检查类型
+                let idl_legal = [];
+                this.goods_list.forEach((goods_item) => {
+                    coupons_array.legal.forEach(legal_item => {
+                        if (legal_item.grant_type === 'all') {
+                            idl_legal.push(legal_item.coupon_id);
+                        } else if (legal_item.grant_type === 'classify' && legal_item.classify.indexOf(parseInt(goods_item.cat_id)) >= 0) {
+                            idl_legal.push(legal_item.coupon_id);
+                        } else if (legal_item.grant_type === 'solo' && legal_item.solo.indexOf(parseInt(goods_item.goods_id)) >= 0) {
+                            idl_legal.push(legal_item.coupon_id);
                         }
                     })
                 });
-                if (this.goods_list.length > 1) {
-                    //2.1取出遍历结果重复的优惠券
-                    let repeat_idl_coupons = this.merge(idl_coupons);
-                    //2.2和this.coupons比对出不包含的，就不符合要求的
-                    let distinct_arr = [];
-                    if (repeat_idl_coupons.length > 1) {
-                        distinct_arr = this.getArrDifference2(repeat_idl_coupons, this.coupons);
-                    } else {
-                        distinct_arr = this.coupons;
-                    }
-                    if (distinct_arr.length > 0) {
-                        distinct_arr.forEach(item => {
-                            item.reason = "所结算商品中存在不符合条件的商品";
-                            this.disabled_coupons.push(item);
-                        })
-                    }
-                    //2.3重新赋值this.coupons
-                    this.coupons = JSON.parse(JSON.stringify(repeat_idl_coupons));
-                } else {
-                    let idl_coupons_ = [];
-                    if (idl_coupons[0].length > 0) {
-                        idl_coupons[0].forEach(item => {
-                            idl_coupons_.push(item);
-                        });
-                    }
-                    //2.2和this.coupons比对出不包含的，就不符合要求的
-                    let distinct_arr = [];
-                    if (idl_coupons_.length > 1) {
-                        distinct_arr = this.getArrDifference2(idl_coupons_, this.coupons);
-                    } else {
-                        distinct_arr = this.coupons;
-                    }
-                    if (distinct_arr.length > 0) {
-                        distinct_arr.forEach(item => {
-                            item.reason = "所结算商品中存在不符合条件的商品";
-                            this.disabled_coupons.push(item);
-                        })
-                    }
-                    //2.3重新赋值this.coupons
-                    this.coupons = JSON.parse(JSON.stringify(idl_coupons_));
-                }
-                //格式化优惠券
-                if (this.coupons.length > 0) {
-                    this.coupons.forEach(item => {
-                        item.id = item.coupon_id;
-                        item.name = item.coupon_name;
-                        item.condition = '单笔订单满' + item.found_sum + '元';
-                        item.startAt = this.$MyCommon.strToDateTime(item.start_use_time,'s') ;
-                        item.endAt = this.$MyCommon.strToDateTime(item.end_use_time,'s');
-                        item.description = item.coupon_desc;
-                        item.value = parseFloat(item.cut_sum) * 100;
-                        item.valueDesc = "减" + parseFloat(item.cut_sum);
-                        item.unitDesc = "元";
-                    });
-                }
-                if (this.disabled_coupons.length > 0) {
-                    this.disabled_coupons.forEach(item => {
-                        item.id = item.coupon_id;
-                        item.name = item.coupon_name;
-                        item.condition = '单笔订单满' + item.found_sum + '元';
-                        item.startAt = this.$MyCommon.strToDateTime(item.start_use_time,'s') ;
-                        item.endAt = this.$MyCommon.strToDateTime(item.end_use_time,'s');
-                        item.description = item.coupon_desc;
-                        item.value = parseFloat(item.cut_sum) * 100;
-                        item.valueDesc = "减" + parseFloat(item.cut_sum);
-                        item.unitDesc = "元";
-                    });
-                }
-
+                idl_legal = this.getArrRepeated1D(idl_legal,this.goods_list.length);
+                let insufficient_goods = this.getArrDifference1D(coupons_id_array.legal, idl_legal); //筛选出来商品类型不满足的
+                idl_legal = this.getArrEqual1D(coupons_id_array.legal, idl_legal);//筛选出最终符合要求的优惠券
+                coupons_id_array.legal = idl_legal;
+                coupons_id_array.insufficient_goods = insufficient_goods;
+                coupons_array = this.formatCoupon(coupons_id_array);//格式化优惠券
+                this.$set(this,'coupons',coupons_array.legal);
+                this.$set(this,'disabled_coupons',coupons_array.insufficient_goods.concat(coupons_array.insufficient_amount));
             },
             /**
-             * 数组排序
-             * @param property
-             * @returns {function(*, *): number}
-             */
-            compare(property) {
-                return function (a, b) {
-                    let value1 = a[property];
-                    let value2 = b[property];
-                    return value1 - value2;
-                }
-            },
-            /**
-             * 筛选重复
-             * @param bigArray
-             * @returns {Array}
-             */
-            merge(bigArray) {
-                let array = [];
-                if (bigArray.length > 1) {
-                    const middeleArray = bigArray.reduce((a, b) => {
-                        return a.concat(b);
-                    });
-                    middeleArray.sort((this.compare('coupon_id')));
-                    for (let i = 0; i < middeleArray.length;) {
-                        let count = 0;
-                        for (let j = i; j < middeleArray.length; j++) {
-                            if (middeleArray[i].coupon_id === middeleArray[j].coupon_id) {
-                                count++;
-                            }
-                        }
-                        if (count > 1) {
-                            array.push(middeleArray[i]);
-                        }
-                        i += count;
-                    }
-                } else {
-                    array = bigArray;
-                }
-                return array;
-            },
-            /**
-             * 筛选不重复
+             * 1维数组筛选不重复
              * @param arr1
              * @param arr2
-             * @returns {*}
+             * @returns {Uint8Array | T[] | *}
              */
-            getArrDifference(arr1, arr2) {
-                if (arr1.length > 0 && arr2.length > 0) {
-                    return arr1.concat(arr2).filter(function (v, i, arr) {
-                        return arr.indexOf(v) === arr.lastIndexOf(v);
-                    });
-                } else {
-                    return [];
-                }
+            getArrDifference1D(arr1, arr2) {
+                return arr1.concat(arr2).filter(function (v, i, arr) {
+                    return arr.indexOf(v) === arr.lastIndexOf(v);
+                });
             },
-            /**
-             * 筛选不重复
-             * @param array1
-             * @param array2
-             * @returns {*}
-             */
-            getArrDifference2(array1, array2) {
-                let result = [];
-                if (array1.length > 0 && array2.length > 0) {
-                    for (let i = 0; i < array2.length; i++) {
-                        let obj = array2[i];
-                        let num = obj.coupon_id;
-                        let isExist = false;
-                        for (let j = 0; j < array1.length; j++) {
-                            let aj = array1[j];
-                            let n = aj.coupon_id;
-                            if (n === num) {
-                                isExist = true;
-                                break;
-                            }
-                        }
-                        if (!isExist) {
-                            result.push(obj);
+
+			/*取出两个数组的相同元素*/
+            getArrEqual1D(arr1, arr2) {
+                let newArr = [];
+                for (let i = 0; i < arr2.length; i++) {
+                    for (let j = 0; j < arr1.length; j++) {
+                        if(arr1[j] === arr2[i]){
+                            newArr.push(arr1[j]);
                         }
                     }
                 }
-                return result;
-            },
+                return newArr;
+            }
+
+			/*获取重复次数*/
+            , getArrRepeated1D(arr, number) {
+                function arrValnumber(val_name) {
+                    let count = 0;
+                    for (let i = 0; i < arr.length; i++) {
+                        for (let j = 0; j < arr.length; j++) {
+                            if (arr[j] == val_name) {
+                                count++;
+                                arr[j] = -1;
+                            }
+                        }
+                    }
+                    return count
+                }
+                let result = [];
+                arr.forEach(item => {
+                    if( arrValnumber(item) === number ){
+                        result.push(item)
+					}
+				});
+               return result;
+            }
+            /**
+             * 格式化优惠券
+             * @param obj
+             */
+            , formatCoupon(obj) {
+                let resutl = {
+                    legal: []//合法的
+                    , insufficient_amount: []//金额不满足
+                    , insufficient_goods: []//商品类型不满足
+                };
+                obj.legal.forEach(item => {
+                    this.coupon_list.forEach(coupon_itme => {
+                        if (item === coupon_itme.coupon_id) {
+                            resutl.legal.push({
+                                id: coupon_itme.coupon_id
+                                , name: coupon_itme.coupon_name
+                                , cut_sum: coupon_itme.cut_sum
+                                , found_sum: coupon_itme.found_sum
+                                , solo: coupon_itme.solo
+                                , classify: coupon_itme.classify
+                                , grant_type: coupon_itme.grant_type
+                                , coupon_id: coupon_itme.coupon_id
+                                , condition: '单笔订单满' + coupon_itme.found_sum + '元'
+                                , startAt: this.$MyCommon.strToDateTime(coupon_itme.start_use_time, 's')
+                                , endAt: this.$MyCommon.strToDateTime(coupon_itme.end_use_time, 's')
+                                , description: coupon_itme.coupon_desc
+                                , value: parseFloat(coupon_itme.cut_sum) * 100
+                                , valueDesc: "减" + parseFloat(coupon_itme.cut_sum)
+                                , unitDesc: "元"
+                            })
+                        }
+                    });
+
+                });
+                obj.insufficient_amount.forEach(item => {
+                    this.coupon_list.forEach(coupon_itme => {
+                        if (item === coupon_itme.coupon_id) {
+                            resutl.insufficient_amount.push({
+                                id: coupon_itme.coupon_id
+                                , name: coupon_itme.coupon_name
+                                , cut_sum: coupon_itme.cut_sum
+                                , found_sum: coupon_itme.found_sum
+                                , grant_type: coupon_itme.grant_type
+                                , solo: coupon_itme.solo
+                                , classify: coupon_itme.classify
+                                , coupon_id: coupon_itme.coupon_id
+                                , condition: '单笔订单满' + coupon_itme.found_sum + '元'
+                                , startAt: this.$MyCommon.strToDateTime(coupon_itme.start_use_time, 's')
+                                , endAt: this.$MyCommon.strToDateTime(coupon_itme.end_use_time, 's')
+                                , description: coupon_itme.coupon_desc
+                                , value: parseFloat(coupon_itme.cut_sum) * 100
+                                , valueDesc: "减" + parseFloat(coupon_itme.cut_sum)
+                                ,reason:'订单金额不满足'
+                                , unitDesc: "元"
+                            })
+                        }
+                    });
+
+                });
+                obj.insufficient_goods.forEach(item => {
+                    this.coupon_list.forEach(coupon_itme => {
+                        if (item === coupon_itme.coupon_id) {
+                            resutl.insufficient_goods.push({
+                                id: coupon_itme.coupon_id
+                                , name: coupon_itme.coupon_name
+                                , cut_sum: coupon_itme.cut_sum
+                                , found_sum: coupon_itme.found_sum
+                                , grant_type: coupon_itme.grant_type
+                                , solo: coupon_itme.solo
+                                , classify: coupon_itme.classify
+                                , coupon_id: coupon_itme.coupon_id
+                                , condition: '单笔订单满' + coupon_itme.found_sum + '元'
+                                , startAt: this.$MyCommon.strToDateTime(coupon_itme.start_use_time, 's')
+                                , endAt: this.$MyCommon.strToDateTime(coupon_itme.end_use_time, 's')
+                                , description: coupon_itme.coupon_desc
+                                , value: parseFloat(coupon_itme.cut_sum) * 100
+                                , valueDesc: "减" + parseFloat(coupon_itme.cut_sum)
+                                ,reason:'所结算商品中存在不符合条件的商品'
+                                , unitDesc: "元"
+                            })
+                        }
+                    });
+
+                });
+                return resutl;
+            }
         },
     };
 </script>

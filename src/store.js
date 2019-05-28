@@ -48,6 +48,8 @@ let store = new Vuex.Store({
             is_promote: 0,//是否秒杀商品
             give_integral: 0,//返积分
             integral: 0,//用积分
+            one_give_integral: 0,//返积分
+            one_integral: 0,//用积分
             integral_desc: '',//积分描述
         }//单个商品信息
         , goods_sku_options: []//sku选项
@@ -116,6 +118,8 @@ let store = new Vuex.Store({
                 is_promote: 0,//是否秒杀商品
                 give_integral: 0,//返积分
                 integral: 0,//用积分
+                one_give_integral: 0,//返积分
+                one_integral: 0,//用积分
                 integral_desc: '',//积分描述
             });
             Vue.set(state.goods_info, 'goods_price', new_goods_info.shop_price);
@@ -260,6 +264,8 @@ let store = new Vuex.Store({
                     data[i3].attr_desc = goods_info.attr_desc;
                     data[i3].give_integral = goods_info.give_integral;
                     data[i3].integral = goods_info.integral;
+                    data[i3].one_give_integral = goods_info.one_give_integral;
+                    data[i3].one_integral = goods_info.one_integral;
                     data[i3].goods_price = goods_info.goods_price;
                     data[i3].one_goods_price = goods_info.one_goods_price;
                 }
@@ -277,9 +283,11 @@ let store = new Vuex.Store({
 
             let index = (state.carts.findIndex(item => item.goods_id === cart_info.goods_id && item.sku_id === cart_info.sku_id));
             Vue.set(state.carts[index], 'goods_number', cart_info.goods_number);
-            //更新购物车价格
+            //更新购物车价格,积分
             state.carts.forEach(item => {
                 Vue.set(item, 'goods_price', (item.goods_number * item.one_goods_price).toFixed(2));
+                Vue.set(item, 'give_integral', (item.goods_number * item.one_give_integral));
+                Vue.set(item, 'integral', (item.goods_number * item.one_integral));
             });
 
             //遍历购物车，puse到carts_selected中
@@ -460,12 +468,16 @@ let store = new Vuex.Store({
                     Vue.set(context.state.goods_info, 'goods_attribute_img', item.img_url);
                     Vue.set(context.state.goods_info, 'sku_id', item.sku_id);
                     Vue.set(context.state.goods_info, 'attr_desc', item.sku_desc);
-                    Vue.set(context.state.goods_info, 'integral', item.integral);
-                    Vue.set(context.state.goods_info, 'give_integral', item.give_integral);
+                    Vue.set(context.state.goods_info, 'one_integral', item.integral);
+                    Vue.set(context.state.goods_info, 'one_give_integral', item.give_integral);
                 }
             });
             //商品价格
             Vue.set(context.state.goods_info, 'goods_price', parseFloat(context.state.goods_info.one_goods_price * context.state.goods_info.goods_number).toFixed(2));
+            //获取积分
+            Vue.set(context.state.goods_info, 'give_integral', parseInt(context.state.goods_info.one_give_integral * context.state.goods_info.goods_number));
+            //使用积分
+            Vue.set(context.state.goods_info, 'integral', parseInt(context.state.goods_info.one_integral * context.state.goods_info.goods_number));
             //积分描述
             Vue.set(context.state.goods_info, 'integral_desc', '购买可得' + parseInt(context.state.goods_info.give_integral) + context.state.integral_name);
         }
@@ -542,7 +554,7 @@ let store = new Vuex.Store({
                 message: '获取用户信息',
                 duration: 0
             });
-            fetch('user_info', {user_token: user_token})
+            fetch('user_get_user_info', {user_token: user_token})
                 .then((msg) => {
                     Vue.set(context.state, 'user_info', msg);
                     toast1.clear();
@@ -554,13 +566,13 @@ let store = new Vuex.Store({
          * @param context
          * @param login_type
          */
-        , getPayList(context, login_type) {
+        , getPayList(context, user_token) {
             let toast1 = Toast.loading({
                 mask: true,
                 message: '获取支付列表',
                 duration: 0
             });
-            fetch('user_get_pay_list', {login_type: login_type})
+            fetch('user_get_pay_list', {user_token: user_token})
                 .then((msg) => {
                     Vue.set(context.state, 'pay_list', msg);
                     toast1.clear();

@@ -5,7 +5,7 @@
 			<van-row>
 				<van-col span="12"><p class="list-name">订单总金额：</p></van-col>
 				<van-col span="12"><p class="list-price">￥{{this.order_info.original_order_price == null ?
-					this.order_info.oder_price : this.order_info.original_order_price}}</p></van-col>
+					this.order_info.order_price : this.order_info.original_order_price}}</p></van-col>
 			</van-row>
 			<van-row>
 				<van-col span="12"><p class="list-name">使用优惠券减免：</p></van-col>
@@ -22,7 +22,7 @@
 			<van-row>
 				<van-col span="12"><p class="list-name">结算金额：</p></van-col>
 				<van-col span="12"><p class="list-price" style="color: red;font-weight: bold">
-					￥{{this.order_info.oder_price}}</p>
+					￥{{this.order_info.order_price}}</p>
 				</van-col>
 			</van-row>
 		</div>

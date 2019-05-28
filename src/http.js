@@ -10,11 +10,11 @@ axios.defaults.baseURL = 'http://192.168.0.158:8004/api/v1';
 //http request 拦截器
 axios.interceptors.request.use(
     config => {
-        if(config.url.indexOf('userupdportrait') !== -1){
+        if (config.url.indexOf('userupdportrait') !== -1) {
             config.headers = {
                 'Content-Type': 'multipart/form-data'
             };
-        }else {
+        } else {
             config.headers = {
                 'Content-Type': 'application/x-www-form-urlencoded'
             };

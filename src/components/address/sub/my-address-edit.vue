@@ -74,9 +74,7 @@
                                 toast1.clear();
                                 this.$router.go(-1);
                             }
-
                         })
-
                 } else {
                     //修改收货地址
                     let toast1 = this.$toast.loading({

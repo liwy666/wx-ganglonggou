@@ -70,6 +70,9 @@
                             .then(() => {
                                 toast1.clear();
                                 this.$store.commit("setIsDefaultAddress", address_id);
+                                if (this.$route.query.go_back === true) {
+                                    this.$router.go(-1);
+                                }
                             })
                     }
                 }

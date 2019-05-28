@@ -98,7 +98,7 @@
                         }
                     });
                     if (flag) {
-                        this.$router.push('/writeOrder');
+                        this.$router.push( {path:'/writeOrder',query:{is_init:true}});
                     }
                 } else {
                     this.$toast("还未选中商品哦~~")
