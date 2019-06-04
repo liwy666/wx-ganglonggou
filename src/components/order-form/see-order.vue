@@ -1,8 +1,13 @@
 <template>
 	<div class="main">
 		<myNarBar title="订单查看"></myNarBar>
+		<!--支付倒计时-->
+		<countDown :end_time="order_info.invalid_pay_time"
+				   v-if="(new Date()).getTime() <= (order_info.invalid_pay_time)*1000 && order_info.order_state === 1"
+				   title="等待付款，超出时效订单将自动关闭">>
+		</countDown>
 		<!--订单状态-->
-		<van-steps v-if="order_info.order_state >=1 && order_info.order_state <=4" :active="active">
+		<van-steps v-if="order_info.order_state >=1 && order_info.order_state <=4&&load_flag" :active="active">
 			<van-step>提交订单</van-step>
 			<van-step>支付订单</van-step>
 			<van-step>商家发货</van-step>
@@ -10,26 +15,27 @@
 		</van-steps>
 		<!--收货地址-->
 		<van-contact-card
-						v-if="JSON.stringify(order_info) !== '{}'"
-						type="edit"
-						:name="order_info.logistics.logistics_address_name +'（'+order_info.logistics.logistics_desc+'）'"
-						:tel="order_info.logistics.logistics_address_phone"
-						:editable="false"
+			v-if="load_flag"
+			type="edit"
+			:name="order_info.logistics_name +'（'+order_info.logistics_address+'）'"
+			:tel="order_info.logistics_tel"
+			:editable="false"
 		/>
 		<!--支付选项,因为农行支付不可切换问题，关闭-->
-	<!--	<payOption
-						v-if="$store.state.pay_list.length > 0 && JSON.stringify(order_info) !== '{}' && order_info.order_state === 1"
-						:order_info="order_info" :pay_lsit="$store.state.pay_list"></payOption>-->
+		<!--	<payOption
+							v-if="$store.state.pay_list.length > 0 && load_flag && order_info.order_state === 1"
+							:order_info="order_info" :pay_lsit="$store.state.pay_list"></payOption>-->
 		<!--商品列表-->
-		<goodsList v-if="JSON.stringify(order_info) !== '{}'" :goods_list="order_info.midorder"></goodsList>
+		<goodsList v-if="load_flag" :goods_list="order_info.mid_order"></goodsList>
 		<!--订单详情-->
-		<orderInfo v-if="JSON.stringify(order_info) !== '{}'" :order_info="order_info"></orderInfo>
+		<orderInfo v-if="load_flag" :order_info="order_info"></orderInfo>
 		<!--物流详情-->
-		<logisticsInfo v-if="JSON.stringify(order_info) !== '{}' &&  parseInt(order_info.order_state) >= 3"  :logistics="order_info.logistics"></logisticsInfo>
+		<logisticsInfo v-if="load_flag &&  parseInt(order_info.order_state) >= 3"
+					   :logistics="order_info.logistics"></logisticsInfo>
 		<!--费用详情-->
-		<payInfo v-if="JSON.stringify(order_info) !== '{}'" :order_info="order_info"></payInfo>
+		<payInfo v-if="load_flag" :order_info="order_info"></payInfo>
 		<!--下方操作按钮-->
-		<orderOperation v-if="JSON.stringify(order_info) !== '{}'" :order_info="order_info"></orderOperation>
+		<orderOperation v-if="load_flag" :order_info="order_info"></orderOperation>
 	</div>
 </template>
 
@@ -41,12 +47,14 @@
     import logisticsInfo from './sub/my-see-order-logistics-info';
     import payOption from './sub/my-see-order-pay-option';
     import orderOperation from './sub/my-see-order-operation';
+    import countDown from '../sub/my-count-down';
 
     export default {
         data() {
             return {
                 order_sn: "",
-                order_info: {}
+                order_info: {},
+                load_flag: false,
             };
         },
         computed: {
@@ -63,7 +71,8 @@
         created() {
             this.order_sn = this.$route.params.order_sn;
             this.getOrderInfo();
-            this.getPayList();
+            console.log((new Date()).getTime() / 1000);
+            //this.getPayList();  //支付选项,因为农行支付不可切换问题，关闭
         },
         methods: {
             getOrderInfo() {
@@ -77,7 +86,10 @@
                     order_sn: this.order_sn
                 })
                     .then((msg) => {
-                        this.order_info = msg;
+                        if (msg) {
+                            this.order_info = msg;
+                            this.load_flag = true;
+                        }
                         toast1.clear();
                     })
             },
@@ -94,7 +106,8 @@
             payInfo,//费用详情
             logisticsInfo,//物流信息
             payOption,//支付选项
-            orderOperation//订单操作
+            orderOperation,//订单操作
+            countDown//倒计时
         },
     };
 </script>

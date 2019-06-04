@@ -30,7 +30,7 @@
             goPay() {
                 let success_url = encodeURIComponent("https://" + window.location.host + "/#/home");
                 let back_url = encodeURIComponent(window.location.href);
-                window.location.href = this.$store.state.api_url + "/api/v1/payment/user_pay?success_url=" + success_url
+                window.location.href = this.$store.state.api_url + "/api/v1/payment/user_order_payment?success_url=" + success_url
                     + "&back_url=" + back_url
                     + "&order_sn=" + this.order_info.order_sn
                     + "&user_token=" + this.$store.getters.getUserToken;
@@ -119,7 +119,6 @@
 
                     })
             }
-
         },
     };
 </script>

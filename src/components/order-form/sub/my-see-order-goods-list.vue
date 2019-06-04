@@ -1,14 +1,14 @@
 <template>
 	<div class="main">
-		<p class="title">商品列表</p>
+		<p class="title">订单清单</p>
 		<van-card
-						v-for="(item,i) in goods_list" :key="i"
-						:num="item.goods_number"
-						:price="item.goods_price"
-						:desc="item.attr_desc"
-						:title="item.goods_name"
-						:thumb="item.goods_attribute_img ==null ? './img/goods-img-invalid.jpg' : item.goods_attribute_img "
-						@click="toGoods(item.goods_id)"
+			v-for="(item,i) in goods_list" :key="i"
+			:num="item.goods_number"
+			:price="item.mid_order_price"
+			:desc="item.sku_desc"
+			:title="item.goods_name"
+			:thumb="item.img_url ==null ? './img/goods-img-invalid.jpg' : item.img_url "
+			@click="toGoods(item.goods_id)"
 		/>
 	</div>
 </template>
@@ -18,23 +18,24 @@
         data() {
             return {};
         },
-        props:["goods_list"],
+        props: ["goods_list"],
         computed: {},
         created() {
 
         },
         methods: {
-            toGoods(goods_id){
-                this.$router.push('/goods/'+goods_id)
+            toGoods(goods_id) {
+                this.$router.push('/goods/' + goods_id)
             }
         },
     };
 </script>
 
 <style lang="scss" scoped>
-	.main{
+	.main {
 		margin-top: 20px;
-		p{
+
+		p {
 			padding-left: 10px;
 			font-size: 14px;
 			color: #323233;

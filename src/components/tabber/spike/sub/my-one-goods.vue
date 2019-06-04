@@ -19,7 +19,7 @@
 				<span class="progress-value">{{this.circle_text}}</span>
 			</md-progress>
 		</div>
-		<countDown :end_time="goods_info.promote_end_date"></countDown>
+		<countDown :end_time="goods_info.promote_end_date" title="距离结束还剩："></countDown>
 	</div>
 </template>
 

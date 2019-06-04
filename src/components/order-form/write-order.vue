@@ -66,7 +66,22 @@
             //初始化表单
             if (this.$route.query.init === true) {
                 this.$set(this.$store.state, 'write_order_info', {
+                    pay_info: {},//提交订单时用户选中的支付方式信息
+                    invoice_info: {
+                        invoice_head: "",
+                        invoice_khh: "",
+                        invoice_kpdz: "",
+                        invoice_nsrsbh: "",
+                        invoice_phone: "",
+                        invoice_qymc: "",
+                        invoice_type: "不开票",
+                        invoice_yhzh: "",
+                        invoice_zj: "",
+                    },//提交订单时用户选中的开票方式信息
+                    coupon_info: {},//提交订单时用户选中的优惠券信息
+                    coupon_id: -1,//提交订单时用户选中的优惠券id
                     use_integral: 0,//使用积分数量
+                    order_price: '0'//订单价格
                 });
             }
             this.getPayList(this.$store.state.user_token);
@@ -141,7 +156,7 @@
                         message: '正在为您生成订单',
                         duration: 0
                     });
-                    this.$post('user_submit_order?XDEBUG_SESSION_START=12355', {
+                    this.$post('user_submit_order', {
                         user_token: this.$store.getters.getUserToken,
                         pay_id: this.$store.state.write_order_info.pay_info.pay_id,
                         pay_code: this.$store.state.write_order_info.pay_info.pay_code,
@@ -152,12 +167,13 @@
                         goods_list: this.$store.state.carts_selected
                     })
                         .then((msg) => {
-                           /* //删除购物车
-                            this.$store.state.carts_selected.forEach(item => {
-                                this.$store.commit('delCart', item);
-                            });
-                            this.$router.push('/seeOrder/' + msg);*/
-                            //
+                            if (msg) {
+                                //删除购物车
+                                this.$store.state.carts_selected.forEach(item => {
+                                    this.$store.commit('delCart', item);
+                                });
+                                this.$router.push('/seeOrder/' + msg);
+                            }
                             toast1.clear();
                         })
 

@@ -1,6 +1,6 @@
 <template>
 	<div class="main">
-		<div class="l">距结束还剩：</div>
+		<div class="l">{{this.title}}</div>
 		<div class="r">
 			<span>{{this.time.d}}</span><i>天</i>
 			<span>{{this.time.h}}</span><i>时</i>
@@ -24,7 +24,7 @@
 
             };
         },
-        props: ["end_time"],
+        props: ["end_time","title"],
         computed: {},
         created() {
             let time = setInterval(() => {
@@ -85,6 +85,7 @@
 				line-height: 20px;
 				text-align: center;
 				margin-left: 5px;
+				color: red;
 			}
 			i{
 				color: white;
