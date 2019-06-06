@@ -1,6 +1,5 @@
 <template>
 	<div class="main">
-		<p class="title">订单清单</p>
 		<van-card
 			v-for="(item,i) in goods_list" :key="i"
 			:num="item.goods_number"

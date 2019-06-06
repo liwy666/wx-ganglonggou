@@ -1,7 +1,7 @@
 <template>
 	<div class="main">
 		<myNarBar title="评价中心"></myNarBar>
-		<div class="evaluate-head"><img src="../../../../assets/evaluate-head.jpg" alt=""></div>
+		<div class="evaluate-head"></div>
 		<div class="evaluate-body-noEvaluate" v-if="evaluate_list.length <1">
 			暂无需要评价商品~~
 		</div>
@@ -27,7 +27,7 @@
                     if (order_list.length > 0) {
                         for (let i = 0; i < order_list.length - 1; i++) {
                             for (let j = 0; j < order_list.length - i - 1; j++) {
-                                if (this.dateStringConvert(order_list[j].order_time_new) < this.dateStringConvert(order_list[j + 1].order_time_new)) {
+                                if (this.dateStringConvert(order_list[j].upd_time) < this.dateStringConvert(order_list[j + 1].upd_time)) {
                                     let max = order_list[j];
                                     order_list[j] = order_list[j + 1];
                                     order_list[j + 1] = max;
@@ -43,8 +43,8 @@
                     let result = [];
                     if (this.order_list.length > 0) {
                         this.order_list.forEach(item => {
-                            item.midorder.forEach(item2 => {
-                                if (item.order_state === 4 && item2.evaluate_is === 0) {
+                            item.mid_order.forEach(item2 => {
+                                if (item.order_state === 4 && item2.is_evaluate === 0) {
                                     result.push(item2);
                                 }
                             })
@@ -84,9 +84,10 @@
 		width: 100%;
 		height: 135px;
 		background-color: #c1101c;
-		img{
-			width: 100%;
-		}
+		z-index: 1;
+		background-image: url("../../../../assets/evaluate-head.jpg");
+		background-repeat:no-repeat;
+		background-size:cover;
 	}
 	
 	.evaluate-body-noEvaluate {
@@ -95,21 +96,22 @@
 		width: 94%;
 		margin-left: 3%;
 		height: 400px;
-		margin-top: -20px;
+		margin-top: -15px;
 		line-height: 400px;
 		text-align: center;
 		box-shadow: 0 0 1px 0 rgba(0, 0, 0, .3);
 		color: #7d7e80;
-		z-index: 9;
+		z-index: 10;
 	}
 	.evaluate-body{
 		background-color: white;
 		border-radius: 5px;
 		width: 94%;
 		margin-left: 3%;
-		margin-top: -20px;
+		margin-top: -15px;
 		box-shadow: 0 0 1px 0 rgba(0, 0, 0, .3);
 		overflow: hidden;
+		z-index: 10;
 	}
 
 </style>

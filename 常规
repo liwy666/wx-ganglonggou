@@ -89,5 +89,5 @@ compare(property) {
 middeleArray.sort((this.compare('coupon_id')));
 
  order_list.forEach(item => {
-                        console.log(item.order_time_new);
+                        console.log(item.upd_time);
                     });

@@ -2,9 +2,9 @@
 	<div class="main">
 		<myNarBar title="提交评价"></myNarBar>
 		<van-card
-						:desc="goods_info.attr_desc"
+						:desc="goods_info.sku_desc"
 						:title="goods_info.goods_name"
-						:thumb="goods_info.goods_attribute_img ==null ? './img/goods-img-invalid.jpg' : goods_info.goods_attribute_img "
+						:thumb="goods_info.img_url ==null ? './img/goods-img-invalid.jpg' : goods_info.img_url "
 		/>
 		<van-row>
 			<van-col span="12">商品评分：</van-col>
@@ -58,13 +58,15 @@
                     user_token: this.$store.getters.getUserToken,
                     evaluate_text: this.evaluate_text,
                     rate: this.rate,
-                    midorder_id: this.goods_info.midorder_id,
-                    order_id: this.goods_info.order_id
+                    id: this.goods_info.id,
                 })
                     .then((msg) => {
                         toast1.clear();
                         if (msg) {
+                            //刷新用户信息
                             this.$store.dispatch("getUserInfo", this.$store.getters.getUserToken);
+                            //刷新订单表
+                            this.$store.dispatch("getOrderList", this.$store.getters.getUserToken);
                             this.$router.push('/home');
                         } else {
                             this.$toast('提交评价失败')
@@ -81,10 +83,13 @@
 <style lang="scss" scoped>
 	.main {
 		.van-card {
+			padding-top:20px;
+			padding-bottom: 20px;
 			background-color: white;
 		}
 		
 		.van-row {
+			padding-bottom: 20px;
 			.van-rate {
 				i {
 					font-size: 20px !important;

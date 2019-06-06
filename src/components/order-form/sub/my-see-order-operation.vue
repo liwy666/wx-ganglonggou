@@ -1,15 +1,14 @@
 <template>
 	<div class="main">
-		<div class="d"></div>
 		<div class="order-operation-body">
 			<van-button round v-if="order_info.order_state === 1" type="default" @click="callOrder">取消订单</van-button>
 			<van-button round v-if="order_info.order_state === 0" type="default" @click="delOrder">删除订单</van-button>
 			<van-button round v-if="order_info.order_state === 1" type="danger" @click="goPay">立即支付</van-button>
 			<van-button round v-if="order_info.order_state === 3" type="default" @click="takeOrder">确认收货</van-button>
-<!--			<van-button round v-if="order_info.order_state === 4 && order_info.evaluate_is === 0" type="default">前去评价</van-button>-->
+			<!--			<van-button round v-if="order_info.order_state === 4 && order_info.evaluate_is === 0" type="default">前去评价</van-button>-->
 			<van-button round v-if="order_info.order_state === 5" type="default" @click="callService">取消申请</van-button>
 			<van-button round v-if="order_info.order_state === 4 ||order_info.order_state === 2" type="default"
-      @click="$router.push('/afterSale/'+order_info.order_sn)">申请售后
+						@click="$router.push('/afterSale/'+order_info.order_sn)">申请售后
 			</van-button>
 		</div>
 	</div>
@@ -49,6 +48,7 @@
                     .then((msg) => {
                         toast1.clear();
                         if (msg) {
+                            this.$store.dispatch("getOrderList", this.$store.getters.getUserToken);
                             this.$router.push('/home');
                         } else {
                             this.$toast('取消售后申请失败')
@@ -63,13 +63,14 @@
                     message: '正在为您取消订单',
                     duration: 0
                 });
-                this.$post('usercallorder', {
+                this.$post('user_call_order', {
                     user_token: this.$store.getters.getUserToken,
                     order_sn: this.order_info.order_sn
                 })
                     .then((msg) => {
                         toast1.clear();
                         if (msg) {
+                            this.$store.dispatch("getOrderList", this.$store.getters.getUserToken);
                             this.$router.push('/home');
                         } else {
                             this.$toast('取消订单失败')
@@ -78,19 +79,20 @@
                     })
             },
             /*删除订单*/
-            delOrder(){
+            delOrder() {
                 let toast1 = this.$toast.loading({
                     mask: true,
                     message: '正在为您删除订单',
                     duration: 0
                 });
-                this.$post('userdelorder', {
+                this.$post('user_del_order', {
                     user_token: this.$store.getters.getUserToken,
                     order_sn: this.order_info.order_sn
                 })
                     .then((msg) => {
                         toast1.clear();
                         if (msg) {
+                            this.$store.dispatch("getOrderList", this.$store.getters.getUserToken);
                             this.$router.push('/home');
                         } else {
                             this.$toast('删除订单失败')
@@ -99,19 +101,20 @@
                     })
             },
             /*签收订单*/
-            takeOrder(){
+            takeOrder() {
                 let toast1 = this.$toast.loading({
                     mask: true,
                     message: '正在为您签收订单',
                     duration: 0
                 });
-                this.$post('usertakeorder', {
+                this.$post('user_take_order', {
                     user_token: this.$store.getters.getUserToken,
                     order_sn: this.order_info.order_sn
                 })
                     .then((msg) => {
                         toast1.clear();
                         if (msg) {
+                            this.$store.dispatch("getOrderList", this.$store.getters.getUserToken);
                             this.$router.push('/home');
                         } else {
                             this.$toast('签收订单失败')
@@ -130,7 +133,7 @@
 			width: 100%;
 			height: 50px;
 		}
-		
+
 		.order-operation-body {
 			width: 100%;
 			height: 50px;
@@ -141,7 +144,7 @@
 			display: flex;
 			justify-content: flex-end;
 			align-items: center;
-			
+
 			button {
 				display: block;
 				height: 80%;

@@ -7,7 +7,8 @@
 				   title="等待付款，超出时效订单将自动关闭">>
 		</countDown>
 		<!--订单状态-->
-		<van-steps v-if="order_info.order_state >=1 && order_info.order_state <=4&&load_flag" :active="active">
+		<van-steps v-if="order_info.order_state >=1 && order_info.order_state <=4&&load_flag" :active="active"
+				   :active-color="$MyCommon.$main_color0">
 			<van-step>提交订单</van-step>
 			<van-step>支付订单</van-step>
 			<van-step>商家发货</van-step>
@@ -31,7 +32,7 @@
 		<orderInfo v-if="load_flag" :order_info="order_info"></orderInfo>
 		<!--物流详情-->
 		<logisticsInfo v-if="load_flag &&  parseInt(order_info.order_state) >= 3"
-					   :logistics="order_info.logistics"></logisticsInfo>
+					   :logistics="order_info"></logisticsInfo>
 		<!--费用详情-->
 		<payInfo v-if="load_flag" :order_info="order_info"></payInfo>
 		<!--下方操作按钮-->
@@ -71,7 +72,6 @@
         created() {
             this.order_sn = this.$route.params.order_sn;
             this.getOrderInfo();
-            console.log((new Date()).getTime() / 1000);
             //this.getPayList();  //支付选项,因为农行支付不可切换问题，关闭
         },
         methods: {
@@ -112,6 +112,12 @@
     };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
+	.van-step--horizontal.van-step--finish .van-step__circle, .van-step--horizontal.van-step--finish .van-step__line {
+		background-color: $main-color0 !important;
+	}
 
+	.van-step--finish .van-step__title {
+		color: $main-color0;
+	}
 </style>

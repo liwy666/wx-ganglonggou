@@ -27,7 +27,7 @@
                     if (order_list.length > 0) {
                         for (let i = 0; i < order_list.length - 1; i++) {
                             for (let j = 0; j < order_list.length -i-1; j++) {
-                                if (this.dateStringConvert(order_list[j].order_time_new) < this.dateStringConvert(order_list[j+1].order_time_new)) {
+                                if (this.dateStringConvert(order_list[j].upd_time) < this.dateStringConvert(order_list[j+1].upd_time)) {
                                     let max = order_list[j];
                                     order_list[j] = order_list[j+1];
                                     order_list[j+1] = max;

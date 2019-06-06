@@ -59,8 +59,8 @@
                     let result = 0;
                     if (this.order_list.length > 0) {
                         this.$store.state.order_list.forEach(item => {
-                            item.midorder.forEach(item2 => {
-                                if (item.order_state === 4 && item2.evaluate_is === 0) {
+                            item.mid_order.forEach(item2 => {
+                                if (item.order_state === 4 && item2.is_evaluate === 0) {
                                     result++;
                                 }
                             })

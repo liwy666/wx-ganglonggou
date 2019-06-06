@@ -3,12 +3,12 @@
 			<p class="order-sn">订单号：{{this.order_info.order_sn}}</p>
 			<p class="order-state">{{this.order_info.order_state_name}}</p>
 		<van-card
-						v-for="(item,i) in order_info.midorder" :key="i"
+						v-for="(item,i) in order_info.mid_order" :key="i"
 						:num="item.goods_number"
-						:price="item.goods_price"
-						:desc="item.attr_desc"
+						:price="item.mid_order_price"
+						:desc="item.sku_desc"
 						:title="item.goods_name"
-						:thumb="item.goods_attribute_img ==null ? './img/goods-img-invalid.jpg' : item.goods_attribute_img "
+						:thumb="item.img_url ==null ? './img/goods-img-invalid.jpg' : item.img_url"
 		/>
 		<p class="order-bottom"></p>
 	</div>
@@ -43,7 +43,7 @@
 		overflow: hidden;
 		box-shadow: 0px 0px 1px 0px rgba(0,0,0,.1);
 		.order-sn{
-			padding-left: 5px;
+			padding-left: 20px;
 			height: 30px;
 			line-height: 30px;
 			font-size: 10px;

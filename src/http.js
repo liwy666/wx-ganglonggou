@@ -4,21 +4,15 @@ import {Toast} from 'vant';
 
 axios.defaults.timeout = 5000;
 //axios.defaults.baseURL = 'https://api.ganglonggou.com/api/v1';
-axios.defaults.baseURL = 'http://192.168.0.158:8004/api/v1';
+axios.defaults.baseURL = 'https://test-api.ganglonggou.com/api/v1';
 
 
 //http request 拦截器
 axios.interceptors.request.use(
     config => {
-        if (config.url.indexOf('userupdportrait') !== -1) {
-            config.headers = {
-                'Content-Type': 'multipart/form-data'
-            };
-        } else {
-            config.headers = {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            };
-        }
+        config.headers = {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        };
         config.validateStatus = function (status) {
             return status >= 200 && status <= 400; // 默认的
         };

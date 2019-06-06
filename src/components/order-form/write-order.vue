@@ -61,6 +61,11 @@
                     return this.$store.state.write_order_info.order_price;
                 }
             },
+            goods_list: {
+                get: function () {
+                    return this.$store.getters.getCartsSelected;
+                }
+            }
         },
         created() {
             //初始化表单
@@ -172,6 +177,11 @@
                                 this.$store.state.carts_selected.forEach(item => {
                                     this.$store.commit('delCart', item);
                                 });
+                                //刷新用户信息
+                                this.$store.dispatch("getUserInfo", this.$store.getters.getUserToken);
+                                //刷新订单表
+                                this.$store.dispatch("getOrderList", this.$store.getters.getUserToken);
+                                //导航到订单查看
                                 this.$router.push('/seeOrder/' + msg);
                             }
                             toast1.clear();

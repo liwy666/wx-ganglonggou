@@ -8,8 +8,8 @@
 				</div>
 				<div class="coupon-head-r">
 					<p class="coupon-name">{{this.coupon_info.coupon_name}}</p>
-					<p class="coupon-grant-time">有效日期：{{this.formatDate(this.coupon_info.start_use_time)}} -
-						{{this.formatDate(this.coupon_info.end_use_time)}}</p>
+					<p class="coupon-grant-time">有效日期：{{this.coupon_info.start_use_time.substring(0,10)}} -
+						{{this.coupon_info.end_use_time.substring(0,10)}}</p>
 				</div>
 			</div>
 			<p class="coupon-desc">{{this.coupon_info.coupon_desc}}</p>
@@ -47,7 +47,7 @@
 	.coupon-box {
 		width: 90%;
 		margin-left: 5%;
-		height: 130px;
+		height: 120px;
 		box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
 		border-radius: 4px;
 		background-color: #fff;
@@ -85,7 +85,6 @@
 			
 			.coupon-head-r {
 				flex: 2;
-				
 				.coupon-name {
 					padding: 7px 15px;
 					height: 50px;
@@ -105,7 +104,7 @@
 		.coupon-desc {
 			height: 20px;
 			font-size: 12px;
-			line-height: 12px;
+			line-height: 20px;
 			color: #969799;
 			padding: 7px 15px;
 			border-top: 1px dashed #ebedf0;

@@ -1,7 +1,10 @@
 <template>
 	<div class="main">
-		<p class="title">费用清单</p>
 		<div class="order-list-body">
+			<p class="title">
+				<van-icon name="bars" :color="$MyCommon.$main_color0"/>
+				<span>费用详情</span>
+			</p>
 			<van-row>
 				<van-col span="12"><p class="list-name">订单总金额：</p></van-col>
 				<van-col span="12"><p class="list-price">￥{{this.order_info.original_order_price == null ?
@@ -61,31 +64,35 @@
 
 <style lang="scss" scoped>
 	.main {
-		margin-top: 20px;
-		
-		.title {
-			padding-left: 10px;
-			font-size: 14px;
-			color: #323233;
-		}
-		
 		.order-list-body {
-			margin-top: 10px;
 			background-color: white;
-			
+			padding-top: 20px;
+			padding-bottom: 60px;
+			.title {
+				padding-left: 10px;
+				font-size: 14px;
+				height: 18px;
+				line-height: 18px;
+				margin-bottom: 10px;
+				span {
+					margin-left: 5px;
+					color: rgb(50, 50, 50);
+					font-weight: bolder;
+				}
+			}
+
 			p {
 				font-size: 14px;
 			}
-			
+
 			.list-price {
 				padding-right: 50px;
 				text-align: right;
 			}
-			
+
 			.list-name {
 				padding-left: 20px;
 				text-align: left;
-				font-weight: bold;
 			}
 		}
 	}

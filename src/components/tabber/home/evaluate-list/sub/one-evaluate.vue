@@ -1,12 +1,13 @@
 <template>
 	<div class="main">
 		<van-card
-						:desc="goods_info.attr_desc"
+						:desc="goods_info.sku_desc"
 						:title="goods_info.goods_name"
-						:thumb="goods_info.goods_attribute_img ==null ? './img/goods-img-invalid.jpg' : goods_info.goods_attribute_img "
+						:thumb="goods_info.img_url ==null ? './img/goods-img-invalid.jpg' : goods_info.img_url "
 		>
 			<div slot="footer">
-				<van-button size="small" type="danger" plain round @click="goPutEvaluate">评价得优点</van-button>
+				<van-tag type="primary" v-if="goods_info.give_integral > 0">评价可得{{goods_info.give_integral}}{{this.$store.state.integral_name}}</van-tag>
+				<van-button type="danger" size="small" round @click="goPutEvaluate">前往评价</van-button>
 			</div>
 		</van-card>
 	</div>
@@ -20,7 +21,7 @@
         props:["goods_info"],
         computed: {},
         created() {
-
+            console.log(this.goods_info);
         },
         methods: {
             goPutEvaluate(){

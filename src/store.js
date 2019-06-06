@@ -25,7 +25,7 @@ let store = new Vuex.Store({
         user_token: user_token_,//用户token
         into_type: "abc"//入口方式
         // ,api_url:"https://api.ganglonggou.com"
-        , api_url: "http://192.168.0.158:8004"
+        , api_url: "https://test-api.ganglonggou.com"
         , parent_id: 203//主类
         , goods_list: []//商品列表
         , goods_info: {
@@ -58,7 +58,7 @@ let store = new Vuex.Store({
         , carts_selected: carts_selected_ //选中的购物车
         , coupon_list: []//优惠券列表
         , address_list: []//地址列表
-        , user_info: {}//用户信息
+        , user_info: null//用户信息
         , pay_list: []//支付列表
         , write_order_info: {
             pay_info: {},//提交订单时用户选中的支付方式信息
@@ -90,6 +90,17 @@ let store = new Vuex.Store({
             recharge_price: 100
         }//充值信息
         , balance_list: []//余额表单
+        , order_state_name: {
+            0: '已取消',
+            1: '未支付',
+            2: '等待商家发货',
+            3: '待签收',
+            4: '交易成功',
+            5: '已评价',
+            6: '申请售后中',
+            7: '售后失败',
+            8: '售后成功',
+        }
     },
     mutations: {
         /**
@@ -522,8 +533,10 @@ let store = new Vuex.Store({
             });
             fetch('user_get_address', {user_token: user_token})
                 .then((msg) => {
-                    Vue.set(context.state, 'address_list', msg);
-                    toast1.clear();
+                    if (msg) {
+                        Vue.set(context.state, 'address_list', msg);
+                        toast1.clear();
+                    }
                 })
         }
 
@@ -539,8 +552,10 @@ let store = new Vuex.Store({
             });
             fetch('user_get_coupon_list', {user_token: user_token})
                 .then((msg) => {
-                    Vue.set(context.state, 'coupon_list', msg);
-                    toast1.clear();
+                    if (msg) {
+                        Vue.set(context.state, 'coupon_list', msg);
+                        toast1.clear();
+                    }
                 })
         }
         /**
@@ -556,8 +571,10 @@ let store = new Vuex.Store({
             });
             fetch('user_get_user_info', {user_token: user_token})
                 .then((msg) => {
-                    Vue.set(context.state, 'user_info', msg);
-                    toast1.clear();
+                    if (msg) {
+                        Vue.set(context.state, 'user_info', msg);
+                        toast1.clear();
+                    }
                 })
 
         }
@@ -574,8 +591,10 @@ let store = new Vuex.Store({
             });
             fetch('user_get_pay_list', {user_token: user_token})
                 .then((msg) => {
-                    Vue.set(context.state, 'pay_list', msg);
-                    toast1.clear();
+                    if (msg) {
+                        Vue.set(context.state, 'pay_list', msg);
+                        toast1.clear();
+                    }
                 })
 
         }
@@ -609,8 +628,11 @@ let store = new Vuex.Store({
             });
             fetch('get_goods_list', {index_type: index_type})
                 .then((msg) => {
-                    Vue.set(context.state, 'goods_list', msg);
-                    toast1.clear();
+                    if (msg) {
+                        Vue.set(context.state, 'goods_list', msg);
+                        toast1.clear();
+                    }
+
                 })
         }
 
