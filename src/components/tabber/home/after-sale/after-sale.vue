@@ -13,13 +13,13 @@
 		</div>
 		<div class="form-box">
 			<p class="title">售后类型</p>
-			<van-radio-group v-model="service_type">
+			<van-radio-group v-model="after_sale_type">
 				<van-radio name="全额退款">全额退款</van-radio>
 			</van-radio-group>
 		</div>
 		<div class="form-box">
 			<p class="title">售后原因</p>
-			<van-radio-group v-model="service_cause">
+			<van-radio-group v-model="after_sale_cause">
 				<van-radio name="卖家发错货">卖家发错货</van-radio>
 				<van-radio name="包装/商品破损/污渍">包装/商品破损/污渍</van-radio>
 				<van-radio name="质量问题">质量问题</van-radio>
@@ -31,7 +31,7 @@
 		<div class="form-box">
 			<van-cell-group>
 				<van-field
-								v-model="service_text"
+								v-model="after_sale_text"
 								label="售后说明"
 								type="textarea"
 								placeholder="选填(280字)"
@@ -52,9 +52,9 @@
         data() {
             return {
                 order_sn: '',
-                service_type: '全额退款',
-                service_cause: '其他',
-                service_text: ''
+                after_sale_type: '全额退款',
+                after_sale_cause: '其他',
+                after_sale_text: ''
             };
         },
         computed: {
@@ -73,9 +73,9 @@
             }
         },
         watch: {
-            'service_text': function (newVal, oldVal) {
+            'after_sale_text': function (newVal, oldVal) {
                 if (newVal.length >= 280) {
-                    this.service_text = oldVal;
+                    this.after_sale_text = oldVal;
                 }
             }
         },
@@ -96,15 +96,17 @@
                     message: '提交中',
                     duration: 0
                 });
-                this.$post('user_ins_service', {user_token: this.$store.getters.getUserToken,
-                    service_type:this.service_type,
-                    service_cause:this.service_cause,
-                    service_text:this.service_text,
+                this.$post('user_submit_after_sale', {user_token: this.$store.getters.getUserToken,
+                    after_sale_type:this.after_sale_type,
+                    after_sale_cause:this.after_sale_cause,
+                    after_sale_text:this.after_sale_text,
                     order_sn:this.order_sn
                     })
                     .then((msg) => {
                         toast1.clear();
                         if (msg) {
+                            /*获取订单信息*/
+                            this.$store.dispatch("getOrderList", this.$store.getters.getUserToken);
                             this.$router.push('/home');
                         } else {
                             this.$toast('提交售后失败')

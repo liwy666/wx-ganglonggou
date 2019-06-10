@@ -74,7 +74,7 @@
                     let result = 0;
                     if (this.order_list.length > 0) {
                         this.$store.state.order_list.forEach(item => {
-                            if (item.order_state === 5) {
+                            if (item.order_state === 6) {
                                 result++;
                             }
                         })

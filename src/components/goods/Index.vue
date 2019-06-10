@@ -20,7 +20,7 @@
 				<div class="shop_price">{{goods_info.goods_price}}<span>元</span></div>
 			</div>
 			<!--倒计时-->
-			<countDown :end_time="goods_info.promote_end_date"></countDown>
+			<countDown :end_time="goods_info.promote_end_date" title="距结束还剩:"></countDown>
 		</div>
 		<!--商品名称-->
 		<div class="goods-name">
@@ -40,6 +40,7 @@
 			<van-col span="8">库存:{{this.goods_info.goods_stock}}</van-col>
 			<van-col span="8">销量:{{this.goods_info.goods_sales_volume}}</van-col>
 		</van-row>
+		<myPayInfo :pay_list="pay_list" v-if="pay_list.length >0"></myPayInfo>
 		<!--领券选择-->
 		<myCouponOption :coupon_list="coupon_list" v-if="coupon_list.length>0 &&load_extra_goods"></myCouponOption>
 		<!--规格选择-->
@@ -52,7 +53,7 @@
 			<van-tab title="商品详情">
 				<myGoodsInfo :goods_desc="goods_desc"></myGoodsInfo>
 			</van-tab>
-			<van-tab :title="'用户评价(' + this.evaluate_count+')'">
+			<van-tab :title="'用户评价(' + this.evaluate_count+')'" v-if="this.load_extra_goods">
 				<myEvaluateList :goods_id="goods_id" :evaluate_count="this.evaluate_count"></myEvaluateList>
 			</van-tab>
 		</van-tabs>
@@ -89,11 +90,6 @@
             return {
                 msg: "",
                 goods_id: "",
-                pay_info_swiper: {
-                    slidesPerView: 3.5,
-                    spaceBetween: 10,
-                    //autoplay:true,
-                },
                 show_sku: false,
                 load_extra_goods: false,
             };
@@ -126,9 +122,19 @@
             /*商品销量*/
             , sales_volume: {
                 get: function () {
-                    var result = "";
+                    let result = 0;
                     if (this.msg !== "") {
                         result = this.msg.goods_sales_volume
+                    }
+                    return result;
+                }
+            }
+            /*商品销量*/
+            , evaluate_count: {
+                get: function () {
+                    let result = 0;
+                    if (this.msg !== "") {
+                        result = this.msg.evaluate_count
                     }
                     return result;
                 }
@@ -141,16 +147,6 @@
                         result = this.msg.coupon_list;
                     }
                     return result;
-                }
-            }
-            /*评价数量*/
-            , evaluate_count: {
-                get: function () {
-                    let reslut = 0;
-                    if (this.msg !== "") {
-                        reslut = this.msg.evaluate_count;
-                    }
-                    return reslut;
                 }
             }
             /*商品详情图*/
@@ -174,10 +170,20 @@
                 }
 
 
-            },
+            }
+            , pay_list: {
+                get:function () {
+                    return this.$store.state.pay_list;
+                }
+			}
         },
         created() {
             this.goods_id = this.$route.params.goods_id;
+
+            if(this.$store.state.pay_list.length <1){
+                this.$store.dispatch('getPayList',this.$store.getters.getUserToken)
+			}
+
             if (typeof (this.$route.query.goods_info) != 'undefined') {
                 this.msg = JSON.parse(this.$route.query.goods_info);
                 //初始化商品信息
@@ -265,6 +271,10 @@
             }
             , updShowSku(flag) {
                 this.show_sku = flag;
+            }
+            /*获取支付方式列表*/
+            , getPayList() {
+
             }
         },
     };

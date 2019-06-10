@@ -1,6 +1,7 @@
 import axios from 'axios';
 import Qs from 'qs'
 import {Toast} from 'vant';
+import VueCookies from 'vue-cookies'
 
 axios.defaults.timeout = 5000;
 //axios.defaults.baseURL = 'https://api.ganglonggou.com/api/v1';
@@ -28,10 +29,21 @@ axios.interceptors.request.use(
 axios.interceptors.response.use(
     response => {
         if (response.data.error_code !== undefined) {
-            Toast.fail({
-                message: response.data.msg,
-                duration: 2000
-            });
+            if(response.data.error_code === 10002){
+                VueCookies.remove("gl_user_token");
+                Toast.clear();
+                Toast.fail({
+                    message: '非常抱歉，我们不能获取到您的用户信息，请尝试重新进入商城',
+                    duration: 4000
+                });
+                location.reload(true);
+
+            }else {
+                Toast.fail({
+                    message: response.data.msg,
+                    duration: 2000
+                });
+            }
             return false;
         } else {
             return response.data;

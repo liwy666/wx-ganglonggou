@@ -3,19 +3,20 @@
 		<div class="evaluate-box">
 			<div class="evaluate-user">
 				<div class="evaluate-user-head">
-					<div class="evaluate-user-head-l"><img :src="evaluate_info.user.user_img" alt=""></div>
+					<div class="evaluate-user-head-l"><img :src="evaluate_info.user_img" alt=""></div>
 					<div class="evaluate-user-head-m">
-						<p class="evaluate-user-name">{{this.evaluate_info.user.user_name}}</p>
-						<p><van-rate v-model="this.evaluate_info.evaluate_rate" readonly/></p>
+						<p class="evaluate-user-name">{{this.evaluate_info.user_name}}</p>
+						<p><van-rate v-model="this.evaluate_info.rate" readonly/></p>
 					</div>
 					<div class="evaluate-user-head-r">
 						{{this.evaluate_info.evaluate_time}}
 					</div>
 				</div>
 				<div class="evaluate-user-body">{{this.evaluate_info.evaluate_text}}</div>
+				<div class="evaluate-desc">{{this.evaluate_info.sku_desc}}</div>
 			</div>
 			<div class="evaluate-img"></div>
-			<div class="evaluate-admin" v-if="evaluate_info.admin !== null">
+			<div class="evaluate-admin" v-if="evaluate_info.parent_id !== 0">
 				<span>&nbsp;&nbsp;&nbsp;&nbsp;岗隆数码：</span>
 
 			</div>
@@ -51,6 +52,7 @@
 			.evaluate-user-head{
 				display: flex;
 				align-items: center;
+				padding: 5px;
 				.evaluate-user-head-l{
 					flex: 1;
 					border-radius: 50%;
@@ -75,15 +77,21 @@
 				}
 			}
 			.evaluate-user-body{
-				margin-top: 5px;
+				padding: 5px;
 				font-size: 13px;
 				color: #323233;
+			}
+			.evaluate-desc{
+				padding: 5px;
+				font-size: 12px;
+				color: rgb(150,150,150);
 			}
 		}
 		.evaluate-admin{
 			border-top: 1PX solid rgba(0,0,0,0.1);
 			font-size: 13px;
 			color: #7d7e80;
+			padding: 5px;
 			span{
 				color:rgb(235,0,51) ;
 			}

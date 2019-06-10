@@ -6,7 +6,7 @@
 			<van-button round v-if="order_info.order_state === 1" type="danger" @click="goPay">立即支付</van-button>
 			<van-button round v-if="order_info.order_state === 3" type="default" @click="takeOrder">确认收货</van-button>
 			<!--			<van-button round v-if="order_info.order_state === 4 && order_info.evaluate_is === 0" type="default">前去评价</van-button>-->
-			<van-button round v-if="order_info.order_state === 5" type="default" @click="callService">取消申请</van-button>
+			<van-button round v-if="order_info.order_state === 6" type="default" @click="callService">取消申请</van-button>
 			<van-button round v-if="order_info.order_state === 4 ||order_info.order_state === 2" type="default"
 						@click="$router.push('/afterSale/'+order_info.order_sn)">申请售后
 			</van-button>
@@ -41,7 +41,7 @@
                     message: '正在为您取消售后申请',
                     duration: 0
                 });
-                this.$post('usercallservice', {
+                this.$post('user_call_after_sale', {
                     user_token: this.$store.getters.getUserToken,
                     order_sn: this.order_info.order_sn
                 })

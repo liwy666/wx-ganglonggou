@@ -46,6 +46,9 @@ let store = new Vuex.Store({
             sku_id: 0,//所选属性id
             attr_desc: '',//所选属性详情
             is_promote: 0,//是否秒杀商品
+            promote_number:0,
+            promote_start_date:0,
+            promote_end_date:0,
             give_integral: 0,//返积分
             integral: 0,//用积分
             one_give_integral: 0,//返积分
@@ -127,6 +130,9 @@ let store = new Vuex.Store({
                 sku_id: 0,//所选属性id
                 attr_desc: '',//所选属性详情
                 is_promote: 0,//是否秒杀商品
+                promote_number:0,
+                promote_start_date:0,
+                promote_end_date:0,
                 give_integral: 0,//返积分
                 integral: 0,//用积分
                 one_give_integral: 0,//返积分
@@ -137,11 +143,15 @@ let store = new Vuex.Store({
             Vue.set(state.goods_info, 'market_price', new_goods_info.market_price);
             Vue.set(state.goods_info, 'goods_sn', new_goods_info.goods_sn);
             Vue.set(state.goods_info, 'goods_id', new_goods_info.goods_id);
+            Vue.set(state.goods_info, 'goods_stock', new_goods_info.goods_stock);
             Vue.set(state.goods_info, 'cat_id', new_goods_info.cat_id);
             Vue.set(state.goods_info, 'goods_name', new_goods_info.goods_name);
             Vue.set(state.goods_info, 'goods_head_name', new_goods_info.goods_head_name);
             Vue.set(state.goods_info, 'goods_sales_volume', new_goods_info.goods_sales_volume);
             Vue.set(state.goods_info, 'is_promote', new_goods_info.is_promote);
+            Vue.set(state.goods_info, 'promote_number', new_goods_info.promote_number);
+            Vue.set(state.goods_info, 'promote_start_date', new_goods_info.promote_start_date);
+            Vue.set(state.goods_info, 'promote_end_date', new_goods_info.promote_end_date);
             state.goods_info.goods_gallery.push(new_goods_info.goods_img);
         },
         /**

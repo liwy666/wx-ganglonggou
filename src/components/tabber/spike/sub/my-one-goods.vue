@@ -37,7 +37,8 @@
         computed: {
             current_rate: {
                 get: function () {
-                    return (parseInt(this.goods_info.goods_number) / parseInt(this.goods_info.promote_price));
+                    console.log(this.goods_info.goods_stock);
+                    return (parseInt(this.goods_info.goods_stock) / parseInt(this.goods_info.promote_number));
                 },
                 set() {
                 }
