@@ -34,12 +34,12 @@
 
 <style lang="scss" scoped>
 	.van-search{
-		background-color: #c1101c!important;
+		background-color: $main-color0!important;
 		width: 100%;
 		top: 0;
 		position: fixed;
 		z-index: 999;
-		box-shadow: 0px 0px 2px 0px rgba(0,0,0,.6);
+		box-shadow: 0px 0px 10px 0px rgba(0,0,0,.6);
 	}
 	.support{
 		width: 100%;

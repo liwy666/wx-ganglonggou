@@ -10,7 +10,7 @@
 		</transition>
 
 		<div class="support"></div>
-		<van-tabbar v-model="active" :fixed="fixed" active-color="#cc0001">
+		<van-tabbar v-model="active" :fixed="fixed" :active-color="$MyCommon.$main_color0">
 			<van-tabbar-item icon="shop-collect" to="first">首页</van-tabbar-item>
 			<van-tabbar-item icon="service"
 							 :to="{path:'myIframe',query:{src:'https://p.qiao.baidu.com/cps2/mobileChat?siteId=11040705&userId=24298402&type=1&reqParam=&appId=&referer='}}">
@@ -21,16 +21,6 @@
 			</van-tabbar-item>
 			<van-tabbar-item icon="manager" to="home">个人中心</van-tabbar-item>
 		</van-tabbar>
-		<!--<van-tabbar v-model="active" :fixed="fixed" active-color="#cc0001">
-			<van-tabbar-item icon="service"
-							 :to="{path:'myIframe',query:{src:'https://p.qiao.baidu.com/cps2/mobileChat?siteId=11040705&userId=24298402&type=1&reqParam=&appId=&referer='}}">
-				客服
-			</van-tabbar-item>
-			<van-tabbar-item icon="phone-o"
-							 url="tel:400-828-2323">
-				电话客服
-			</van-tabbar-item>
-		</van-tabbar>-->
 	</div>
 
 </template>

@@ -66,11 +66,12 @@ import VueCookies from 'vue-cookies'
 Vue.use(VueCookies);
 
 //Mand Mobile
-import {Progress, Bill,ResultPage} from 'mand-mobile'
+import {Progress, Bill,ResultPage,Landscape} from 'mand-mobile'
 
 Vue.component('md-progress', Progress);
 Vue.component(Bill.name, Bill);
 Vue.component(ResultPage.name, ResultPage);
+Vue.component(Landscape.name, Landscape);
 
 Vue.config.productionTip = false;
 

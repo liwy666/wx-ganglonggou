@@ -37,7 +37,7 @@
         activated() {
             /*获取商品列表*/
             if (this.$store.state.goods_list.length < 1) {
-                this.$store.dispatch("getGoodsList", this.$store.getters.getLoginType);
+                this.$store.dispatch("getGoodsList", this.$store.getters.getIntoType);
             }
         },
         methods: {},

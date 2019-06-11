@@ -4,7 +4,7 @@
 		<!--<div class="goods" @click="showTxt">-->
 		<div class="goods-img"><img v-lazy="goods_info.goods_img"></div>
 		<div class="goods-name">
-			<van-tag type="danger" v-if="goods_info.goods_head_name!==''&&goods_info.goods_head_name!==null">
+			<van-tag type="danger" v-if="goods_info.goods_head_name!==''&&goods_info.goods_head_name!==null" :color="$MyCommon.$main_color0">
 				{{this.goods_info.goods_head_name}}
 			</van-tag>
 			{{goods_info.goods_name}}

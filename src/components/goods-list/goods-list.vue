@@ -206,7 +206,7 @@
             this.yz_flag = false;//是否隐藏按钮
             /*获取商品列表*/
             if (this.$store.state.goods_list.length < 1) {
-                this.$store.dispatch("getGoodsList", this.$store.getters.getLoginType);
+                this.$store.dispatch("getGoodsList", this.$store.getters.getIntoType);
             }else {
                 this.$set(this, 'goods_list_', this.$store.state.goods_list);
             }

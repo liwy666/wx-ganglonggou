@@ -24,14 +24,14 @@
 		</div>
 		<!--商品名称-->
 		<div class="goods-name">
-			<van-tag type="danger" v-if="goods_info.goods_head_name!==''&&goods_info.goods_head_name!==null">
+			<van-tag type="danger" v-if="goods_info.goods_head_name!==''&&goods_info.goods_head_name!==null" :color="$MyCommon.$main_color0">
 				{{this.goods_info.goods_head_name}}
 			</van-tag>
 			{{msg.goods_name}}
 		</div>
 		<!--积分信息-->
 		<div class="integral-box" v-if="goods_info.give_integral > 0&&load_extra_goods">
-			<van-tag plain type="danger">{{this.$store.state.integral_name}}</van-tag>
+			<van-tag plain type="danger" :color="$MyCommon.$main_color0">{{this.$store.state.integral_name}}</van-tag>
 			{{goods_info.integral_desc}}
 		</div>
 		<!--库存、销量信息-->
@@ -353,7 +353,7 @@
 		background-color: white;
 		height: 30px;
 		padding: 10px;
-		color: red;
+		color: $main-color0;
 	}
 
 	.d {

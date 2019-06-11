@@ -102,7 +102,7 @@
 				line-height: 40px;
 				text-align: center;
 				font-weight: bold;
-				color: red;
+				color: $main-color0;
 				background-color: #c8c9cc;
 				font-size: 12px;
 

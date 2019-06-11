@@ -18,8 +18,11 @@
 		<transition-group class="my-goods-box" name="flip-list">
 			<oneGoods v-for="(item) in goods_list" :key="item.goods_id" :goods_info_="item"></oneGoods>
 		</transition-group>
+		<!--压屏广告-->
+		<md-landscape v-model="showPic">
+			<img :src="pop_img_url">
+		</md-landscape>
 	</div>
-
 </template>
 
 <script>
@@ -34,7 +37,8 @@
                     spaceBetween: 10,
                 },
                 radio: "1",
-				cat_index:0
+                cat_index: 0,
+                showPic: false,
             };
         },
         created() {
@@ -79,6 +83,19 @@
                     }
                     return result;
                 }
+            },
+            pop_img_url: {
+                get: function () {
+                    let result = '';
+                    if (JSON.stringify(this.get_info) !== '{}') {
+                        this.get_info.ad_list.forEach(item => {
+                            if (item.position_type === '压屏广告') {
+                                result = item.ad_img;
+                            }
+                        })
+                    }
+                    return result;
+                }
             }
         },
         components: {
@@ -88,8 +105,12 @@
         methods: {
             getIndexAd() {
                 this.$fetch("get_index_info", {into_type: this.$store.getters.getIntoType}).then((msg) => {
-                    this.get_info = msg;
-                    this.$set(this.$store.state, 'goods_list', msg.goods_list);//赋值商品列表
+                    if (msg) {
+                        this.get_info = msg;
+                        this.$set(this.$store.state, 'goods_list', msg.goods_list);//赋值商品列表
+                        this.showPic = true;
+                    }
+
                 })
             },
             toControl(ad_info) {
@@ -241,10 +262,12 @@
 			}
 		}
 	}
+
 	.my-goods-box {
 		display: flex;
 		flex-wrap: wrap;
 	}
+
 	.flip-list-move {
 		transition: transform 0.5s;
 	}
@@ -262,6 +285,7 @@
 		display: flex;
 		flex-wrap: wrap;
 		justify-content: flex-start;
+
 		.goods {
 			width: 45%;
 			margin-left: 3.33%;
@@ -336,6 +360,7 @@
 			}
 		}
 	}
+
 	.my-tab-box {
 		display: flex;
 		margin-top: 5px;
@@ -359,4 +384,11 @@
 		}
 	}
 
+
+</style>
+<style lang="scss">
+	.md-landscape-content {
+		width: 375px;
+		text-align: center;
+	}
 </style>

@@ -9,7 +9,7 @@
 						<p><van-rate v-model="this.evaluate_info.rate" readonly/></p>
 					</div>
 					<div class="evaluate-user-head-r">
-						{{this.evaluate_info.evaluate_time}}
+						{{this.evaluate_info.create_time.substring(0,10)}}
 					</div>
 				</div>
 				<div class="evaluate-user-body">{{this.evaluate_info.evaluate_text}}</div>

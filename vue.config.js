@@ -28,7 +28,8 @@ module.exports = {
                     'text-color': '#111'*/
                  /*   'nav-bar-icon-color': "#fb3126",
                     'nav-bar-text-color': "#fb3126"*/
-
+                    red: 'rgb(49,156,140)',
+                    orange: 'rgb(190,194,63)'
                 }
             }
         }

@@ -630,13 +630,13 @@ let store = new Vuex.Store({
          * @param context
          * @param user_token
          */
-        , getGoodsList(context, index_type) {
+        , getGoodsList(context, into_type) {
             let toast1 = Toast.loading({
                 mask: true,
                 message: '获取商品列表',
                 duration: 0
             });
-            fetch('get_goods_list', {index_type: index_type})
+            fetch('user_get_goods_list', {into_type: into_type})
                 .then((msg) => {
                     if (msg) {
                         Vue.set(context.state, 'goods_list', msg);
