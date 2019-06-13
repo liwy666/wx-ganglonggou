@@ -1,30 +1,62 @@
 <template>
-	<div class="mian">
+	<div class="main">
 		<!--搜索框-->
 		<mySearch></mySearch>
 		<!--头部轮播图-->
-		<van-swipe :autoplay="3000" indicator-color="white">
-			<van-swipe-item v-for="(item, index) in swipe_img" :key="index">
-				<img v-lazy="item.ad_img" @click="toControl(item)"/>
-			</van-swipe-item>
-		</van-swipe>
-		<div class="my-tab-box">
-			<div class="my-tab" v-for="(item,i) in get_info.cat_list" :key="item.cat_id"
-				 @click="cat_index = i"
-				 :class="[i === cat_index ? 'xz':'']">
-				{{item.cat_name}}
+		<div class="my-van-swipe-box">
+			<van-swipe :autoplay="3000" indicator-color="white">
+				<van-swipe-item v-for="(item, index) in index_ad_list.swipe_img" :key="index">
+					<img :src="item.ad_img" @click="toControl(item)"/>
+				</van-swipe-item>
+			</van-swipe>
+		</div>
+		<!--公告-->
+		<van-notice-bar
+			:text="index_ad_list.notice_text.text"
+			:color="$MyCommon.$main_color4"
+			:speed="200"
+			:background="$MyCommon.$main_color1"
+			left-icon="volume-o"
+		/>
+		<div class="banner-box">
+			<img :src="index_ad_list.coupon.ad_img" alt="" @click="toControl(index_ad_list.coupon)">
+		</div>
+		<!--4件商品区-->
+		<div class="four-goods-box" v-for="(item) in index_ad_list.four_goods" :key="item.id">
+			<div class="banner-box">
+				<img :src="item.banner.ad_img" alt="" @click="toControl(item.banner)">
+			</div>
+			<div class="four-goods-base">
+				<div v-for="(item2 ,i2) in item.goods" :key="i2"><img :src="item2.ad_img" alt=""
+					@click="toControl(item2)"></div>
 			</div>
 		</div>
-		<transition-group class="my-goods-box" name="flip-list">
-			<oneGoods v-for="(item) in goods_list" :key="item.goods_id" :goods_info_="item"></oneGoods>
-		</transition-group>
+		<!--8件商品区-->
+		<div class="eight-goods-box" v-for="(item) in index_ad_list.eight_goods" :key="item.id">
+			<div class="banner-box">
+				<img :src="item.banner.ad_img" alt="" @click="toControl(item.banner)">
+			</div>
+			<div class="eight-goods-base">
+				<div v-for="(item2 ,i2) in item.goods" :key="i2"><img :src="item2.ad_img" alt=""
+					@click="toControl(item2)"></div>
+			</div>
+		</div>
+		<!--6件商品区-->
+		<div class="six-goods-box" v-for="(item) in index_ad_list.six_goods" :key="item.id">
+			<div class="banner-box">
+				<img :src="item.banner.ad_img" alt="" @click="toControl(item.banner)">
+			</div>
+			<div class="six-goods-base">
+				<div v-for="(item2 ,i2) in item.goods" :key="i2"><img :src="item2.ad_img" alt=""
+					@click="toControl(item2)"></div>
+			</div>
+		</div>
 		<!--压屏广告-->
 		<md-landscape v-model="showPic">
-			<img :src="pop_img_url">
+			<img :src="index_ad_list.pop_img_url">
 		</md-landscape>
 	</div>
 </template>
-
 <script>
     import mySearch from "./sub/my-sub-search.vue";//搜索组件
     import oneGoods from "../../sub/my-one-goods";//搜索组件
@@ -39,6 +71,8 @@
                 radio: "1",
                 cat_index: 0,
                 showPic: false,
+                swipe_img: [],
+                notice_text: '',
             };
         },
         created() {
@@ -54,15 +88,73 @@
             }
         },
         computed: {
-            /*头部轮播*/
-            swipe_img: {
+            index_ad_list: {
                 get: function () {
-                    let result = [];
+                    let result = {
+                        swipe_img: [],
+                        notice_text: {},
+                        pop_img_url: '',
+                        coupon: {},
+                        four_goods_banner: [],
+                        four_goods_base: [],
+                        four_goods: [],
+                        eight_goods_banner: [],
+                        eight_goods_base: [],
+                        eight_goods: [],
+                        six_goods_banner: [],
+                        six_goods_base: [],
+                        six_goods: [],
+                    };
                     if (JSON.stringify(this.get_info) !== '{}') {
                         this.get_info.ad_list.forEach(item => {
-                            if (item.position_type === '顶部广告轮播图') {
-                                result.push(item);
+                            if (item.position_type === '顶部轮播') {
+                                result.swipe_img.push(item);
+                            } else if (item.position_type === '压屏广告') {
+                                result.pop_img_url = item.ad_img;
+                            } else if (item.position_type === '公告') {
+                                result.notice_text = item;
+                            } else if (item.position_type === '优惠券区域') {
+                                result.coupon = item;
+                            } else if (item.position_type === '4件商品通栏') {
+                                result.four_goods_banner.push(item);
+                            } else if (item.position_type === '4件商品内容') {
+                                result.four_goods_base.push(item);
+                            } else if (item.position_type === '8件商品通栏') {
+                                result.eight_goods_banner.push(item);
+                            } else if (item.position_type === '8件商品内容') {
+                                result.eight_goods_base.push(item);
+                            } else if (item.position_type === '6件商品通栏') {
+                                result.six_goods_banner.push(item);
+                            } else if (item.position_type === '6件商品内容') {
+                                result.six_goods_base.push(item);
                             }
+                        });
+                        result.four_goods_banner.forEach(item => {
+                            let goods = [];
+                            result.four_goods_base.forEach(item2 => {
+                                if (item.position_type_name === item2.position_type_name) {
+                                    goods.push(item2);
+                                }
+                            });
+                            result.four_goods.push({banner: item, goods: goods})
+                        });
+                        result.eight_goods_banner.forEach(item => {
+                            let goods = [];
+                            result.eight_goods_base.forEach(item2 => {
+                                if (item.position_type_name === item2.position_type_name) {
+                                    goods.push(item2);
+                                }
+                            });
+                            result.eight_goods.push({banner: item, goods: goods})
+                        });
+                        result.six_goods_banner.forEach(item => {
+                            let goods = [];
+                            result.six_goods_base.forEach(item2 => {
+                                if (item.position_type_name === item2.position_type_name) {
+                                    goods.push(item2);
+                                }
+                            });
+                            result.six_goods.push({banner: item, goods: goods})
                         })
                     }
                     return result;
@@ -84,19 +176,7 @@
                     return result;
                 }
             },
-            pop_img_url: {
-                get: function () {
-                    let result = '';
-                    if (JSON.stringify(this.get_info) !== '{}') {
-                        this.get_info.ad_list.forEach(item => {
-                            if (item.position_type === '压屏广告') {
-                                result = item.ad_img;
-                            }
-                        })
-                    }
-                    return result;
-                }
-            }
+
         },
         components: {
             mySearch,//搜索组件
@@ -170,221 +250,73 @@
         },
     };
 </script>
-
 <style lang="scss" scoped>
-	.van-swipe {
-		img {
-			width: 100%;
-		}
-	}
-
-	.declare-box {
-		background-color: white;
-		//height: 50px;
-		//position: relative;
-		//z-index: 99;
-		//margin-top: -25px;
-		//border-radius: 80%;
-		img {
-			width: 100%;
-		}
-	}
-
-	.coupon_swiper {
-		img {
-			width: 100%;
-		}
-	}
-
-	.van-panel {
-		margin-top: 20px;
-	}
-
-	.my-panel {
-		width: 95%;
-		margin-left: 1.5%;
-		background-color: white;
-		border-radius: 5px;
-		overflow: hidden;
-		padding: 1%;
-		margin-top: 5px;
-	}
-
-	.classify-box {
-		display: flex;
-		flex-wrap: wrap;
-		justify-content: space-around;
-
-		.classify {
-			width: 170px;
-
-			img {
-				width: 100%;
-			}
-		}
-
-	}
-
-	.cooperation-box {
-		display: flex;
-		flex-wrap: wrap;
-		justify-content: flex-start;
-
-		.cooperation {
-			width: 70px;
-			margin-left: 4px;
-
-			img {
-				width: 100%;
-			}
-		}
-	}
-
-	.banner {
-		width: 100%;
-
-		img {
-			width: 100%;
-		}
-	}
-
-	.brand-box {
-		display: flex;
-		flex-wrap: wrap;
-		justify-content: flex-start;
-
-		.brand {
-			width: 110px;
-			margin-left: 7px;
-
-			img {
-				width: 100%;
-			}
-		}
-	}
-
-	.my-goods-box {
-		display: flex;
-		flex-wrap: wrap;
-	}
-
-	.flip-list-move {
-		transition: transform 0.5s;
-	}
-
-	.lflip-list-enter-active, .flip-list-leave-active {
-		transition: all 0.3s;
-	}
-
-	.flip-list-enter, .flip-list-leave-to {
-		//opacity: 0;
-		transform: translateY(60px);
-	}
-
-	.goods-box {
-		display: flex;
-		flex-wrap: wrap;
-		justify-content: flex-start;
-
-		.goods {
-			width: 45%;
-			margin-left: 3.33%;
-			background-color: white;
-			margin-top: 8px;
-			margin-bottom: 8px;
-			border-radius: 5px;
+	.main {
+		/*顶部轮播*/
+		.my-van-swipe-box {
+			height: 180px;
 			overflow: hidden;
 
-			.goods-img {
-				margin-top: 5px;
-				width: 100%;
-
+			.van-swipe {
 				img {
 					width: 100%;
 				}
 			}
+		}
 
-			.goods-name {
-				white-space: pre-wrap;
-				border: 0px solid black;
-				position: relative;
-				box-sizing: border-box;
-				display: -webkit-box;
-				-webkit-box-orient: vertical;
-				flex-direction: column;
-				align-content: flex-start;
-				flex-shrink: 0;
-				font-size: 12px;
-				text-align: left;
-				line-height: 19.872px;
-				height: 39.744px;
-				margin-top: 2.208px;
-				margin-bottom: 2.208px;
-				color: rgb(62, 62, 62);
-				-webkit-line-clamp: 2;
-				overflow: hidden;
+		.banner-box {
+			width: 100%;
+
+			img {
+				width: 100%;
 			}
+		}
 
-			.goods-price {
-				white-space: pre-wrap;
-				border: 0px solid black;
-				position: relative;
-				box-sizing: border-box;
-				display: block;
-				-webkit-box-orient: vertical;
-				flex-direction: column;
-				align-content: flex-start;
-				flex-shrink: 0;
-				font-size: 12px;
-				text-align: left;
-				font-weight: 600;
-				color: rgb(255, 0, 0);
-				line-height: 30.912px;
-				margin-left: 11.04px;
+		.four-goods-box {
+			.four-goods-base {
+				display: flex;
+				flex-wrap: wrap;
+
+				div {
+					width: 50%;
+
+					img {
+						width: 100%;
+					}
+				}
 			}
+		}
 
-			.goods-stages {
-				background: url("../../../assets/goods-stages.jpg") no-repeat;
-				background-size: 100% 100%;
-				height: 40px;
-				line-height: 40px;
-				font-weight: bold;
-				color: white;
-				font-size: 10px;
-				padding-left: 8px;
+		.eight-goods-box {
+			.eight-goods-base {
+				display: flex;
+				flex-wrap: wrap;
 
-				i {
-					font-style: normal;
-					font-size: 24px;
+				div {
+					width: 25%;
+
+					img {
+						width: 100%;
+					}
+				}
+			}
+		}
+
+		.six-goods-box {
+			.six-goods-base {
+				display: flex;
+				flex-wrap: wrap;
+
+				div {
+					width: 33%;
+
+					img {
+						width: 100%;
+					}
 				}
 			}
 		}
 	}
-
-	.my-tab-box {
-		display: flex;
-		margin-top: 5px;
-		box-shadow: 0 0 1px 1px rgba(0, 0, 0, .3);
-		background-color: $main-color0;
-
-		.my-tab {
-			background-color: $main-color0;
-			color: white;
-			height: 40px;
-			line-height: 40px;
-			width: 50%;
-			text-align: center;
-			transition: all ease 0.3s;
-		}
-
-		.xz {
-			/*box-shadow: 0px -5px 1px 1px rgba(0,0,0,.3);*/
-			color: $main-color0;
-			background-color: white;
-		}
-	}
-
-
 </style>
 <style lang="scss">
 	.md-landscape-content {
