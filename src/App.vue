@@ -37,7 +37,6 @@
 	}
 
 	.name2-enter {
-		//opacity: 0;
 		transform: translateX(100%);
 	}
 

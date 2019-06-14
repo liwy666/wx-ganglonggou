@@ -21,6 +21,11 @@ npm i url-loader file-loader --save-dev//处理url路径的loader模块
 
 npm i vue-router -s //安装vue-router
 
+npm查看某个模块的所有版本,如styled-components
+npm info styled-components
+npm更新某个模块
+npm i styled-components@latest \\更新到最新版
+
 
 用npm run serve命令运行vue项目。
 npm run build 打包项目

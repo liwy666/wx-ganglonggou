@@ -9,6 +9,7 @@ Vue.use(Router);
 import Index from './components/tabber/Index.vue'
 import Login from './components/Login'
 import First from './components/tabber/first/First'//首页
+import Classify from './components/tabber/classify/Classify'//分类
 import Spike from './components/tabber/spike/Spike'//秒杀
 import Cart from './components/tabber/cart/Cart'//购物车
 import Home from './components/tabber/home/Home'//个人中心
@@ -44,6 +45,7 @@ var router = new Router({
             }, children: [
                 {path: '/', redirect: '/first', meta: {keepAlive: true}},
                 {path: '/first', component: First, meta: {keepAlive: true}},
+                {path: '/classify', component: Classify, meta: {keepAlive: true}},
                 {path: '/spike', component: Spike, meta: {keepAlive: true}},
                 {path: '/cart', component: Cart, meta: {keepAlive: false}},
                 {path: '/home', component: Home, meta: {keepAlive: true}}

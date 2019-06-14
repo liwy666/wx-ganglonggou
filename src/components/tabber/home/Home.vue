@@ -74,7 +74,6 @@
 			background-color: $main-color0;
 			height: 150px;
 			width: 100%;
-
 			.home-head-body {
 				display: flex;
 				height: 80%;

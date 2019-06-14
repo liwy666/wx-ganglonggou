@@ -104,6 +104,7 @@ let store = new Vuex.Store({
             7: '售后失败',
             8: '售后成功',
         }
+        ,classify_list:[],
     },
     mutations: {
         /**

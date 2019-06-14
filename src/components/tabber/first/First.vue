@@ -322,5 +322,8 @@
 	.md-landscape-content {
 		width: 375px;
 		text-align: center;
+		img{
+			width: 70%;
+		}
 	}
 </style>
