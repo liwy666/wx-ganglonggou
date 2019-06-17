@@ -13,7 +13,7 @@
 		<!--商品列表-->
 		<GoodsList></GoodsList>
 		<!--支付选项-->
-		<payOption v-if="getPayList_load && getUserInfo_load"></payOption>
+		<payOption v-if="getPayList_load && getUserInfo_load" :goods_list="goods_list"></payOption>
 		<!--开票方式选项-->
 		<invoice></invoice>
 		<!--优惠券选项-->
@@ -31,7 +31,6 @@
 		</div>
 	</div>
 </template>
-
 <script>
     import myNarBar from '../sub/my-nav-bar';
     import payOption from './sub/my-pay-option';
@@ -285,7 +284,6 @@
     }
     ;
 </script>
-
 <style lang="scss" scoped>
 	.d {
 		margin-top: 20px;

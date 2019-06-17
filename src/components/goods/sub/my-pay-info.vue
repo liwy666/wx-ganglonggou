@@ -35,7 +35,6 @@
         },
         watch: {
             'goods_price': function (newVal) {
-                console.log(newVal);
                 this.updPayInfo(newVal);
             }
         },

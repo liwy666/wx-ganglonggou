@@ -54,6 +54,7 @@ let store = new Vuex.Store({
             one_give_integral: 0,//返积分
             one_integral: 0,//用积分
             integral_desc: '',//积分描述
+            by_stages_number:1//分期期数
         }//单个商品信息
         , goods_sku_options: []//sku选项
         , goods_sku: []//单个商品规格
@@ -104,7 +105,7 @@ let store = new Vuex.Store({
             7: '售后失败',
             8: '售后成功',
         }
-        ,classify_list:[],
+        ,classify_list:[]
     },
     mutations: {
         /**
@@ -139,6 +140,7 @@ let store = new Vuex.Store({
                 one_give_integral: 0,//返积分
                 one_integral: 0,//用积分
                 integral_desc: '',//积分描述
+                by_stages_number:1//分期期数
             });
             Vue.set(state.goods_info, 'goods_price', new_goods_info.shop_price);
             Vue.set(state.goods_info, 'market_price', new_goods_info.market_price);

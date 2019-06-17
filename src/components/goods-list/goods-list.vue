@@ -1,5 +1,17 @@
 <template>
 	<div class="main">
+		<div class="van-search-main">
+			<van-search
+				v-model="keyword"
+				placeholder="请输入搜索关键词"
+				showAction
+				shape="round"
+			>
+				<div slot="label" @click="$router.go(back_number)">返回</div>
+				<div slot="action" @click="onSearch">搜索</div>
+			</van-search>
+			<div class="van-search-support"></div>
+		</div>
 		<van-tabs v-model="active" sticky @click="updGoodsList">
 			<van-tab title="综合">
 				<div class="goods-box">
@@ -13,7 +25,8 @@
 			</van-tab>
 			<van-tab title="销量排序">
 				<div class="goods-box">
-					<oneGoods v-for="(item) in sales_volume_goods_list" :key="item.goods_id" :goods_info_="item"></oneGoods>
+					<oneGoods v-for="(item) in sales_volume_goods_list" :key="item.goods_id"
+						:goods_info_="item"></oneGoods>
 				</div>
 			</van-tab>
 			<van-tab title="新品">
@@ -27,12 +40,12 @@
 				<i class="suspension-button">
 					<van-icon name="arrow-up" @click="scrollToTop"/>
 				</i>
-				<i class="suspension-button">
+				<!--<i class="suspension-button">
 					<van-icon name="search" @click="$router.push('/search');"/>
 				</i>
 				<i class="suspension-button">
 					<van-icon name="arrow-left" @click="$router.go(-1);"/>
-				</i>
+				</i>-->
 			</div>
 		</transition>
 	</div>
@@ -50,9 +63,10 @@
                 yz_flag: false,//是否隐藏按钮
                 type: '',
                 cat_id: -1,
-                keyword:"",
+                keyword: "",
                 price_flag: true,
                 goods_list_: [],
+                back_number: -2,
             };
         },
         computed: {
@@ -62,20 +76,47 @@
                     if (this.type === 'cat') {
                         if (this.goods_list_.length > 0) {
                             this.goods_list_.forEach(item => {
-                                if ( parseInt(item.cat_id )===  parseInt(this.cat_id)) {
+                                if (parseInt(item.cat_id) === parseInt(this.cat_id)) {
                                     result.push(item)
                                 }
                             })
                         }
-                    }else if(this.type === 'search'){
+                    } else if (this.type === 'search') {
+                        let goods_id_array = [];
                         this.goods_list_.forEach(item => {
-                           let goods_name = item.goods_name.toUpperCase();
-                           goods_name = goods_name.replace(/\s*/g,"");
-                           if(goods_name.indexOf(this.keyword) !== -1){
-                               result.push(item)
-                           }
-                        })
-                    }else {
+                            /*名称*/
+                            let goods_name = item.goods_name.toUpperCase();
+                            goods_name = goods_name.replace(/\s*/g, "");
+                            if (goods_name.indexOf(this.keyword) !== -1) {
+                                goods_id_array.push(item.goods_id)
+                            }
+                            /*分类名称*/
+                            let cat_name = item.cat_name.toUpperCase();
+                            cat_name = cat_name.replace(/\s*/g, "");
+                            if (cat_name.indexOf(this.keyword) !== -1) {
+                                goods_id_array.push(item.goods_id)
+                            }
+                            /*关键词*/
+                            let keywords = item.keywords.toUpperCase();
+                            keywords = keywords.replace(/\s*/g, "");
+                            if (keywords.indexOf(this.keyword) !== -1) {
+                                goods_id_array.push(item.goods_id)
+                            }
+                        });
+                        if (goods_id_array.length > 0) {
+                            goods_id_array = this.$MyCommon.unique1(goods_id_array);
+                            goods_id_array.forEach(item => {
+                                this.goods_list_.forEach(item2 => {
+                                    if (item === item2.goods_id) {
+                                        result.push(item2)
+                                    }
+                                })
+                            })
+                        }
+                        if (result.length < 1) {
+                            result = this.goods_list_
+                        }
+                    } else {
                         result = this.goods_list_
                     }
                     return result;
@@ -203,11 +244,12 @@
             this.type = this.$route.query.type;
             this.cat_id = this.$route.query.cat_id;
             this.keyword = this.$route.query.keyword;
+            this.back_number = typeof (this.$route.query.back_number) === 'undefined' ? -2 : this.$route.query.back_number;
             this.yz_flag = false;//是否隐藏按钮
             /*获取商品列表*/
             if (this.$store.state.goods_list.length < 1) {
                 this.$store.dispatch("getGoodsList", this.$store.getters.getIntoType);
-            }else {
+            } else {
                 this.$set(this, 'goods_list_', this.$store.state.goods_list);
             }
         },
@@ -232,6 +274,14 @@
                 }
 
             },
+            /*手动搜索*/
+            onSearch() {
+                if (this.keyword.length > 0 && this.keyword.length < 20) {
+                    let keyword = this.keyword.toUpperCase();
+                    keyword = keyword.replace(/\s*/g, "");
+                    this.$router.push({path: 'goodsList', query: {type: 'search', cat_id: -1, keyword: keyword}});
+                }
+            },
         },
         components: {
             myNarBar,//头部组件
@@ -239,20 +289,22 @@
         },
     };
 </script>
-
 <style lang="scss" scoped>
-	
 	.main {
 		.van-tabs--line {
 			padding-top: 0 !important;
 		}
-		
+
+		.van-search {
+			//background-image: linear-gradient(45deg,$main-color0,$main-color2)!important;
+		}
+
 		.suspension-button-box {
 			z-index: 100;
 			position: fixed;
 			right: 0;
 			bottom: 0;
-			
+
 			.suspension-button {
 				display: block;
 				background-color: white;
@@ -263,7 +315,7 @@
 				margin-right: 5px;
 				border: 2px solid $main-color0;
 				box-shadow: 0px 0px 1px 0px rgba(0, 0, 0, 0.9);
-				
+
 				i {
 					width: 100%;
 					height: 100%;
@@ -274,19 +326,18 @@
 				}
 			}
 		}
-		
+
 		.goods-box {
 			display: flex;
 			flex-wrap: wrap;
 			justify-content: flex-start;
 		}
-		
+
 		.flip-list-move {
 			transition: transform 0.5s;
 		}
 	}
 </style>
-
 <style>
 	.van-tabs__wrap {
 		z-index: 2 !important;

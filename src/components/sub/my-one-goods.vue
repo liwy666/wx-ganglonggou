@@ -1,17 +1,23 @@
 <template>
 	<div class="goods"
-		 @click="$router.push({ path: 'goods/'+goods_info.goods_id, query: { goods_info: JSON.stringify(goods_info_) }})">
+		@click="$router.push({ path: 'goods/'+goods_info.goods_id, query: { goods_info: JSON.stringify(goods_info_) }})">
 		<!--<div class="goods" @click="showTxt">-->
 		<div class="goods-img"><img v-lazy="goods_info.goods_img"></div>
 		<div class="goods-name">
-			<van-tag type="danger" v-if="goods_info.goods_head_name!==''&&goods_info.goods_head_name!==null" :color="$MyCommon.$main_color0">
+			<van-tag type="danger" v-if="goods_info.goods_head_name!==''&&goods_info.goods_head_name!==null"
+				:color="$MyCommon.$main_color0">
 				{{this.goods_info.goods_head_name}}
 			</van-tag>
 			{{goods_info.goods_name}}
 		</div>
-		<div class="goods-tag-box">
-			<van-tag plain type="danger" v-for="(item,i) in goods_tag" :key="i">{{item}}</van-tag>
+		<div class="supplier-name-box">
+			<van-icon name="shop-collect-o"/>
+			{{goods_info.supplier_name}}
 		</div>
+		<!--关键词-->
+		<!--<div class="goods-tag-box">
+			<van-tag plain type="danger" v-for="(item,i) in goods_tag" :key="i">{{item}}</van-tag>
+		</div>-->
 		<div class="goods-price" v-if="parseFloat(goods_info.shop_price ) > 50">原价：{{goods_info.market_price}}元</div>
 		<div class="goods-stages" v-if="parseFloat(goods_info.shop_price ) > 50"><i>{{goods_info.goods_stages}}</i>元×24期起
 		</div>
@@ -20,7 +26,6 @@
 		</div>
 	</div>
 </template>
-
 <script>
     export default {
         data() {
@@ -33,6 +38,7 @@
                     let result = {};
                     result.goods_id = this.goods_info_.goods_id;
                     result.goods_name = this.goods_info_.goods_name;
+                    result.supplier_name = this.goods_info_.supplier_name;
                     result.goods_head_name = this.goods_info_.goods_head_name;
                     result.goods_img = this.goods_info_.goods_img;
                     result.shop_price = this.goods_info_.shop_price;
@@ -67,7 +73,6 @@
         },
     };
 </script>
-
 <style lang="scss" scoped>
 	.goods {
 		width: 45%;
@@ -114,9 +119,23 @@
 			}
 		}
 
+		.supplier-name-box {
+			padding-left: 10px;
+			height: 25px;
+			font-size: 12px;
+			line-height: 25px;
+			color: #7d7e80;
+
+			.van-icon {
+				height: 25px !important;
+				font-size: 12px !important;
+				line-height: 28px !important;
+			}
+		}
+
 		.goods-price {
 			white-space: pre-wrap;
-			border: 0px solid black;
+			border: 0 solid black;
 			position: relative;
 			box-sizing: border-box;
 			display: block;
@@ -128,13 +147,14 @@
 			text-align: left;
 			font-weight: 600;
 			color: rgb(255, 0, 0);
-			line-height: 30.912px;
+			line-height: 24px;
+			height: 24px;
 			text-decoration: line-through
 		}
 
 		.goods-stages {
 			//background: url("./../../assets/goods-stages.jpg") no-repeat;
-			background: url("./../../assets/goods-stages2.jpg") no-repeat;
+			background: url("./../../assets/goods-stages.jpg") no-repeat;
 			background-size: 100% 100%;
 			height: 40px;
 			line-height: 40px;

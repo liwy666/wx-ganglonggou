@@ -10,12 +10,13 @@
 			</div>
 			<div class="base-box">
 				<div class="base" v-for="(item,i) in classify_list" :key="item.id" v-show="i===active_key">
-					<div class="title"><img v-lazy="item.img_url" alt=""></div>
+					<div class="title"><img v-lazy="item.img_url" alt="" @click="toSearch(item)"></div>
 					<div class="body">
 						<div class="group-box" v-for="(item2,i2) in item.children" :key="i2">
 							<p class="group-name">{{item2.group_name}}</p>
 							<div class="base">
-								<div class="one-classify" v-for="(item3) in item2.children" :key="item3.id">
+								<div class="one-classify" v-for="(item3) in item2.children" :key="item3.id"
+									@click="toSearch(item3)">
 									<div class="img"><img v-lazy="item3.img_url" alt=""></div>
 									<div class="name">{{item3.classify_name}}</div>
 								</div>
@@ -135,6 +136,25 @@
                 }
                 return clientHeight;
             }
+            , toSearch(info) {
+                let key_word = '';
+                if (info.key_word !== '' && info.key_word != null) {
+                    key_word = info.key_word;
+                } else {
+                    key_word = info.classify_name;
+                }
+                key_word = key_word.toUpperCase();
+                key_word = key_word.replace(/\s*/g, "");
+                this.$router.push({
+                    path: 'goodsList', query: {
+                        type: 'search',
+                        cat_id: -1,
+                        keyword: key_word,
+                        back_number: -1,
+                    }
+                })
+                ;
+            }
         },
         components: {
             mySearch,//搜索组件
@@ -168,6 +188,7 @@
 			top: 0px;
 			right: 0px;
 			bottom: 0px;
+
 			.base {
 				width: 100%;
 

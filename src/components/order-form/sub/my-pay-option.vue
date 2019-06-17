@@ -11,16 +11,16 @@
 				<p class="pay-title">支付方式：</p>
 				<div class="pay-code">
 					<span :class="['pay-code-row-item row-item',i===pay_code_index ? 'xz':'']"
-						  v-for="(item,i) in pay_list" :key="item.pay_id"
-						  @click="payCodeSwitch(i)"
+						v-for="(item,i) in pay_list" :key="item.pay_id"
+						@click="payCodeSwitch(i)"
 					>{{item.pay_name}}</span>
 				</div>
 				<p class="pay-title">分期方式：</p>
 				<div class="pay-byStages" v-for="(item,i) in pay_list" :key="item.pay_id" v-show="pay_code_index === i">
 					<span :class="['pay-byStages-row-item row-item',i2===pay_byStages_index[i] ? 'xz':'']"
-						  v-for="(item2,i2) in item.ByStages"
-						  :key="item2.bystages_id"
-						  @click="payByStagesSwitch(i,i2)"
+						v-for="(item2,i2) in item.ByStages"
+						:key="item2.bystages_id"
+						@click="payByStagesSwitch(i,i2)"
 					>{{item2.bystages_val}}</span>
 				</div>
 			</div>
@@ -28,24 +28,23 @@
 		</van-popup>
 	</div>
 </template>
-
 <script>
     export default {
         data() {
             return {
                 show: false,
                 pay_code_index: 0,
-                pay_desc: ''
+                pay_desc: '',
+                by_stages_number: 1,
             };
         },
+        props: ["goods_list"],
         computed: {
-
             pay_list_: {
                 get: function () {
                     return this.$store.state.pay_list;
                 }
             },
-
             pay_list: {
                 get: function () {
                     let result = [];
@@ -98,6 +97,22 @@
             },
         },
         created() {
+            this.by_stages_number = this.goods_list[0].by_stages_number;
+            switch (this.by_stages_number) {
+                case 1:
+                    this.switch_index["pay_code_key"] = 0;
+                    this.switch_index["pay_byStages_key"][this.switch_index["pay_code_key"]] = 0;
+                    break;
+                case 12:
+                    this.switch_index["pay_code_key"] = 1;
+                    this.switch_index["pay_byStages_key"][this.switch_index["pay_code_key"]] = 1;
+                    break;
+                case 24:
+                    this.switch_index["pay_code_key"] = 1;
+                    this.switch_index["pay_byStages_key"][this.switch_index["pay_code_key"]] = 2;
+                    break;
+
+            }
             this.getPayDescAndIniPayInfo();
         },
         methods: {
@@ -143,7 +158,6 @@
         },
     };
 </script>
-
 <style lang="scss" scoped>
 	.mian {
 		margin-top: 10px;

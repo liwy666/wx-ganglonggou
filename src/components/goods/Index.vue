@@ -9,12 +9,12 @@
 		</van-swipe>
 		<!--价格-->
 		<div class="goods-price"
-			 v-if="parseInt(goods_info.promote_start_date * 1000) > parseInt( new Date().getTime()) || parseInt(goods_info.promote_end_date * 1000) < parseInt( new Date().getTime())||goods_info.is_promote===0">
+			v-if="parseInt(goods_info.promote_start_date * 1000) > parseInt( new Date().getTime()) || parseInt(goods_info.promote_end_date * 1000) < parseInt( new Date().getTime())||goods_info.is_promote===0">
 			￥{{goods_info.goods_price}}
 		</div>
 		<!--秒杀倒计时-->
 		<div class="promote-price-box"
-			 v-if="parseInt(goods_info.promote_start_date * 1000) < parseInt( new Date().getTime()) && parseInt(goods_info.promote_end_date * 1000) > parseInt( new Date().getTime())&&goods_info.is_promote===1">
+			v-if="parseInt(goods_info.promote_start_date * 1000) < parseInt( new Date().getTime()) && parseInt(goods_info.promote_end_date * 1000) > parseInt( new Date().getTime())&&goods_info.is_promote===1">
 			<!--价格-->
 			<div class="goods-price">
 				<div class="shop_price">{{goods_info.goods_price}}<span>元</span></div>
@@ -24,7 +24,8 @@
 		</div>
 		<!--商品名称-->
 		<div class="goods-name">
-			<van-tag type="danger" v-if="goods_info.goods_head_name!==''&&goods_info.goods_head_name!==null" :color="$MyCommon.$main_color0">
+			<van-tag type="danger" v-if="goods_info.goods_head_name!==''&&goods_info.goods_head_name!==null"
+				:color="$MyCommon.$main_color0">
 				{{this.goods_info.goods_head_name}}
 			</van-tag>
 			{{msg.goods_name}}
@@ -40,12 +41,13 @@
 			<van-col span="8">库存:{{this.goods_info.goods_stock}}</van-col>
 			<van-col span="8">销量:{{this.goods_info.goods_sales_volume}}</van-col>
 		</van-row>
-		<myPayInfo :pay_list="pay_list" v-if="pay_list.length >0"></myPayInfo>
+		<!--分期信息-->
+		<!--<myPayInfo :pay_list="pay_list" v-if="pay_list.length >0"></myPayInfo>-->
 		<!--领券选择-->
 		<myCouponOption :coupon_list="coupon_list" v-if="coupon_list.length>0 &&load_extra_goods"></myCouponOption>
 		<!--规格选择-->
 		<van-cell title="已选" :value="goods_info.attr_desc + ',' +goods_info.goods_number +'件'" is-link
-				  @click="show_sku = !show_sku" v-if="load_extra_goods"/>
+			@click="show_sku = !show_sku" v-if="load_extra_goods"/>
 		<!--服务选择-->
 		<myServiceOption></myServiceOption>
 		<!--商品详情and用户评价-->
@@ -71,7 +73,6 @@
 		</van-popup>
 	</div>
 </template>
-
 <script>
     import {ImagePreview} from 'vant';
     import myNarBar from '../sub/my-nav-bar';
@@ -172,17 +173,19 @@
 
             }
             , pay_list: {
-                get:function () {
+                get: function () {
                     return this.$store.state.pay_list;
                 }
-			}
+            }
         },
         created() {
             this.goods_id = this.$route.params.goods_id;
 
-            if(this.$store.state.pay_list.length <1){
-                this.$store.dispatch('getPayList',this.$store.getters.getUserToken)
-			}
+            /*
+            //获取支付方式列表
+            if (this.$store.state.pay_list.length < 1) {
+				   this.$store.dispatch('getPayList', this.$store.getters.getUserToken)
+			   }*/
 
             if (typeof (this.$route.query.goods_info) != 'undefined') {
                 this.msg = JSON.parse(this.$route.query.goods_info);
@@ -279,7 +282,6 @@
         },
     };
 </script>
-
 <style lang="scss">
 	.van-swipe {
 		background-color: white;
