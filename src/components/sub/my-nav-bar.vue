@@ -6,7 +6,6 @@
 		<div class="d"></div>
 	</div>
 </template>
-
 <script>
     export default {
         data() {
@@ -28,24 +27,23 @@
             },
             onClickRight() {
                 let goods_id = this.GetQueryString('gl_goods_id');
-                if (goods_id != null && goods_id.length > 1 &&(/(^[1-9]\d*$)/.test(parseInt(goods_id))) ) {
+                if (goods_id != null && goods_id.length > 1 && (/(^[1-9]\d*$)/.test(parseInt(goods_id)))) {
                     /* 直接跳转*/
-                    window.location.href = 'https://mate.ganglonggou.com/wx_glShopping'
-                }else {
+                    window.location.href = this.$store.state.local_url;
+                } else {
                     this.$router.push('/')
                 }
             }
         },
     };
 </script>
-
 <style lang="scss" scoped>
 	.my-nav-bar {
 		width: 100%;
 		position: fixed;
 		z-index: 999 !important;
 	}
-	
+
 	.d {
 		width: 100%;
 		height: 45px;

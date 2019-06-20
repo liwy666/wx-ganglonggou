@@ -4,7 +4,7 @@
 		<!--头部商品轮播-->
 		<van-swipe :autoplay="3000" indicator-color="white">
 			<van-swipe-item v-for="(item,i) in head_imgPreview" :key="i" @click="imgPreview(head_imgPreview,i)">
-				<img v-lazy="item"/>
+				<img :src="item"/>
 			</van-swipe-item>
 		</van-swipe>
 		<!--价格-->
@@ -50,6 +50,8 @@
 			@click="show_sku = !show_sku" v-if="load_extra_goods"/>
 		<!--服务选择-->
 		<myServiceOption></myServiceOption>
+		<!--供应商缩略-->
+		<supplierPreview v-if="load_extra_goods" :supplier_preview_info="supplier_preview_info"></supplierPreview>
 		<!--商品详情and用户评价-->
 		<van-tabs>
 			<van-tab title="商品详情">
@@ -84,6 +86,7 @@
     import myGoodsAction from './sub/my-goods-action'
     import myPayInfo from './sub/my-pay-info'
     import countDown from '../sub/my-count-down'
+    import supplierPreview from './sub/my-supplier-preview'
     import {commonShare} from "../../share";
 
     export default {
@@ -93,6 +96,7 @@
                 goods_id: "",
                 show_sku: false,
                 load_extra_goods: false,
+                supplier_preview_info: {},
             };
         },
         computed: {
@@ -109,7 +113,7 @@
             /*预览图片*/
             head_imgPreview: {
                 get: function () {
-                    var result = [];
+                    let result = [];
                     if (typeof (this.goods_info.goods_gallery) !== 'undefined') {
                         if (this.goods_info.goods_gallery.length > 0) {
                             this.goods_info.goods_gallery.forEach(item => {
@@ -155,12 +159,12 @@
                 get: function () {
                     let reslut = [];
                     if (this.msg !== "" && this.msg.goods_desc !== "") {
-                        var imgReg = /<img.*?(?:>|\/>)/gi;
+                        let imgReg = /<img.*?(?:>|\/>)/gi;
                         //匹配src属性
-                        var srcReg = /src=['"]?([^'"]*)['"]?/i;
-                        var arr = this.msg.goods_desc.match(imgReg);
-                        for (var i = 0; i < arr.length; i++) {
-                            var src = arr[i].match(srcReg);
+                        let srcReg = /src=['"]?([^'"]*)['"]?/i;
+                        let arr = this.msg.goods_desc.match(imgReg);
+                        for (let i = 0; i < arr.length; i++) {
+                            let src = arr[i].match(srcReg);
                             //获取图片地址
                             if (src[1]) {
                                 reslut.push(src[1])
@@ -178,12 +182,27 @@
                 }
             }
         },
+        beforeRouteUpdate(to){
+            window.scrollTo(0,0);
+            this.goods_id = to.params.goods_id;
+            if (typeof (to.query.goods_info) != 'undefined') {
+                this.msg = JSON.parse(to.query.goods_info);
+                //初始化商品信息
+                this.$store.commit("initGoodsInfo", this.msg);
+                //初始化商品sku
+                this.$store.commit("initGoodsSkuOptions", this.msg);
+                //获取额外商品信息
+                this.getExtraGoodsInfo();
+            } else {
+                this.getGoodsInfo();
+            }
+		},
         created() {
             this.goods_id = this.$route.params.goods_id;
 
             /*
-            //获取支付方式列表
-            if (this.$store.state.pay_list.length < 1) {
+			//获取支付方式列表
+			if (this.$store.state.pay_list.length < 1) {
 				   this.$store.dispatch('getPayList', this.$store.getters.getUserToken)
 			   }*/
 
@@ -210,6 +229,7 @@
             myGoodsAction,//商品导航栏
             myPayInfo,//支付列表
             countDown,//倒计时组件
+            supplierPreview,//供应商
         },
         methods: {
             getGoodsInfo() {
@@ -259,9 +279,10 @@
                         });
                         this.$set(this.$store.state.goods_info, 'goods_sku_list', msg.goods_sku);
                         this.$set(this.msg, 'coupon_list', msg.coupon_list);
+                        this.$set(this, 'supplier_preview_info', msg.supplier_preview_info);
                         this.$store.dispatch("updGoodsInfo");
-                        //let share_url = (this.$store.state.location_url + "?gl_goods_id="+this.goods_id);
-                        //commonShare(this, this.goods_info.goods_name,share_url,this.$store.state.goods_info.goods_attribute_img, '江苏岗隆数码-您身边的数码产品服务商');
+                        let share_url = (this.$store.state.local_url + "?gl_goods_id="+this.goods_id);
+                        commonShare(this, this.goods_info.goods_name,share_url,this.$store.state.goods_info.goods_attribute_img, '江苏岗隆数码-您身边的数码产品服务商');
                         this.load_extra_goods = true;
                     })
             }

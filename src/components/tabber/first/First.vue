@@ -195,41 +195,33 @@
             },
             toControl(ad_info) {
                 if (ad_info.ad_type === "商品ID") {
-                    if (ad_info.index_goods_id != null && ad_info.index_goods_id !== '' && ad_info.index_goods_id !== 0) {
-                        this.$router.push('goods/' + ad_info.index_goods_id)
+                    if (ad_info.goods_id != null && ad_info.goods_id !== '' && ad_info.goods_id !== 0) {
+                        this.$router.push('goods/' + ad_info.goods_id)
                     }
                 } else if (ad_info.ad_type === "分类ID") {
-                    if (ad_info.index_cat_id != null && ad_info.index_cat_id !== '' && ad_info.index_cat_id !== 0) {
+                    if (ad_info.cat_id != null && ad_info.cat_id !== '' && ad_info.cat_id !== 0) {
                         this.$router.push({
                             path: 'goodsList',
-                            query: {type: 'cat', cat_id: ad_info.index_cat_id, keyword: ""}
+                            query: {type: 'cat', cat_id: ad_info.cat_id, keyword: "", back_number: -1}
                         })
                     }
-                } else if (ad_info.ad_type === "优惠券ID") {
-                    if (ad_info.index_coupon_id != null && ad_info.index_coupon_id !== '' && ad_info.index_coupon_id !== 0) {
-                        let toast1 = this.$toast.loading({
-                            mask: true,
-                            message: '领取中...',
-                            duration: 0
-                        });
-                        this.$post('user_get_coupon', {
-                            coupon_id: ad_info.index_coupon_id,
-                            user_token: this.$store.getters.getUserToken
+                } else if (ad_info.ad_type === "搜索关键词") {
+                    if (ad_info.text != null && ad_info.text !== '') {
+                        this.$router.push({
+                            path: 'goodsList',
+                            query: {type: 'search', cat_id: -1, keyword: ad_info.text, back_number: -1}
                         })
-                            .then((msg) => {
-                                toast1.clear();
-                                this.$toast(msg);
-                            })
                     }
-                } else if (ad_info.ad_type === "外部链接") {
-                    if (ad_info.index_url != null && ad_info.index_url !== '') {
+                } else if (ad_info.ad_type === "优惠券板块") {
+                    this.$router.push('/allCoupon');
+                } else if (ad_info.ad_type === "外链接") {
+                    if (ad_info.text != null && ad_info.text !== '') {
                         this.$router.push({
                             path: 'myIframe',
                             query: {src: ad_info.index_url}
                         })
                     }
                 } else if (ad_info.ad_type === "内部文章") {
-                    console.log(ad_info);
                     if (ad_info.index_article_id != null && ad_info.index_article_id !== '' && ad_info.index_article_id !== 0) {
                         this.$router.push('article/' + ad_info.index_article_id)
                     }
@@ -322,7 +314,8 @@
 	.md-landscape-content {
 		width: 375px;
 		text-align: center;
-		img{
+
+		img {
 			width: 70%;
 		}
 	}

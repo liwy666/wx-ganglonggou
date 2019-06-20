@@ -30,7 +30,7 @@ axios.interceptors.response.use(
     response => {
         if (response.data.error_code !== undefined) {
             if(response.data.error_code === 10002){
-                VueCookies.remove("gl_user_token");
+                VueCookies.remove("gl_wx_user_token");
                 Toast.clear();
                 Toast.fail({
                     message: '非常抱歉，我们不能获取到您的用户信息，请尝试重新进入商城',

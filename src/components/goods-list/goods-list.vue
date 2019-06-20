@@ -40,12 +40,6 @@
 				<i class="suspension-button">
 					<van-icon name="arrow-up" @click="scrollToTop"/>
 				</i>
-				<!--<i class="suspension-button">
-					<van-icon name="search" @click="$router.push('/search');"/>
-				</i>
-				<i class="suspension-button">
-					<van-icon name="arrow-left" @click="$router.go(-1);"/>
-				</i>-->
 			</div>
 		</transition>
 	</div>
@@ -269,8 +263,7 @@
             },
             updGoodsList() {
                 if (this.active === 1) {
-                    this.$set(this, 'price_flag', !this.price_flag)
-                    console.log(this.price_flag);
+                    this.$set(this, 'price_flag', !this.price_flag);
                 }
 
             },

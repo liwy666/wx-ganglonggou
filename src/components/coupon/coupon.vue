@@ -1,13 +1,13 @@
 <template>
 	<div class="main">
 		<myNarBar title="我的优惠券"></myNarBar>
-		<oneCoupon v-for="(item) in coupon_list" :key="item.coupon_id" :coupon_info = "item"></oneCoupon>
+		<oneCoupon v-for="(item) in coupon_list" :key="item.coupon_id" :coupon_info="item" :allow_get="false" :view_number="false"></oneCoupon>
 	</div>
 </template>
-
 <script>
     import oneCoupon from './sub/one-coupon';
     import myNarBar from '../sub/my-nav-bar';
+
     export default {
         data() {
             return {};
@@ -29,7 +29,5 @@
         },
     };
 </script>
-
 <style lang="scss" scoped>
-
 </style>

@@ -9,11 +9,14 @@ Vue.use(Router);
 import Index from './components/tabber/Index.vue'
 import Login from './components/Login'
 import First from './components/tabber/first/First'//首页
+import AboutMall from './components/tabber/aboutMall/AboutMall'//关于商城
 import Classify from './components/tabber/classify/Classify'//分类
 import Spike from './components/tabber/spike/Spike'//秒杀
 import Cart from './components/tabber/cart/Cart'//购物车
 import Home from './components/tabber/home/Home'//个人中心
+import AllCoupon from './components/coupon/AllCoupon' //优惠券列表
 import Goods from './components/goods/Index'//商品详情
+import supplier from './components/supplier/Supplier'//商品详情
 import myIframe from './components/sub/my-iframe'//页中页
 import writeOrder from './components/order-form/write-order'//填写订单
 import addressList from './components/address/address'//地址列表
@@ -45,6 +48,7 @@ var router = new Router({
             }, children: [
                 {path: '/', redirect: '/first', meta: {keepAlive: true}},
                 {path: '/first', component: First, meta: {keepAlive: true}},
+                {path: '/aboutMall', component: AboutMall, meta: {keepAlive: true}},
                 {path: '/classify', component: Classify, meta: {keepAlive: true}},
                 {path: '/spike', component: Spike, meta: {keepAlive: true}},
                 {path: '/cart', component: Cart, meta: {keepAlive: false}},
@@ -53,6 +57,8 @@ var router = new Router({
         },
         {path: '/login', component: Login},
         {path: '/goods/:goods_id', component: Goods},
+        {path: '/allCoupon/', component: AllCoupon},
+        {path: '/supplier', component: supplier,meta: {keepAlive: true}},
         {path: '/article/:article_id', component: Article},
         {path: '/myIframe', component: myIframe},
         {path: '/writeOrder', component: writeOrder},
@@ -73,7 +79,7 @@ var router = new Router({
 });
 
 router.beforeEach((to, from, next) => {
-    let user_token = VueCookies.get("gl_user_token");
+    let user_token = VueCookies.get("gl_wx_user_token");
     if (user_token === null && to.path !== '/login') {
         // 第一次进入项目
         localStorage.setItem('beforeLoginUrl', to.fullPath);// 保存用户进入的url

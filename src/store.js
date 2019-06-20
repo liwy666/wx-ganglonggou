@@ -8,7 +8,7 @@ Vue.use(Vuex);
 
 var carts_ = JSON.parse(localStorage.getItem('carts') || '[]');
 var carts_selected_ = [];
-var user_token_ = VueCookies.get("gl_user_token");
+var user_token_ = VueCookies.get("gl_wx_user_token");
 /*初始化选中购物车*/
 if (carts_.length > 0) {
     carts_.forEach(item => {
@@ -26,6 +26,7 @@ let store = new Vuex.Store({
         into_type: "wx"//入口方式
         // ,api_url:"https://api.ganglonggou.com"
         , api_url: "https://test-api.ganglonggou.com"
+        ,local_url:"https://mate.ganglonggou.com/wx-ganglonggou/"
         , parent_id: 203//主类
         , goods_list: []//商品列表
         , goods_info: {
@@ -46,15 +47,15 @@ let store = new Vuex.Store({
             sku_id: 0,//所选属性id
             attr_desc: '',//所选属性详情
             is_promote: 0,//是否秒杀商品
-            promote_number:0,
-            promote_start_date:0,
-            promote_end_date:0,
+            promote_number: 0,
+            promote_start_date: 0,
+            promote_end_date: 0,
             give_integral: 0,//返积分
             integral: 0,//用积分
             one_give_integral: 0,//返积分
             one_integral: 0,//用积分
             integral_desc: '',//积分描述
-            by_stages_number:1//分期期数
+            by_stages_number: 1//分期期数
         }//单个商品信息
         , goods_sku_options: []//sku选项
         , goods_sku: []//单个商品规格
@@ -105,7 +106,7 @@ let store = new Vuex.Store({
             7: '售后失败',
             8: '售后成功',
         }
-        ,classify_list:[]
+        , classify_list: []
     },
     mutations: {
         /**
@@ -132,15 +133,15 @@ let store = new Vuex.Store({
                 sku_id: 0,//所选属性id
                 attr_desc: '',//所选属性详情
                 is_promote: 0,//是否秒杀商品
-                promote_number:0,
-                promote_start_date:0,
-                promote_end_date:0,
+                promote_number: 0,
+                promote_start_date: 0,
+                promote_end_date: 0,
                 give_integral: 0,//返积分
                 integral: 0,//用积分
                 one_give_integral: 0,//返积分
                 one_integral: 0,//用积分
                 integral_desc: '',//积分描述
-                by_stages_number:1//分期期数
+                by_stages_number: 1//分期期数
             });
             Vue.set(state.goods_info, 'goods_price', new_goods_info.shop_price);
             Vue.set(state.goods_info, 'market_price', new_goods_info.market_price);
@@ -400,7 +401,7 @@ let store = new Vuex.Store({
          */
         setUserToken(state, user_token) {
             state.user_token = user_token;
-            VueCookies.set("gl_user_token", user_token, '43200s');
+            VueCookies.set("gl_wx_user_token", user_token, '43200s');
         },
 
         /**
@@ -750,10 +751,8 @@ let store = new Vuex.Store({
          * @returns {string}
          */
         , getUserToken(state) {
-
             let result = state.user_token;
             if (result === "" || result === null || typeof (result) === "undefined") {
-                Toast("未获取到有效用户信息，建议您重新进入商城");
                 return false;
             } else {
                 return result;

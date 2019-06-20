@@ -75,7 +75,8 @@
                     payment_price: '计算中...',
                     by_stages_price: '计算中...',
                     by_stages_fee: '计算中...',
-                }
+                },
+
             };
         },
         computed: {
@@ -87,7 +88,6 @@
             goods_info: {
                 get: function () {
                     return this.$store.getters.getGoodsInfo
-
                 }
             }
         },

@@ -11,6 +11,14 @@
 		<div class="support"></div>
 		<van-tabbar v-model="active" :fixed="fixed" :active-color="$MyCommon.$main_color0">
 			<van-tabbar-item icon="shop-collect" to="first">首页</van-tabbar-item>
+			<van-tabbar-item icon="shop-collect" to="aboutMall">
+				<span>关于商城</span>
+				<img
+					slot="icon"
+					slot-scope="props"
+					:src="props.active ? './img/gl_icon_xz.png' : './img/gl_icon.png'"
+				>
+			</van-tabbar-item>
 			<van-tabbar-item icon="service"
 				:to="{path:'myIframe',query:{src:'https://p.qiao.baidu.com/cps2/mobileChat?siteId=11040705&userId=24298402&type=1&reqParam=&appId=&referer='}}">
 				客服
@@ -28,11 +36,12 @@
     export default {
         data() {
             return {
-                fixed: true
+                fixed: true,
+
             };
         },
         created() {
-            //commonShare(this, '岗隆数码', window.location.href, 'https://api.ganglonggou.com/images/wx_share_img.png', '岗隆数码农行专区');
+            commonShare(this, '岗隆数码', this.$store.state.local_url, 'https://img-api.ganglonggou.com/wx_share_img.png', '江苏岗隆数码-您身边的数码产品服务商');
         },
         computed: {
             /*头部轮播*/
@@ -44,17 +53,17 @@
                         case "/":
                             index = 0;
                             break;
-                        case "/spike":
-                            index = 2;
+                        case "/aboutMall":
+                            index = 1;
                             break;
                         case "/classify":
-                            index = 2;
-                            break;
-                        case "/cart":
                             index = 3;
                             break;
-                        case "/home":
+                        case "/cart":
                             index = 4;
+                            break;
+                        case "/home":
+                            index = 5;
                             break;
                         default:
                             index = 0;
@@ -66,6 +75,14 @@
 
                 }
             },
+        },
+        watch: {
+            'active': {
+                'handler': function () {
+
+                },
+                immediate: true,
+            }
         },
         activated() {
 

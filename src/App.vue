@@ -6,17 +6,16 @@
 		<router-view class="router-view" v-if="!$route.meta.keepAlive"></router-view>
 	</div>
 </template>
-
 <script>
     export default {
         created() {
-			this.loginCount();
+            this.loginCount();
         },
         methods: {
             loginCount() {
                 let user_token = this.$store.getters.getUserToken;
                 if (user_token) {
-                    this.$post('user_login_count',{user_token:this.$store.getters.getUserToken});
+                    this.$post('user_login_count', {user_token: user_token});
                 }
             }
         },
@@ -50,5 +49,4 @@
 	.name1-leave-active {
 		transition: all 0.3s ease;
 	}
-
 </style>

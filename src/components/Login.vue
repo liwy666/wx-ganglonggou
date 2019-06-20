@@ -1,7 +1,6 @@
 <template>
 	<h1></h1>
 </template>
-
 <script>
     export default {
         data() {
@@ -12,8 +11,8 @@
         },
         methods: {
             Login() {
-                this.testLogin();
-                //this.abcLogin();
+                //this.testLogin();
+                this.wxLogin();
             },
             /*登录方法合集*/
             abcLogin() {
@@ -87,22 +86,21 @@
             wxLogin() {
                 let code_v = this.GetQueryString("code");
                 let redirect_uri = encodeURIComponent(window.location.href);
-                this.$store.state.login_type = 'wxgllogin';
                 if (code_v === null) {
                     let url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxcdc792b2207365e6&redirect_uri=" +
                         redirect_uri +
                         "&response_type=code&scope=snsapi_userinfo&state=GANGLONG8888#wechat_redirect";
                     window.location.href = url;
                 } else {
-                    /!*用code去换取openid*!/
+                    /* 用code去换取openid*/
                     this.$toast.loading({
                         mask: true,
                         message: '登录中....',
                         duration: 0
                     });
-                    this.$post('wxlogin', {code: code_v})
+                    this.$post('wx_login', {code: code_v})
                         .then((msg) => {
-                            if (typeof (msg) !== "undefined") {
+                            if (msg) {
                                 this.$store.commit("setUserToken", msg);
                                 this.$toast.clear();
                                 this.goBeforeLoginUrl();
@@ -132,7 +130,5 @@
         },
     };
 </script>
-
 <style lang="scss" scoped>
-
 </style>

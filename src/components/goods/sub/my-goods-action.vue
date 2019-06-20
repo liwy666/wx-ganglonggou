@@ -31,7 +31,6 @@
 		</van-goods-action>
 	</div>
 </template>
-
 <script>
     export default {
         data() {
@@ -41,15 +40,14 @@
 
         },
         methods: {
-            showSku(){
-                this.$emit('updShowSku',true)
-						}
-				},
+            showSku() {
+                this.$emit('updShowSku', true)
+            }
+        },
     };
 </script>
-
 <style lang="scss" scoped>
-		.van-icon{
-			font-size: 20px;
-		}
+	.van-icon {
+		font-size: 20px;
+	}
 </style>

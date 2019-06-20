@@ -9,7 +9,7 @@
 				title="优惠券"
 			/>
 			<div class="coupon-box">
-				<myCoupon v-for="(item) in coupon_list" :key="item.coupon_id" :coupon_info="item"></myCoupon>
+				<myCoupon v-for="(item) in coupon_list" :key="item.coupon_id" :coupon_info="item" allow_get view_number></myCoupon>
 			</div>
 			<div class="brace"></div>
 			<van-button type="danger" size="large"  @click="show = !show"> 确 认 </van-button>
@@ -18,7 +18,7 @@
 </template>
 
 <script>
-    import myCoupon from '../../sub/my-coupon';
+    import myCoupon from '../../coupon/sub/one-coupon';
     export default {
         data() {
             return {
