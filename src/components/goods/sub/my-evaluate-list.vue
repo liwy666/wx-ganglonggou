@@ -10,7 +10,7 @@
 				@load="onLoad"
 			>
 				<myEvaluateInfo v-for="(item) in evaluate_list" :key="item.id"
-								:evaluate_info="item"></myEvaluateInfo>
+					:evaluate_info="item"></myEvaluateInfo>
 			</van-list>
 		</div>
 		<div class="evaluate-no-load" v-else>
@@ -18,7 +18,6 @@
 		</div>
 	</div>
 </template>
-
 <script>
     import myEvaluateInfo from './my-evaluate-info'
 
@@ -56,7 +55,6 @@
                                 this.finished = true;
                             }
                             this.loading = false;
-                            console.log(msg);
                             this.evaluate_list = msg;
                         })
                 } else {
@@ -71,7 +69,6 @@
         },
     };
 </script>
-
 <style lang="scss" scoped>
 	.evaluate-no-load {
 		width: 100%;

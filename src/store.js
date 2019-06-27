@@ -24,9 +24,9 @@ let store = new Vuex.Store({
     state: {
         user_token: user_token_,//用户token
         into_type: "wx"//入口方式
-        // ,api_url:"https://api.ganglonggou.com"
+        //, api_url: "https://api.ganglonggou.com"
         , api_url: "https://test-api.ganglonggou.com"
-        ,local_url:"https://mate.ganglonggou.com/wx-ganglonggou/"
+        , local_url: "https://mate.ganglonggou.com/wx-ganglonggou/"
         , parent_id: 203//主类
         , goods_list: []//商品列表
         , goods_info: {
@@ -793,7 +793,7 @@ let store = new Vuex.Store({
             return state.carts_selected;
         }
         /**
-         * 返回选中商品
+         * 返回优惠券
          * @param state
          * @returns {Array}
          */

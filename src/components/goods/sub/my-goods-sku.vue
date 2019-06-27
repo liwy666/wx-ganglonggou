@@ -6,10 +6,10 @@
 					:src="goods_info.goods_attribute_img" alt=""></div>
 				<div class="goods_price_sn">
 					<p class="goods_price"><span>￥</span>{{this.goods_info.goods_price}}
-					<p/>
+					</p>
 					<p class="goods_sn">商品编号：{{this.goods_info.goods_sn}}
 					<p class="goods_sn">库存：{{this.goods_info.goods_stock}}
-					<p/>
+					</p>
 				</div>
 			</div>
 			<div class="goods-sku-body">
@@ -31,7 +31,7 @@
 					</van-col>
 				</van-row>
 			</div>
-			<div class="by-stages-body" v-show="goods_info.goods_price > 2000">
+			<div class="by-stages-body" v-show="goods_info.goods_price > 50">
 				<p class="title">分期方式</p>
 				<div class="by-stages-row-box">
 					<span @click="switchByStages(1)"
@@ -42,12 +42,12 @@
 						:class="['by-stage-row-item',goods_info.by_stages_number === 24 ? 'xz':'']">24期</span>
 				</div>
 				<div class="list">
+					<p><i class="list-name">折扣：</i><i class="list-desc">{{this.list_info.by_stages_fee}}</i></p>
 					<p><i class="list-name">分期方式：</i><i class="list-desc">{{this.list_info.by_stages_name}}</i></p>
 					<p><i class="list-name">手续费：</i><i class="list-desc">无手续费</i></p>
 					<p><i class="list-name">实际支付：</i><i class="list-desc">￥{{this.list_info.payment_price}}</i></p>
 					<p v-show="goods_info.by_stages_number !== 1"><i class="list-name">每期本金：</i><i class="list-desc">￥{{this.list_info.by_stages_price}}</i>
 					</p>
-					<p><i class="list-name">分期折扣：</i><i class="list-desc">{{this.list_info.by_stages_fee}}</i></p>
 					<van-row>
 						<van-col span="16">每期金额仅供参考，实际金额以支付页面为准</van-col>
 					</van-row>

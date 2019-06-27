@@ -18,6 +18,7 @@
 			:background="$MyCommon.$main_color1"
 			left-icon="volume-o"
 		/>
+		<!--优惠券-->
 		<div class="banner-box">
 			<img :src="index_ad_list.coupon.ad_img" alt="" @click="toControl(index_ad_list.coupon)">
 		</div>
@@ -29,6 +30,16 @@
 			<div class="four-goods-base">
 				<div v-for="(item2 ,i2) in item.goods" :key="i2"><img :src="item2.ad_img" alt=""
 					@click="toControl(item2)"></div>
+			</div>
+		</div>
+		<!--孤立-->
+		<div class="banner-box">
+			<img v-lazy="index_ad_list.banner.ad_img" alt="" @click="toControl(index_ad_list.banner)">
+		</div>
+		<!--合作伙伴-->
+		<div class="align-box">
+			<div class="align" v-for="(item) in index_ad_list.align" :key="item.id">
+				<img v-lazy="item.ad_img" alt="" @click="toControl(item)">
 			</div>
 		</div>
 		<!--8件商品区-->
@@ -52,7 +63,7 @@
 			</div>
 		</div>
 		<!--压屏广告-->
-		<md-landscape v-model="showPic">
+		<md-landscape v-model="show_pic">
 			<img :src="index_ad_list.pop_img_url">
 		</md-landscape>
 	</div>
@@ -70,7 +81,7 @@
                 },
                 radio: "1",
                 cat_index: 0,
-                showPic: false,
+                show_pic: false,
                 swipe_img: [],
                 notice_text: '',
             };
@@ -95,6 +106,8 @@
                         notice_text: {},
                         pop_img_url: '',
                         coupon: {},
+                        banner: {},
+                        align: [],
                         four_goods_banner: [],
                         four_goods_base: [],
                         four_goods: [],
@@ -113,6 +126,10 @@
                                 result.pop_img_url = item.ad_img;
                             } else if (item.position_type === '公告') {
                                 result.notice_text = item;
+                            } else if (item.position_type === '孤立通栏') {
+                                result.banner = item;
+                            } else if (item.position_type === '合作伙伴') {
+                                result.align.push(item);
                             } else if (item.position_type === '优惠券区域') {
                                 result.coupon = item;
                             } else if (item.position_type === '4件商品通栏') {
@@ -188,10 +205,17 @@
                     if (msg) {
                         this.get_info = msg;
                         this.$set(this.$store.state, 'goods_list', msg.goods_list);//赋值商品列表
-                        this.showPic = true;
+                        this.showPic();
                     }
 
                 })
+            },
+            showPic() {
+                let time = localStorage.getItem('glShowPicTime') || 0;
+                if (time < parseInt(new Date().getTime())) {
+                    localStorage.setItem('glShowPicTime', parseInt(new Date().getTime()) + 86400000);
+                    this.show_pic = true;
+                }
             },
             toControl(ad_info) {
                 if (ad_info.ad_type === "商品ID") {
@@ -222,8 +246,8 @@
                         })
                     }
                 } else if (ad_info.ad_type === "内部文章") {
-                    if (ad_info.index_article_id != null && ad_info.index_article_id !== '' && ad_info.index_article_id !== 0) {
-                        this.$router.push('article/' + ad_info.index_article_id)
+                    if (ad_info.article_id != null && ad_info.article_id !== '' && ad_info.article_id !== 0) {
+                        this.$router.push('article/' + ad_info.article_id)
                     }
                 } else {
                     console.log(ad_info.ad_type);

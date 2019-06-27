@@ -8,12 +8,11 @@
 			<!--			<van-button round v-if="order_info.order_state === 4 && order_info.evaluate_is === 0" type="default">前去评价</van-button>-->
 			<van-button round v-if="order_info.order_state === 6" type="default" @click="callService">取消申请</van-button>
 			<van-button round v-if="order_info.order_state === 4 ||order_info.order_state === 2" type="default"
-						@click="$router.push('/afterSale/'+order_info.order_sn)">申请售后
+				@click="$router.push('/afterSale/'+order_info.order_sn)">申请售后
 			</van-button>
 		</div>
 	</div>
 </template>
-
 <script>
     export default {
         data() {
@@ -27,7 +26,7 @@
         methods: {
             /*立即支付*/
             goPay() {
-                let success_url = encodeURIComponent("https://" + window.location.host + "/#/home");
+                let success_url = encodeURIComponent(this.$store.state.local_url + "#/home");
                 let back_url = encodeURIComponent(window.location.href);
                 window.location.href = this.$store.state.api_url + "/api/v1/payment/user_order_payment?success_url=" + success_url
                     + "&back_url=" + back_url
@@ -125,7 +124,6 @@
         },
     };
 </script>
-
 <style lang="scss" scoped>
 	.main {
 		.d {

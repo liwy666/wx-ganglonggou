@@ -11,6 +11,7 @@ import 'lib-flexible';
 
 //引入功能函数和常量
 import MyCommon from './common';
+
 Vue.prototype.$MyCommon = MyCommon;
 
 //引入vant
@@ -66,7 +67,7 @@ import VueCookies from 'vue-cookies'
 Vue.use(VueCookies);
 
 //Mand Mobile
-import {Progress, Bill,ResultPage,Landscape} from 'mand-mobile'
+import {Progress, Bill, ResultPage, Landscape} from 'mand-mobile'
 
 Vue.component('md-progress', Progress);
 Vue.component(Bill.name, Bill);

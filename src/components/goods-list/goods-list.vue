@@ -8,7 +8,7 @@
 				shape="round"
 			>
 				<div slot="label" @click="$router.go(back_number)">返回</div>
-				<div slot="action" @click="onSearch">搜索</div>
+				<!--				<div slot="action" @click="onSearch">搜索</div>-->
 			</van-search>
 			<div class="van-search-support"></div>
 		</div>
@@ -59,6 +59,7 @@
                 cat_id: -1,
                 keyword: "",
                 price_flag: true,
+				keyword_show_flag:true,
                 goods_list_: [],
                 back_number: -2,
             };
@@ -228,6 +229,11 @@
             '$store.state.goods_list': function (newVal) {
                 this.$set(this, 'goods_list_', newVal);
             }
+            , 'keyword': function (newVal) {
+                let keyword = newVal.toUpperCase();
+                keyword = keyword.replace(/\s*!/g, "");
+				this.keyword = keyword;
+            }
         },
         created() {
 
@@ -268,13 +274,13 @@
 
             },
             /*手动搜索*/
-            onSearch() {
+            /*onSearch() {
                 if (this.keyword.length > 0 && this.keyword.length < 20) {
                     let keyword = this.keyword.toUpperCase();
-                    keyword = keyword.replace(/\s*/g, "");
-                    this.$router.push({path: 'goodsList', query: {type: 'search', cat_id: -1, keyword: keyword}});
+                    keyword = keyword.replace(/\s*!/g, "");
+                    this.$router.push({path: '/goodsList', query: {type: 'search', cat_id: -1, keyword: keyword}});
                 }
-            },
+            },*/
         },
         components: {
             myNarBar,//头部组件

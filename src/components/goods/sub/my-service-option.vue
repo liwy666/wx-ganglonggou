@@ -1,9 +1,9 @@
 <template>
     <div>
-        <van-cell title="岗隆自营放心购" label="原装正品|电子发票|专业服务商|顺丰速运|7天无理由|全国联保|售后无忧" is-link @click="show = !show"/>
+        <van-cell title="岗隆放心购" label="原装正品|电子发票|专业服务商|顺丰速运|7天无理由|全国联保|售后无忧" is-link @click="show = !show"/>
         <van-popup v-model="show" position="bottom">
             <van-nav-bar
-                    title="岗隆自营放心购"
+                    title="岗隆放心购"
             />
             <van-cell icon="star-o" title="原装正品" label="正规渠道，全新原装"/>
             <van-cell icon="coupon-o" title="电子发票" label="根据国家政策，开具电子发票"/>
