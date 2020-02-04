@@ -34,6 +34,7 @@ import balance from './components/balance/balance' //用户余额
 import balanceList from './components/balance/balance-list/balance-list' //用户余额明细
 import Article from './components/article/article' //内部文章
 import PcLogin from './components/PcLogin/PcLogin' //pc登录
+import Activity01 from './components/activity/activity01/index' //现货专区活动页
 
 
 // 3. 创建路由对象
@@ -77,6 +78,7 @@ var router = new Router({
         {path: '/afterSale/:order_sn', component: afterSale},
         {path: '/goodsList', component: goodsList, meta: {keepAlive: true}},
         {path: '/pcLogin', component: PcLogin},
+        {path: '/activity01', component: Activity01,meta: {keepAlive: true}},
     ],
     scrollBehavior (to, from, savedPosition) {
         if (savedPosition) {

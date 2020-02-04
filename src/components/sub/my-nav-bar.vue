@@ -31,9 +31,9 @@
                 }
                 //上面都没执行就说明卡在当前页不是最后一条， histroy记录数量大于1，又没有回退记录，只能返回首页，
                 //如果上面都执行了 页面都跳走了，这个也就不用管了
-                setTimeout(() => {
-                    this.$router.push({path:'/'})
-                },500)
+                // setTimeout(() => {
+                //     this.$router.push({path:'/'})
+                // },500)
             },
             onClickRight() {
                 let goods_id = this.GetQueryString('gl_goods_id');
