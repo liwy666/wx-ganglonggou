@@ -1,7 +1,7 @@
 export default {
     //公共常量
     //岗隆
-    $main_color0: '#cc0001',
+    $main_color0: 'rgb(255,126,26)',
     $main_color1: 'rgba(251,0,0,0.1)',
     $main_color2: 'rgb(238,175,61)',
     $main_color4: 'rgba(251,0,0,0.6)',

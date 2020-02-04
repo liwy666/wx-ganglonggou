@@ -78,9 +78,18 @@ var router = new Router({
         {path: '/goodsList', component: goodsList, meta: {keepAlive: true}},
         {path: '/pcLogin', component: PcLogin},
     ],
+    scrollBehavior (to, from, savedPosition) {
+        if (savedPosition) {
+            return savedPosition
+        } else {
+            return { x: 0, y: 0 }
+        }
+        // return 期望滚动到哪个的位置
+    }
 });
 
 router.beforeEach((to, from, next) => {
+    localStorage.setItem('beforeUrl', from.path);// 保存来源路由
     let user_token = VueCookies.get("gl_wx_user_token");
     if (user_token === null && to.path !== '/login') {
         // 第一次进入项目

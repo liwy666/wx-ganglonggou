@@ -15,7 +15,7 @@
 			<p class="coupon-desc">{{this.coupon_info.coupon_desc}}</p>
 			<van-progress
 				v-if="view_number"
-				:pivot-text="'已抢:' + already_get + '%'"
+				:pivot-text="'已领:' + already_get + '%'"
 				color="#f44"
 				:percentage="already_get"
 			/>
@@ -74,7 +74,6 @@
                         })
                 }
             },
-
         },
     };
 </script>

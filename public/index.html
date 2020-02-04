@@ -8,10 +8,13 @@
     <title>岗隆购</title>
     <style type="text/css">
       .my-load{
-        width: 100%;
-        text-align: center;
-        position: fixed;
-        bottom: 100px;
+        width: 100vw;
+        height: 100vh;
+        background-color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 100;
       }
       .my-load img{
         width: 100%;
@@ -24,6 +27,5 @@
     </noscript>
     <div class="my-load" id="my-load"><img src="<%= BASE_URL %>load.png" alt=""></div>
     <div id="app"></div>
-    <!-- built files will be auto injected -->
   </body>
 </html>

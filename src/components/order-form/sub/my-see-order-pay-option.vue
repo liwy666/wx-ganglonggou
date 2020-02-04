@@ -3,24 +3,24 @@
 		<van-cell title="支付方式" :label="pay_desc" is-link @click="show = !show"/>
 		<van-popup v-model="show" position="bottom" @open="iniIndex">
 			<van-nav-bar
-							right-text="收起"
-							@click-right="show = !show"
-							title="支付方式切换"
+				right-text="收起"
+				@click-right="show = !show"
+				title="支付方式切换"
 			/>
 			<div class="pay-option-body">
 				<p class="pay-title">支付方式：</p>
 				<div class="pay-code">
 					<span :class="['pay-code-row-item row-item',i===pay_code_index ? 'xz':'']"
-					      v-for="(item,i) in pay_list" :key="item.pay_id"
-					      @click="payCodeSwitch(i)"
+						v-for="(item,i) in pay_list" :key="item.pay_id"
+						@click="payCodeSwitch(i)"
 					>{{item.pay_name}}</span>
 				</div>
 				<p class="pay-title">分期方式：</p>
 				<div class="pay-byStages" v-for="(item,i) in pay_list" :key="item.pay_id" v-show="pay_code_index === i">
 					<span :class="['pay-byStages-row-item row-item',i2===pay_byStages_index[i] ? 'xz':'']"
-					      v-for="(item2,i2) in item.ByStages"
-					      :key="item2.bystages_id"
-					      @click="payByStagesSwitch(i,i2)"
+						v-for="(item2,i2) in item.ByStages"
+						:key="item2.bystages_id"
+						@click="payByStagesSwitch(i,i2)"
 					>{{item2.bystages_val}}</span>
 				</div>
 			</div>
@@ -28,7 +28,6 @@
 		</van-popup>
 	</div>
 </template>
-
 <script>
     export default {
         data() {
@@ -152,33 +151,32 @@
         },
     };
 </script>
-
 <style lang="scss" scoped>
 	.main {
 		margin-top: 10px;
-		
+
 		.pay-option-body {
 			width: 100%;
 			height: 400px;
 			padding: 10px;
-			
+
 			.pay-title {
 				font-size: 14px;
 				margin-top: 20px;
 			}
-			
+
 			.pay-code {
 				margin-top: 10px;
 				display: flex;
 				flex-wrap: wrap;
 			}
-			
+
 			.pay-byStages {
 				margin-top: 10px;
 				display: flex;
 				flex-wrap: wrap;
 			}
-			
+
 			.row-item {
 				height: 28px;
 				line-height: 28px;
@@ -194,7 +192,7 @@
 				border: 1PX solid rgba(0, 0, 0, 0);
 				transition: all ease 0.3s;
 			}
-			
+
 			.xz {
 				border: 1PX solid $main-color0;
 				background-color: $main-color1;

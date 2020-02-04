@@ -31,28 +31,6 @@
 					</van-col>
 				</van-row>
 			</div>
-			<div class="by-stages-body" v-show="goods_info.goods_price > 50">
-				<p class="title">分期方式</p>
-				<div class="by-stages-row-box">
-					<span @click="switchByStages(1)"
-						:class="['by-stage-row-item',goods_info.by_stages_number === 1 ? 'xz':'']">不分期</span>
-					<span @click="switchByStages(12)"
-						:class="['by-stage-row-item',goods_info.by_stages_number === 12 ? 'xz':'']">12期</span>
-					<span @click="switchByStages(24)"
-						:class="['by-stage-row-item',goods_info.by_stages_number === 24 ? 'xz':'']">24期</span>
-				</div>
-				<div class="list">
-					<p><i class="list-name">折扣：</i><i class="list-desc">{{this.list_info.by_stages_fee}}</i></p>
-					<p><i class="list-name">分期方式：</i><i class="list-desc">{{this.list_info.by_stages_name}}</i></p>
-					<p><i class="list-name">手续费：</i><i class="list-desc">无手续费</i></p>
-					<p><i class="list-name">实际支付：</i><i class="list-desc">￥{{this.list_info.payment_price}}</i></p>
-					<p v-show="goods_info.by_stages_number !== 1"><i class="list-name">每期本金：</i><i class="list-desc">￥{{this.list_info.by_stages_price}}</i>
-					</p>
-					<van-row>
-						<van-col span="16">每期金额仅供参考，实际金额以支付页面为准</van-col>
-					</van-row>
-				</div>
-			</div>
 			<div class="button-box" v-show="goods_info.goods_stock > 0">
 				<van-button block type="warning" @click="addCart(goods_info)">加入购物车</van-button>
 				<van-button block type="danger" @click="nowPay(goods_info)">立即购买</van-button>
@@ -92,41 +70,6 @@
             }
         },
         created() {
-
-        },
-        watch: {
-            'goods_info': {
-                handler: function () {
-                    switch (this.goods_info.by_stages_number) {
-                        case 1 :
-                            this.$set(this, 'list_info', {
-                                by_stages_name: '不分期',
-                                payment_price: parseFloat(this.goods_info.goods_price * 0.95).toFixed(2),
-                                by_stages_price: parseFloat(this.goods_info.goods_price * 0.95).toFixed(2),
-                                by_stages_fee: '9.5折',
-                            });
-                            break;
-                        case 12 :
-                            this.$set(this, 'list_info', {
-                                by_stages_name: '12期',
-                                payment_price: parseFloat(this.goods_info.goods_price * 0.97).toFixed(2),
-                                by_stages_price: parseFloat((this.goods_info.goods_price * 0.97) / 12).toFixed(2),
-                                by_stages_fee: '9.7折',
-                            });
-                            break;
-                        case 24 :
-                            this.$set(this, 'list_info', {
-                                by_stages_name: '24期',
-                                payment_price: parseFloat(this.goods_info.goods_price).toFixed(2),
-                                by_stages_price: parseFloat(this.goods_info.goods_price / 24).toFixed(2),
-                                by_stages_fee: '无折扣',
-                            });
-                            break;
-                    }
-                },
-                immediate: true,
-                deep: true
-            },
 
         },
         methods: {
@@ -219,7 +162,7 @@
 		.goods-sku-body {
 			width: 96%;
 			margin-left: 2%;
-			height: 200px;
+			height: 300px;
 			overflow-y: auto;
 
 			.goods-sku-row-title {
@@ -255,6 +198,10 @@
 				}
 			}
 
+		}
+
+		.goods-number {
+			margin-bottom: 20px;
 		}
 
 		.button-box {

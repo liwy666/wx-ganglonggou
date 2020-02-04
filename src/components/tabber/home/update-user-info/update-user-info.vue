@@ -55,7 +55,6 @@
         methods: {
             /*修改头像*/
             onRead(file) {
-
                 let toast1 = this.$toast.loading({
                     mask: true,
                     message: '正在为您上传图片',

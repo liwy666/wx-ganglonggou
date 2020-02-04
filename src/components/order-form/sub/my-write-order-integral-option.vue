@@ -30,7 +30,6 @@
                     return parseInt(this.$store.state.user_info.integral);
                 }
             },
-
             goods_can_integral: {
                 get: function () {
                     let result = 0;

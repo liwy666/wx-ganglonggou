@@ -4,8 +4,9 @@ import {Toast} from 'vant';
 import VueCookies from 'vue-cookies'
 
 axios.defaults.timeout = 5000;
-//axios.defaults.baseURL = 'https://api.ganglonggou.com/api/v1';
-axios.defaults.baseURL = 'https://test-api.ganglonggou.com/api/v1';
+axios.defaults.baseURL = 'https://api.ganglonggou.com/api/v1';
+//axios.defaults.baseURL = 'https://test-api.ganglonggou.com/api/v1';
+//axios.defaults.baseURL = 'http://192.168.0.37:8004/api/v1';
 
 
 //http request 拦截器
@@ -29,7 +30,7 @@ axios.interceptors.request.use(
 axios.interceptors.response.use(
     response => {
         if (response.data.error_code !== undefined) {
-            if(response.data.error_code === 10002){
+            if (response.data.error_code === 10002) {
                 VueCookies.remove("gl_wx_user_token");
                 Toast.clear();
                 Toast.fail({
@@ -38,7 +39,7 @@ axios.interceptors.response.use(
                 });
                 location.reload(true);
 
-            }else {
+            } else {
                 Toast.fail({
                     message: response.data.msg,
                     duration: 2000

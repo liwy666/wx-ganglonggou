@@ -25,7 +25,7 @@
 				<van-radio name="质量问题">质量问题</van-radio>
 				<van-radio name="少件/漏发">少件/漏发</van-radio>
 				<van-radio name="发票问题">发票问题</van-radio>
-				<van-radio name="其他">其他</van-radio>
+				<van-radio name="其它">其它</van-radio>
 			</van-radio-group>
 		</div>
 		<div class="form-box">

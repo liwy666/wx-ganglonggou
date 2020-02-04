@@ -1,7 +1,7 @@
 <template>
 	<div class="classify-main-base">
 		<!--搜索框-->
-		<mySearch></mySearch>
+		<!--		<mySearch></mySearch>-->
 		<div class="classify-main">
 			<div class="bar-box">
 				<van-sidebar :active-key="active_key" @change="onChange">
@@ -10,17 +10,14 @@
 			</div>
 			<div class="base-box">
 				<div class="base" v-for="(item,i) in classify_list" :key="item.id" v-show="i===active_key">
-					<div class="title"><img v-lazy="item.img_url" alt="" @click="toSearch(item)"></div>
+					<div class="title" v-if="item.bar_img"><img :src="item.bar_img" alt="" @click="toSearch(item)">
+					</div>
+					<div style="height:1rem" v-if="!item.bar_img"></div>
 					<div class="body">
-						<div class="group-box" v-for="(item2,i2) in item.children" :key="i2">
-							<p class="group-name">{{item2.group_name}}</p>
-							<div class="base">
-								<div class="one-classify" v-for="(item3) in item2.children" :key="item3.id"
-									@click="toSearch(item3)">
-									<div class="img"><img v-lazy="item3.img_url" alt=""></div>
-									<div class="name">{{item3.classify_name}}</div>
-								</div>
-							</div>
+						<div class="one-classify" v-for="(item3) in item.children" :key="item3.id"
+							@click="toSearch(item3)">
+							<div class="img"><img v-lazy="item3.logo_img" alt=""></div>
+							<div class="name">{{item3.classify_name}}</div>
 						</div>
 					</div>
 				</div>
@@ -42,11 +39,12 @@
                     let result = [];
                     let classify_list = this.$store.state.classify_list;
                     if (classify_list.length > 1) {
-                        classify_list = this.getTrees(classify_list, 0);
-                        classify_list.forEach((item, i) => {
-                            classify_list[i].children = this.arrayGroup(item.children)
-                        });
-                        result = classify_list;
+                        result = this.getTrees(classify_list, 0);
+                        //分组
+                        // classify_list.forEach((item, i) => {
+                        //     classify_list[i].children = this.arrayGroup(item.children)
+                        // });
+                        // result = classify_list;
                     }
                     return result;
                 }
@@ -166,7 +164,7 @@
 		display: flex;
 		position: absolute;
 		width: 100%;
-		top: 50px;
+		top: 0px;
 		bottom: 50px;
 
 		.bar-box {
@@ -206,41 +204,27 @@
 					width: 90%;
 					margin-left: 7%;
 					margin-top: 2%;
+					display: flex;
+					flex-wrap: wrap;
 
-					.group-box {
-						margin-top: 20px;
+					.one-classify {
+						width: 85px;
+						margin-bottom: 10px;
 
-						.group-name {
-							font-size: 12px;
-							font-weight: bolder;
-							margin-bottom: 10px;
-						}
+						.img {
+							width: 100%;
+							text-align: center;
+							margin-bottom: 5px;
 
-						.base {
-							display: flex;
-							flex-wrap: wrap;
-
-							.one-classify {
-								width: 85px;
-								margin-bottom: 10px;
-
-								.img {
-									width: 100%;
-									text-align: center;
-									margin-bottom: 5px;
-
-									img {
-										width: 75%;
-									}
-								}
-
-								.name {
-									text-align: center;
-									font-size: 10px;
-								}
+							img {
+								width: 75%;
 							}
 						}
 
+						.name {
+							text-align: center;
+							font-size: 10px;
+						}
 					}
 				}
 			}

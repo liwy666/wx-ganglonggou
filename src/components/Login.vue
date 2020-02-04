@@ -11,8 +11,8 @@
         },
         methods: {
             Login() {
-                //this.testLogin();
-                this.wxLogin();
+                this.testLogin();
+                //this.wxLogin();
             },
             /*登录方法合集*/
             abcLogin() {
@@ -107,7 +107,6 @@
                             } else {
                                 this.$toast("发生登录错误，请尝试重新进入商城");
                             }
-
                         })
                 }
             },

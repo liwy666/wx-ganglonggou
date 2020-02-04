@@ -49,7 +49,6 @@
                 /*获取订单信息*/
                 this.$store.dispatch("getOrderList", this.$store.getters.getUserToken);
             }
-            //this.t();
         },
         activated() {
 

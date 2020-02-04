@@ -28,10 +28,18 @@
             goPay() {
                 let success_url = encodeURIComponent(this.$store.state.local_url + "#/home");
                 let back_url = encodeURIComponent(window.location.href);
-                window.location.href = this.$store.state.api_url + "/api/v1/payment/user_order_payment?success_url=" + success_url
-                    + "&back_url=" + back_url
-                    + "&order_sn=" + this.order_info.order_sn
-                    + "&user_token=" + this.$store.getters.getUserToken;
+                switch (this.order_info.son_into_type) {
+                    case 'pc':
+                        this.$toast('请在电脑端打开岗隆购,支付该订单');
+                        break;
+                    case 'wx':
+                        window.location.href = this.$store.state.api_url + "/api/v1/payment/user_order_payment?success_url=" + success_url
+                            + "&back_url=" + back_url
+                            + "&order_sn=" + this.order_info.order_sn
+                            + "&user_token=" + this.$store.getters.getUserToken;
+                        break;
+                }
+
             },
             /*取消售后*/
             callService() {

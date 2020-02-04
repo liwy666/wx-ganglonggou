@@ -52,14 +52,13 @@ import VueLazyload from 'vue-lazyload'
 Vue.use(VueLazyload);
 
 //animate
-import animated from 'animate.css'
-
+import animated from 'animate.css';
 Vue.use(animated);
 
 //mint
-import {CellSwipe} from 'mint-ui'
-
-Vue.component('mt-cell-swipe', CellSwipe);
+// import {CellSwipe} from 'mint-ui'
+//
+// Vue.component('mt-cell-swipe', CellSwipe);
 
 //cookie
 import VueCookies from 'vue-cookies'
@@ -90,12 +89,12 @@ Date.prototype.Format = function (fmt) {
     for (var k in o)
         if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
     return fmt;
-}
+};
 
 new Vue({
     store,
     router,
-    render: h => h(App)
+    render: h => h(App),
 }).$mount('#app');
 
 /*关闭加载图片*/

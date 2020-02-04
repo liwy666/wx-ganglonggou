@@ -24,8 +24,9 @@ let store = new Vuex.Store({
     state: {
         user_token: user_token_,//用户token
         into_type: "wx"//入口方式
-        //, api_url: "https://api.ganglonggou.com"
-        , api_url: "https://test-api.ganglonggou.com"
+        , api_url: "https://api.ganglonggou.com"
+        // , api_url: "https://test-api.ganglonggou.com"
+        // , api_url: "http://192.168.0.37:8004"
         , local_url: "https://mate.ganglonggou.com/wx-ganglonggou/"
         , parent_id: 203//主类
         , goods_list: []//商品列表
@@ -55,7 +56,6 @@ let store = new Vuex.Store({
             one_give_integral: 0,//返积分
             one_integral: 0,//用积分
             integral_desc: '',//积分描述
-            by_stages_number: 1//分期期数
         }//单个商品信息
         , goods_sku_options: []//sku选项
         , goods_sku: []//单个商品规格
@@ -141,7 +141,9 @@ let store = new Vuex.Store({
                 one_give_integral: 0,//返积分
                 one_integral: 0,//用积分
                 integral_desc: '',//积分描述
-                by_stages_number: 1//分期期数
+                by_stages_number: 1,//分期期数
+                click_type: '',//点击跳转类型
+                url: '',//如需跳转的外部链接
             });
             Vue.set(state.goods_info, 'goods_price', new_goods_info.shop_price);
             Vue.set(state.goods_info, 'market_price', new_goods_info.market_price);
@@ -156,6 +158,8 @@ let store = new Vuex.Store({
             Vue.set(state.goods_info, 'promote_number', new_goods_info.promote_number);
             Vue.set(state.goods_info, 'promote_start_date', new_goods_info.promote_start_date);
             Vue.set(state.goods_info, 'promote_end_date', new_goods_info.promote_end_date);
+            Vue.set(state.goods_info, 'click_type', new_goods_info.click_type);
+            Vue.set(state.goods_info, 'url', new_goods_info.url);
             state.goods_info.goods_gallery.push(new_goods_info.goods_img);
         },
         /**
@@ -282,7 +286,7 @@ let store = new Vuex.Store({
             //更新购物车
             let data = JSON.parse(JSON.stringify(state.carts));
             data.forEach((item3, i3) => {
-                if (item3.goods_id === goods_info.goods_id && item3.sku_id === goods_info.sku_id) {
+                if (item3.goods_id === parseInt(goods_info.goods_id) && item3.sku_id === parseInt(goods_info.sku_id)) {
                     data[i3].cart_is = goods_info.cart_is;
                     data[i3].goods_stock = parseInt(goods_info.goods_stock);
                     data[i3].goods_name = goods_info.goods_name;
@@ -533,23 +537,17 @@ let store = new Vuex.Store({
                 let value2 = b[property];
                 return value1 - value2;
             }
-        }
+        },
 
         /**
          * 获取地址列表
          * @param state
          */
-        , getAddressList(context, user_token) {
-            let toast1 = Toast.loading({
-                mask: true,
-                message: '获取地址列表',
-                duration: 0
-            });
+        getAddressList(context, user_token) {
             fetch('user_get_address', {user_token: user_token})
                 .then((msg) => {
                     if (msg) {
                         Vue.set(context.state, 'address_list', msg);
-                        toast1.clear();
                     }
                 })
         }

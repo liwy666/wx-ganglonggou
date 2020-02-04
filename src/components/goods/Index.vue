@@ -1,5 +1,5 @@
 <template>
-	<div class="main">
+	<div class="goods-info-main">
 		<myNarBar title="商品详情"></myNarBar>
 		<!--头部商品轮播-->
 		<van-swipe :autoplay="3000" indicator-color="white">
@@ -182,8 +182,8 @@
                 }
             }
         },
-        beforeRouteUpdate(to){
-            window.scrollTo(0,0);
+        beforeRouteUpdate(to) {
+            window.scrollTo(0, 0);
             this.goods_id = to.params.goods_id;
             if (typeof (to.query.goods_info) != 'undefined') {
                 this.msg = JSON.parse(to.query.goods_info);
@@ -196,7 +196,7 @@
             } else {
                 this.getGoodsInfo();
             }
-		},
+        },
         created() {
             this.goods_id = this.$route.params.goods_id;
 
@@ -206,18 +206,7 @@
 				   this.$store.dispatch('getPayList', this.$store.getters.getUserToken)
 			   }*/
 
-            if (typeof (this.$route.query.goods_info) != 'undefined') {
-                this.msg = JSON.parse(this.$route.query.goods_info);
-                //初始化商品信息
-                this.$store.commit("initGoodsInfo", this.msg);
-                //初始化商品sku
-                this.$store.commit("initGoodsSkuOptions", this.msg);
-                //获取额外商品信息
-                this.getExtraGoodsInfo();
-            } else {
-                this.getGoodsInfo();
-            }
-
+            this.getGoodsInfo();
         },
         components: {
             myNarBar,//头部组件
@@ -281,8 +270,8 @@
                         this.$set(this.msg, 'coupon_list', msg.coupon_list);
                         this.$set(this, 'supplier_preview_info', msg.supplier_preview_info);
                         this.$store.dispatch("updGoodsInfo");
-                        let share_url = (this.$store.state.local_url + "?gl_goods_id="+this.goods_id);
-                        commonShare(this, this.goods_info.goods_name,share_url,this.$store.state.goods_info.goods_attribute_img, '江苏岗隆数码-您身边的数码产品服务商');
+                        let share_url = (this.$store.state.local_url + "?gl_goods_id=" + this.goods_id);
+                        commonShare(this, this.goods_info.goods_name, share_url, this.$store.state.goods_info.goods_attribute_img, '江苏岗隆数码-您身边的数码产品服务商');
                         this.load_extra_goods = true;
                     })
             }
@@ -304,87 +293,89 @@
     };
 </script>
 <style lang="scss">
-	.van-swipe {
-		background-color: white;
+	.goods-info-main {
+		.van-swipe {
+			background-color: white;
 
-		img {
-			width: 100%;
+			img {
+				width: 100%;
+			}
 		}
-	}
-
-	.goods-price {
-		color: #FF0036;
-		height: 36px;
-		line-height: 36px;
-		background-color: white;
-		font-size: 18px;
-		padding-left: 15px;
-	}
-
-	.promote-price-box {
-		display: flex;
 
 		.goods-price {
-			width: 90%;
-			background-image: linear-gradient(45deg, $main-color0, $main-color5);
-			height: 50px;
+			color: #FF0036;
+			height: 36px;
+			line-height: 36px;
+			background-color: white;
+			font-size: 18px;
+			padding-left: 15px;
+		}
 
-			.shop_price {
-				color: white;
-				line-height: 50px;
-				font-size: 26px;
-				font-weight: bold;
-				padding-left: 10px;
+		.promote-price-box {
+			display: flex;
 
-				span {
-					font-size: 12px;
+			.goods-price {
+				width: 90%;
+				background-image: linear-gradient(45deg, $main-color0, $main-color5);
+				height: 50px;
+
+				.shop_price {
+					color: white;
+					line-height: 50px;
+					font-size: 26px;
+					font-weight: bold;
+					padding-left: 10px;
+
+					span {
+						font-size: 12px;
+					}
 				}
 			}
 		}
-	}
 
-	.goods-name {
-		padding-top: 5px;
-		background-color: white;
-		font-size: 14px;
-		color: #051B28;
-		line-height: 20px;
-		display: -webkit-box;
-		-webkit-line-clamp: 3;
-		max-height: 63px;
-		-webkit-box-orient: vertical;
-		-webkit-box-pack: center;
-		overflow: hidden;
-		word-break: break-all;
-		padding-left: 10px;
-		padding-right: 10px;
-	}
-
-	.van-row {
-		background-color: white;
-
-		.van-col {
-			text-align: center;
-			height: 30px;
-			line-height: 30px;
-			color: #7d7e80;
-			font-size: 12px;
+		.goods-name {
+			padding-top: 5px;
+			background-color: white;
+			font-size: 14px;
+			color: #051B28;
+			line-height: 20px;
+			display: -webkit-box;
+			-webkit-line-clamp: 3;
+			max-height: 63px;
+			-webkit-box-orient: vertical;
+			-webkit-box-pack: center;
+			overflow: hidden;
+			word-break: break-all;
+			padding-left: 10px;
+			padding-right: 10px;
 		}
-	}
 
-	.integral-box {
-		background-color: white;
-		height: 30px;
-		padding: 10px;
-		color: $main-color0;
-	}
+		.van-row {
+			background-color: white;
 
-	.d {
-		width: 100%;
-		height: 50px;
-	}
+			.van-col {
+				text-align: center;
+				height: 30px;
+				line-height: 30px;
+				color: #7d7e80;
+				font-size: 12px;
+			}
+		}
 
-	.van-goods-action {
-		z-index: 3;
+		.integral-box {
+			background-color: white;
+			height: 30px;
+			padding: 10px;
+			color: $main-color0;
+		}
+
+		.d {
+			width: 100%;
+			height: 50px;
+		}
+
+		.van-goods-action {
+			z-index: 3;
+		}
 	}
 </style>

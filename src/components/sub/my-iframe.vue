@@ -8,48 +8,47 @@
 		/>
 		<div id="d" class="d"></div>
 		<iframe frameborder=0 class="iframe-box" id="my-iframe"
-						:src="src"
-						:height="iHeight"
+			:src="src"
+			:height="iHeight"
 		></iframe>
 	</div>
 </template>
-
 <script>
     export default {
         data() {
             return {
-                iWidth:0,
-                iHeight:0,
-                title:"",
-								src:""
-						};
+                iWidth: 0,
+                iHeight: 0,
+                title: "",
+                src: ""
+            };
         },
         created() {
 
         },
-        mounted(){
+        mounted() {
             this.src = this.$route.query.src;
-            this.iHeight =document.documentElement.clientHeight - document.getElementById("d").offsetHeight;
+            this.iHeight = document.documentElement.clientHeight - document.getElementById("d").offsetHeight;
         },
         methods: {
-            onClickLeft(){
+            onClickLeft() {
                 this.$router.go(-1);
-						},
+            },
         },
-        components: {
-        },
+        components: {},
     };
 </script>
-
 <style lang="scss" scoped>
-	.iframe-box{
-			width: 100%;
+	.iframe-box {
+		width: 100%;
 	}
-	.d{
+
+	.d {
 		width: 100%;
 		height: 50px
 	}
-	.my-nav-bar{
+
+	.my-nav-bar {
 		width: 100%;
 		position: fixed;
 	}

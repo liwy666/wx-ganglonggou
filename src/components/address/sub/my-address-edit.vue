@@ -28,7 +28,6 @@
                 get: function () {
                     var result = {};
                     if (!this.address_edit.is_add) {
-                        console.log(this.address_edit);
                         result.id = this.address_edit.address_info.address_id;//id
                         result.name = this.address_edit.address_info.name;//收件人
                         result.tel = this.address_edit.address_info.tel;//电话

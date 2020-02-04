@@ -48,7 +48,6 @@
             }
         },
         created() {
-            console.log(this.$route.params.type_name);
             switch (this.$route.params.type_name) {
                 case '全部':
                     this.active = 0;

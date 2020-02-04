@@ -51,6 +51,7 @@
 			padding-top: 30px;
 			padding-bottom: 30px;
 		}
+
 		.article-body {
 			img {
 				display: block;

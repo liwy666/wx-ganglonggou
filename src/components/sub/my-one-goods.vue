@@ -1,6 +1,6 @@
 <template>
-	<div class="goods"
-		@click="$router.push({ path: 'goods/'+goods_info.goods_id, query: { goods_info: JSON.stringify(goods_info_) }})">
+	<div class="goods-card"
+		@click="$router.push({ path: 'goods/'+goods_info.goods_id})">
 		<!--<div class="goods" @click="showTxt">-->
 		<div class="goods-img"><img v-lazy="goods_info.goods_img"></div>
 		<div class="goods-name">
@@ -15,14 +15,9 @@
 			{{goods_info.supplier_name}}
 		</div>
 		<!--关键词-->
-		<!--<div class="goods-tag-box">
-			<van-tag plain type="danger" v-for="(item,i) in goods_tag" :key="i">{{item}}</van-tag>
-		</div>-->
-		<div class="goods-price" v-if="parseFloat(goods_info.shop_price ) > 50">原价：{{goods_info.market_price}}元</div>
-		<div class="goods-stages" v-if="parseFloat(goods_info.shop_price ) > 50"><i>{{goods_info.goods_stages}}</i>元×24期起
-		</div>
-		<div class="goods-price" v-if="parseFloat(goods_info.shop_price ) <= 50">原价：{{goods_info.market_price}}元</div>
-		<div class="goods-stages" v-if="parseFloat(goods_info.shop_price ) <= 50"><i>现价{{goods_info.shop_price}}</i>元
+		<div class="goods-price-box">
+			<div class="goods-price">￥<i>{{goods_info.shop_price}}</i></div>
+<!--			<div class="origin-goods-price">￥{{goods_info.market_price}}</div>-->
 		</div>
 	</div>
 </template>
@@ -74,15 +69,15 @@
     };
 </script>
 <style lang="scss" scoped>
-	.goods {
+	.goods-card {
 		width: 45%;
 		margin-left: 3.33%;
+		box-sizing: border-box;
 		background-color: white;
 		margin-top: 8px;
 		margin-bottom: 8px;
 		border-radius: 5px;
-		overflow: hidden;
-
+		padding: 10px 5px;
 		.goods-img {
 			margin-top: 5px;
 			width: 100%;
@@ -133,40 +128,40 @@
 			}
 		}
 
-		.goods-price {
-			white-space: pre-wrap;
-			border: 0 solid black;
-			position: relative;
-			box-sizing: border-box;
-			display: block;
-			-webkit-box-orient: vertical;
-			flex-direction: column;
-			align-content: flex-start;
-			flex-shrink: 0;
-			font-size: 12px;
-			text-align: left;
-			font-weight: 600;
-			color: rgb(255, 0, 0);
-			line-height: 24px;
-			height: 24px;
-			text-decoration: line-through
-		}
+		.goods-price-box {
+			display: flex;
+			align-items: flex-end;
+			margin-top: 10px;
+			.origin-goods-price {
+				white-space: pre-wrap;
+				border: 0 solid black;
+				position: relative;
+				box-sizing: border-box;
+				display: block;
+				-webkit-box-orient: vertical;
+				flex-direction: column;
+				align-content: flex-start;
+				flex-shrink: 0;
+				font-size: 12px;
+				text-align: left;
+				color: #7d7e80;
+				margin-left: 10px;
+				text-decoration: line-through
+			}
 
-		.goods-stages {
-			//background: url("./../../assets/goods-stages.jpg") no-repeat;
-			background: url("./../../assets/goods-stages.jpg") no-repeat;
-			background-size: 100% 100%;
-			height: 40px;
-			line-height: 40px;
-			font-weight: bold;
-			color: white;
-			font-size: 10px;
-			padding-left: 8px;
+			.goods-price {
+				background-size: 100% 100%;
+				font-weight: bold;
+				color: red;
+				font-size: 10px;
+				padding-left: 8px;
 
-			i {
-				font-style: normal;
-				font-size: 24px;
+				i {
+					font-style: normal;
+					font-size: 16px;
+				}
 			}
 		}
+
 	}
 </style>

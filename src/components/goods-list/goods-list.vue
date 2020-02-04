@@ -2,39 +2,17 @@
 	<div class="main">
 		<div class="van-search-main">
 			<van-search
-				v-model="keyword"
+				v-model="show_keyword"
 				placeholder="请输入搜索关键词"
 				showAction
 				shape="round"
 			>
-				<div slot="label" @click="$router.go(back_number)">返回</div>
-				<!--				<div slot="action" @click="onSearch">搜索</div>-->
+				<div slot="label" @click="back">返回</div>
+				<div slot="action" @click="goSearch">搜索</div>
 			</van-search>
 			<div class="van-search-support"></div>
 		</div>
-		<van-tabs v-model="active" sticky @click="updGoodsList">
-			<van-tab title="综合">
-				<div class="goods-box">
-					<oneGoods v-for="(item) in default_goods_list" :key="item.goods_id" :goods_info_="item"></oneGoods>
-				</div>
-			</van-tab>
-			<van-tab title="价格排序">
-				<transition-group class="goods-box" name="flip-list">
-					<oneGoods v-for="(item) in price_goods_list" :key="item.goods_id" :goods_info_="item"></oneGoods>
-				</transition-group>
-			</van-tab>
-			<van-tab title="销量排序">
-				<div class="goods-box">
-					<oneGoods v-for="(item) in sales_volume_goods_list" :key="item.goods_id"
-						:goods_info_="item"></oneGoods>
-				</div>
-			</van-tab>
-			<van-tab title="新品">
-				<div class="goods-box">
-					<oneGoods v-for="(item) in new_goods_list" :key="item.goods_id" :goods_info_="item"></oneGoods>
-				</div>
-			</van-tab>
-		</van-tabs>
+		<goodsList :goods_list="screen_after_goods_list"></goodsList>
 		<transition enter-active-class="animated fadeInRight" leave-active-class="animated fadeOutRight">
 			<div v-show="!yz_flag" class="suspension-button-box">
 				<i class="suspension-button">
@@ -45,174 +23,24 @@
 	</div>
 </template>
 <script>
-    import myNarBar from '../sub/my-nav-bar';
-    import oneGoods from '../sub/my-one-goods';
+    import goodsList from '../sub/goodsList'
 
     export default {
         data() {
             return {
-                active: 0,
                 scrollTop: 0,//滚动距离
                 t1: '',//是否隐藏按钮计时器
                 yz_flag: false,//是否隐藏按钮
                 type: '',
                 cat_id: -1,
-                keyword: "",
-                price_flag: true,
-				keyword_show_flag:true,
-                goods_list_: [],
+                show_keyword: "",
+                truth_keyword: "",
+                goods_list: [],
+                screen_after_goods_list: [],
                 back_number: -2,
             };
         },
-        computed: {
-            goods_list: {
-                get: function () {
-                    let result = [];
-                    if (this.type === 'cat') {
-                        if (this.goods_list_.length > 0) {
-                            this.goods_list_.forEach(item => {
-                                if (parseInt(item.cat_id) === parseInt(this.cat_id)) {
-                                    result.push(item)
-                                }
-                            })
-                        }
-                    } else if (this.type === 'search') {
-                        let goods_id_array = [];
-                        this.goods_list_.forEach(item => {
-                            /*名称*/
-                            let goods_name = item.goods_name.toUpperCase();
-                            goods_name = goods_name.replace(/\s*/g, "");
-                            if (goods_name.indexOf(this.keyword) !== -1) {
-                                goods_id_array.push(item.goods_id)
-                            }
-                            /*分类名称*/
-                            let cat_name = item.cat_name.toUpperCase();
-                            cat_name = cat_name.replace(/\s*/g, "");
-                            if (cat_name.indexOf(this.keyword) !== -1) {
-                                goods_id_array.push(item.goods_id)
-                            }
-                            /*关键词*/
-                            let keywords = item.keywords.toUpperCase();
-                            keywords = keywords.replace(/\s*/g, "");
-                            if (keywords.indexOf(this.keyword) !== -1) {
-                                goods_id_array.push(item.goods_id)
-                            }
-                        });
-                        if (goods_id_array.length > 0) {
-                            goods_id_array = this.$MyCommon.unique1(goods_id_array);
-                            goods_id_array.forEach(item => {
-                                this.goods_list_.forEach(item2 => {
-                                    if (item === item2.goods_id) {
-                                        result.push(item2)
-                                    }
-                                })
-                            })
-                        }
-                        if (result.length < 1) {
-                            result = this.goods_list_
-                        }
-                    } else {
-                        result = this.goods_list_
-                    }
-                    return result;
-                }
-            },
-            default_goods_list: {
-                get: function () {
-                    let result = JSON.parse(JSON.stringify(this.goods_list));
-                    if (result.length > 0) {
-                        //冒泡排序
-                        for (let i = 0; i < result.length - 1; i++) {
-                            for (let j = 0; j < result.length - i - 1; j++) {
-                                if ((result[j].goods_sales_volume + result[j].evaluate_count) < (result[j + 1].goods_sales_volume + result[j + 1].evaluate_count)) {
-                                    let max = result[j];
-                                    result[j] = result[j + 1];
-                                    result[j + 1] = max;
-                                }
-                            }
-                        }
-                    }
-                    return result;
-                }
-            },
-            price_goods_list: {
-                get: function () {
-                    let result = JSON.parse(JSON.stringify(this.goods_list));
-                    if (result.length > 0) {
-                        //冒泡排序
-                        if (this.price_flag) {
-                            for (let i = 0; i < result.length - 1; i++) {
-                                for (let j = 0; j < result.length - i - 1; j++) {
-                                    if (parseFloat(result[j].shop_price) < parseFloat(result[j + 1].shop_price)) {
-                                        let max = result[j];
-                                        result[j] = result[j + 1];
-                                        result[j + 1] = max;
-                                    }
-                                }
-                            }
-                        } else {
-                            for (let i = 0; i < result.length - 1; i++) {
-                                for (let j = 0; j < result.length - i - 1; j++) {
-                                    if (parseFloat(result[j].shop_price) > parseFloat(result[j + 1].shop_price)) {
-                                        let max = result[j];
-                                        result[j] = result[j + 1];
-                                        result[j + 1] = max;
-                                    }
-                                }
-                            }
-                        }
-
-                    }
-                    return result;
-                }
-            },
-            sales_volume_goods_list: {
-                get: function () {
-                    let result = JSON.parse(JSON.stringify(this.goods_list));
-                    if (result.length > 0) {
-                        //冒泡排序
-                        for (let i = 0; i < result.length - 1; i++) {
-                            for (let j = 0; j < result.length - i - 1; j++) {
-                                if (parseInt(result[j].goods_sales_volume) < parseInt(result[j + 1].goods_sales_volume)) {
-                                    let max = result[j];
-                                    result[j] = result[j + 1];
-                                    result[j + 1] = max;
-                                }
-                            }
-                        }
-                    }
-                    return result;
-                }
-            },
-            new_goods_list: {
-                get: function () {
-                    let result2 = JSON.parse(JSON.stringify(this.goods_list));
-                    let result = [];
-                    if (result2.length > 0) {
-                        //先筛选
-                        result2.forEach(item => {
-                            if (item.is_new === 1) {
-                                result.push(item);
-                            }
-                        });
-                        if (result.length > 0) {
-                            //冒泡排序
-                            for (let i = 0; i < result.length - 1; i++) {
-                                for (let j = 0; j < result.length - i - 1; j++) {
-                                    if ((result[j].goods_sales_volume + result[j].evaluate_count) < (result[j + 1].goods_sales_volume + result[j + 1].evaluate_count)) {
-                                        let max = result[j];
-                                        result[j] = result[j + 1];
-                                        result[j + 1] = max;
-                                    }
-                                }
-                            }
-                        }
-
-                    }
-                    return result;
-                }
-            }
-        },
+        computed: {},
         watch: {
             'scrollTop': function (newVal) {
                 this.yz_flag = false;
@@ -227,30 +55,43 @@
                 }, 3000);
             },
             '$store.state.goods_list': function (newVal) {
-                this.$set(this, 'goods_list_', newVal);
+                this.$set(this, 'goods_list', newVal);
             }
-            , 'keyword': function (newVal) {
-                let keyword = newVal.toUpperCase();
-                keyword = keyword.replace(/\s*!/g, "");
-				this.keyword = keyword;
-            }
-        },
-        created() {
-
         },
         activated() {
             window.addEventListener('scroll', this.handleScroll);
             /*获取url参数*/
             this.type = this.$route.query.type;
             this.cat_id = this.$route.query.cat_id;
-            this.keyword = this.$route.query.keyword;
+            this.truth_keyword = decodeURI(this.$route.query.keyword);
             this.back_number = typeof (this.$route.query.back_number) === 'undefined' ? -2 : this.$route.query.back_number;
             this.yz_flag = false;//是否隐藏按钮
             /*获取商品列表*/
             if (this.$store.state.goods_list.length < 1) {
-                this.$store.dispatch("getGoodsList", this.$store.getters.getIntoType);
+                let toast1 = this.$toast.loading({
+                    mask: true,
+                    message: '获取商品列表',
+                    duration: 0
+                });
+                this.$fetch('user_get_goods_list', {into_type: this.$store.getters.getIntoType})
+                    .then((msg) => {
+                        if (msg) {
+                            console.log(msg);
+                            this.$set(this, 'goods_list', msg);
+                            toast1.clear();
+                            this.screen_after_goods_list = this.screenGoods();
+                        }
+
+                    })
             } else {
-                this.$set(this, 'goods_list_', this.$store.state.goods_list);
+                this.$set(this, 'goods_list', this.$store.state.goods_list);
+                this.screen_after_goods_list = this.screenGoods();
+            }
+
+            /*置顶*/
+            let beforeUrl = localStorage.getItem('beforeUrl');
+            if (beforeUrl.indexOf('/goods/') === -1) {
+                window.scrollTo(0, 0);
             }
         },
         methods: {
@@ -267,26 +108,92 @@
                     }
                 })();
             },
-            updGoodsList() {
-                if (this.active === 1) {
-                    this.$set(this, 'price_flag', !this.price_flag);
+            screenGoods() {
+                let result = [];
+                if (this.type === 'cat') {
+                    if (this.goods_list.length > 0) {
+                        this.goods_list.forEach(item => {
+                            if (parseInt(item.cat_id) === parseInt(this.cat_id)) {
+                                result.push(item)
+                            }
+                        })
+                    }
+                } else if (this.type === 'search') {
+                    result = this.screenGoodsByKeyword();
                 }
-
+                return result;
+            },
+            screenGoodsByKeyword() {
+                let result = [];
+                let goods_id_array = [];
+                this.goods_list.forEach(item => {
+                    /*名称*/
+                    let goods_name = item.goods_name.toUpperCase();
+                    goods_name = goods_name.replace(/\s*/g, "");
+                    if (goods_name.indexOf(this.truth_keyword) !== -1) {
+                        goods_id_array.push(item.goods_id)
+                    }
+                    /*分类名称*/
+                    let cat_name = item.cat_name.toUpperCase();
+                    cat_name = cat_name.replace(/\s*/g, "");
+                    if (cat_name.indexOf(this.truth_keyword) !== -1) {
+                        goods_id_array.push(item.goods_id)
+                    }
+                    /*关键词*/
+                    let keywords = item.keywords.toUpperCase();
+                    keywords = keywords.replace(/\s*/g, "");
+                    if (keywords.indexOf(this.truth_keyword) !== -1) {
+                        goods_id_array.push(item.goods_id)
+                    }
+                });
+                if (goods_id_array.length > 0) {
+                    goods_id_array = this.$MyCommon.unique1(goods_id_array);
+                    goods_id_array.forEach(item => {
+                        this.goods_list.forEach(item2 => {
+                            if (item === item2.goods_id) {
+                                result.push(item2)
+                            }
+                        })
+                    })
+                } else {
+                    result = this.goods_list;
+                    this.$dialog.alert({
+                        title: '没找到相关的商品哦~',
+                        message: '别担心，看看这些商品吧，肯定有你喜欢的'
+                    })
+                }
+                return result;
             },
             /*手动搜索*/
-            /*onSearch() {
-                if (this.keyword.length > 0 && this.keyword.length < 20) {
-                    let keyword = this.keyword.toUpperCase();
-                    keyword = keyword.replace(/\s*!/g, "");
-                    this.$router.push({path: '/goodsList', query: {type: 'search', cat_id: -1, keyword: keyword}});
+            goSearch() {
+                this.truth_keyword = this.show_keyword;
+                this.truth_keyword = this.truth_keyword.toUpperCase();
+                this.truth_keyword = this.truth_keyword.replace(/\s*/g, "");
+                let screen_goods_list = this.screenGoodsByKeyword();
+                this.$set(this, 'screen_after_goods_list', screen_goods_list);
+            },
+
+            back(){
+                if (window.history.length <= 1) {
+                    this.$router.push({path:'/'});
+                    return false
+                } else {
+                    this.$router.go(this.back_number)
                 }
-            },*/
+                //上面都没执行就说明卡在当前页不是最后一条， histroy记录数量大于1，又没有回退记录，只能返回首页，
+                //如果上面都执行了 页面都跳走了，这个也就不用管了
+                setTimeout(() => {
+                    this.$router.push({path:'/'})
+                },500)
+            }
+
         },
         components: {
-            myNarBar,//头部组件
-            oneGoods,//单个商品
-        },
-    };
+            goodsList,//商品列表
+        }
+        ,
+    }
+    ;
 </script>
 <style lang="scss" scoped>
 	.main {

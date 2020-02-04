@@ -1,80 +1,36 @@
 <template>
-	<div class="main">
-		<!--搜索框-->
-		<mySearch></mySearch>
-		<!--头部轮播图-->
-		<div class="my-van-swipe-box">
-			<van-swipe :autoplay="3000" indicator-color="white">
-				<van-swipe-item v-for="(item, index) in index_ad_list.swipe_img" :key="index">
-					<img :src="item.ad_img" @click="toControl(item)"/>
-				</van-swipe-item>
-			</van-swipe>
-		</div>
-		<!--公告-->
-		<van-notice-bar
-			:text="index_ad_list.notice_text.text"
-			:color="$MyCommon.$main_color4"
-			:speed="200"
-			:background="$MyCommon.$main_color1"
-			left-icon="volume-o"
-		/>
-		<!--优惠券-->
-		<div class="banner-box">
-			<img :src="index_ad_list.coupon.ad_img" alt="" @click="toControl(index_ad_list.coupon)">
-		</div>
-		<!--4件商品区-->
-		<div class="four-goods-box" v-for="(item) in index_ad_list.four_goods" :key="item.id">
-			<div class="banner-box">
-				<img :src="item.banner.ad_img" alt="" @click="toControl(item.banner)">
+	<div class="first-main">
+		<van-sticky>
+			<div class="top-main">
+				<mySearch></mySearch>
+				<topSwitch :parents_classify_list="classify_list" :switch_index="switch_index"
+					@updateSwitchIndex="updateSwitchIndex"></topSwitch>
 			</div>
-			<div class="four-goods-base">
-				<div v-for="(item2 ,i2) in item.goods" :key="i2"><img :src="item2.ad_img" alt=""
-					@click="toControl(item2)"></div>
-			</div>
+		</van-sticky>
+		<div class="base-swiper-main">
+			<swiper :options="base_swiper_options" ref="myBaseSwiper">
+				<swiper-slide>
+					<firstPage v-if="index_ad_list&&classify_list" :index_ad_info="index_ad_list"
+						:classify_list="classify_list"></firstPage>
+				</swiper-slide>
+				<swiper-slide v-for="(item,i) in classify_list" :key="i">
+					<classifyPage :parent_classify="item"></classifyPage>
+				</swiper-slide>
+			</swiper>
 		</div>
-		<!--孤立-->
-		<div class="banner-box">
-			<img v-lazy="index_ad_list.banner.ad_img" alt="" @click="toControl(index_ad_list.banner)">
-		</div>
-		<!--合作伙伴-->
-		<div class="align-box">
-			<div class="align" v-for="(item) in index_ad_list.align" :key="item.id">
-				<img v-lazy="item.ad_img" alt="" @click="toControl(item)">
-			</div>
-		</div>
-		<!--8件商品区-->
-		<div class="eight-goods-box" v-for="(item) in index_ad_list.eight_goods" :key="item.id">
-			<div class="banner-box">
-				<img :src="item.banner.ad_img" alt="" @click="toControl(item.banner)">
-			</div>
-			<div class="eight-goods-base">
-				<div v-for="(item2 ,i2) in item.goods" :key="i2"><img :src="item2.ad_img" alt=""
-					@click="toControl(item2)"></div>
-			</div>
-		</div>
-		<!--6件商品区-->
-		<div class="six-goods-box" v-for="(item) in index_ad_list.six_goods" :key="item.id">
-			<div class="banner-box">
-				<img :src="item.banner.ad_img" alt="" @click="toControl(item.banner)">
-			</div>
-			<div class="six-goods-base">
-				<div v-for="(item2 ,i2) in item.goods" :key="i2"><img :src="item2.ad_img" alt=""
-					@click="toControl(item2)"></div>
-			</div>
-		</div>
-		<!--压屏广告-->
-		<md-landscape v-model="show_pic">
-			<img :src="index_ad_list.pop_img_url">
-		</md-landscape>
 	</div>
 </template>
 <script>
     import mySearch from "./sub/my-sub-search.vue";//搜索组件
-    import oneGoods from "../../sub/my-one-goods";//搜索组件
+    import topSwitch from './sub/topSwitch'//头部切换
+    import firstPage from './page/firstPage/firstPage'//首页
+    import classifyPage from './page/classifyPage/classifyPage'//分类页
+    import {commonShare} from "../../../share";
+
     export default {
         data() {
             return {
-                get_info: {},
+                index_info: null,
                 coupon_swiper: {
                     slidesPerView: 2.5,
                     spaceBetween: 10,
@@ -84,6 +40,12 @@
                 show_pic: false,
                 swipe_img: [],
                 notice_text: '',
+                switch_index: 0,
+                base_swiper_options: {
+                    slidesPerView: 1,
+                    allowTouchMove: false,
+                    autoHeight: true,
+                }
             };
         },
         created() {
@@ -97,86 +59,9 @@
                     this.$router.push('/goods/' + goods_id);
                 }
             }
+            commonShare(this, '岗隆数码', this.$store.state.local_url, 'https://img-api.ganglonggou.com/wx_share_img.png', '江苏岗隆数码-您身边的数码产品服务商');
         },
         computed: {
-            index_ad_list: {
-                get: function () {
-                    let result = {
-                        swipe_img: [],
-                        notice_text: {},
-                        pop_img_url: '',
-                        coupon: {},
-                        banner: {},
-                        align: [],
-                        four_goods_banner: [],
-                        four_goods_base: [],
-                        four_goods: [],
-                        eight_goods_banner: [],
-                        eight_goods_base: [],
-                        eight_goods: [],
-                        six_goods_banner: [],
-                        six_goods_base: [],
-                        six_goods: [],
-                    };
-                    if (JSON.stringify(this.get_info) !== '{}') {
-                        this.get_info.ad_list.forEach(item => {
-                            if (item.position_type === '顶部轮播') {
-                                result.swipe_img.push(item);
-                            } else if (item.position_type === '压屏广告') {
-                                result.pop_img_url = item.ad_img;
-                            } else if (item.position_type === '公告') {
-                                result.notice_text = item;
-                            } else if (item.position_type === '孤立通栏') {
-                                result.banner = item;
-                            } else if (item.position_type === '合作伙伴') {
-                                result.align.push(item);
-                            } else if (item.position_type === '优惠券区域') {
-                                result.coupon = item;
-                            } else if (item.position_type === '4件商品通栏') {
-                                result.four_goods_banner.push(item);
-                            } else if (item.position_type === '4件商品内容') {
-                                result.four_goods_base.push(item);
-                            } else if (item.position_type === '8件商品通栏') {
-                                result.eight_goods_banner.push(item);
-                            } else if (item.position_type === '8件商品内容') {
-                                result.eight_goods_base.push(item);
-                            } else if (item.position_type === '6件商品通栏') {
-                                result.six_goods_banner.push(item);
-                            } else if (item.position_type === '6件商品内容') {
-                                result.six_goods_base.push(item);
-                            }
-                        });
-                        result.four_goods_banner.forEach(item => {
-                            let goods = [];
-                            result.four_goods_base.forEach(item2 => {
-                                if (item.position_type_name === item2.position_type_name) {
-                                    goods.push(item2);
-                                }
-                            });
-                            result.four_goods.push({banner: item, goods: goods})
-                        });
-                        result.eight_goods_banner.forEach(item => {
-                            let goods = [];
-                            result.eight_goods_base.forEach(item2 => {
-                                if (item.position_type_name === item2.position_type_name) {
-                                    goods.push(item2);
-                                }
-                            });
-                            result.eight_goods.push({banner: item, goods: goods})
-                        });
-                        result.six_goods_banner.forEach(item => {
-                            let goods = [];
-                            result.six_goods_base.forEach(item2 => {
-                                if (item.position_type_name === item2.position_type_name) {
-                                    goods.push(item2);
-                                }
-                            });
-                            result.six_goods.push({banner: item, goods: goods})
-                        })
-                    }
-                    return result;
-                }
-            },
             goods_list: {
                 get: function () {
                     let result = [];
@@ -193,21 +78,54 @@
                     return result;
                 }
             },
-
+            classify_list: {
+                get: function () {
+                    let result = [];
+                    let classify_list = this.$store.state.classify_list;
+                    if (classify_list.length > 1) {
+                        result = this.getTrees(classify_list, 0);
+                    }
+                    return result;
+                }
+            },
+            index_ad_list: {
+                get: function () {
+                    let result = null;
+                    if (this.index_info) {
+                        result = this.index_info.ad_list;
+                    }
+                    return result;
+                }
+            }
         },
         components: {
             mySearch,//搜索组件
-            oneGoods,//单个商品
+            topSwitch,//头部切换
+            firstPage,//首页
+            classifyPage,//分类页
         },
         methods: {
             getIndexAd() {
                 this.$fetch("get_index_info", {into_type: this.$store.getters.getIntoType}).then((msg) => {
                     if (msg) {
-                        this.get_info = msg;
+                        this.index_info = msg;
                         this.$set(this.$store.state, 'goods_list', msg.goods_list);//赋值商品列表
-                        this.showPic();
+                        //this.showPic();//弹窗
+                        this.$fetch("user_get_classify_ad_list", {into_type: this.$store.getters.getIntoType}).then((msg) => {
+                            if (msg) {
+                                this.$set(this.$store.state, 'classify_list', msg);
+                            }
+                        });
+						//默认展示第几项
+                        let first_page_index= this.GetQueryString('first_page_index');
+                        if(first_page_index){
+                            if ((/(^[1-9]\d*$)/.test(parseInt(first_page_index)))) {//验证正整数
+                                setTimeout(() => {
+                                    this.updateSwitchIndex(first_page_index);
+                                },1000)
+                            }
+                        }
                     }
-
                 })
             },
             showPic() {
@@ -217,120 +135,62 @@
                     this.show_pic = true;
                 }
             },
-            toControl(ad_info) {
-                if (ad_info.ad_type === "商品ID") {
-                    if (ad_info.goods_id != null && ad_info.goods_id !== '' && ad_info.goods_id !== 0) {
-                        this.$router.push('goods/' + ad_info.goods_id)
+            /**
+             * 树状的算法
+             * @params list     代转化数组
+             * @params parentId 起始节点
+             */
+            getTrees(list, parentId) {
+                let items = {};
+                // 获取每个节点的直属子节点，*记住是直属，不是所有子节点
+                for (let i = 0; i < list.length; i++) {
+                    let key = list[i].parent_id;
+                    if (items[key]) {
+                        items[key].push(list[i]);
+                    } else {
+                        items[key] = [];
+                        items[key].push(list[i]);
                     }
-                } else if (ad_info.ad_type === "分类ID") {
-                    if (ad_info.cat_id != null && ad_info.cat_id !== '' && ad_info.cat_id !== 0) {
-                        this.$router.push({
-                            path: 'goodsList',
-                            query: {type: 'cat', cat_id: ad_info.cat_id, keyword: "", back_number: -1}
-                        })
-                    }
-                } else if (ad_info.ad_type === "搜索关键词") {
-                    if (ad_info.text != null && ad_info.text !== '') {
-                        this.$router.push({
-                            path: 'goodsList',
-                            query: {type: 'search', cat_id: -1, keyword: ad_info.text, back_number: -1}
-                        })
-                    }
-                } else if (ad_info.ad_type === "优惠券板块") {
-                    this.$router.push('/allCoupon');
-                } else if (ad_info.ad_type === "外链接") {
-                    if (ad_info.text != null && ad_info.text !== '') {
-                        this.$router.push({
-                            path: 'myIframe',
-                            query: {src: ad_info.index_url}
-                        })
-                    }
-                } else if (ad_info.ad_type === "内部文章") {
-                    if (ad_info.article_id != null && ad_info.article_id !== '' && ad_info.article_id !== 0) {
-                        this.$router.push('article/' + ad_info.article_id)
-                    }
-                } else {
-                    console.log(ad_info.ad_type);
-                    return false;
                 }
+                return this.formatTree(items, parentId);
             },
-            toTestControl() {
-                return false;
+            /**
+             * 利用递归格式化每个节点
+             */
+            formatTree(items, parentId) {
+                let result = [];
+                if (!items[parentId]) {
+                    return result;
+                }
+                for (let t of items[parentId]) {
+                    t.children = this.formatTree(items, t.id);
+                    result.push(t);
+                }
+                return result;
             },
             GetQueryString(name) {
                 let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
                 let r = window.location.search.substr(1).match(reg);
                 if (r != null) return unescape(r[2]);
                 return null;
+            },
+            updateSwitchIndex(val) {
+                this.switch_index = val;
+                console.log(val);
+                this.$refs.myBaseSwiper.swiper.slideToLoop(val);
             }
         },
     };
 </script>
 <style lang="scss" scoped>
-	.main {
-		/*顶部轮播*/
-		.my-van-swipe-box {
-			height: 180px;
-			overflow: hidden;
+	.first-main {
+		background-color: rgb(242, 242, 242);
 
-			.van-swipe {
-				img {
-					width: 100%;
-				}
-			}
-		}
-
-		.banner-box {
-			width: 100%;
-
-			img {
-				width: 100%;
-			}
-		}
-
-		.four-goods-box {
-			.four-goods-base {
-				display: flex;
-				flex-wrap: wrap;
-
-				div {
-					width: 50%;
-
-					img {
-						width: 100%;
-					}
-				}
-			}
-		}
-
-		.eight-goods-box {
-			.eight-goods-base {
-				display: flex;
-				flex-wrap: wrap;
-
-				div {
-					width: 25%;
-
-					img {
-						width: 100%;
-					}
-				}
-			}
-		}
-
-		.six-goods-box {
-			.six-goods-base {
-				display: flex;
-				flex-wrap: wrap;
-
-				div {
-					width: 33%;
-
-					img {
-						width: 100%;
-					}
-				}
-			}
+		.top-main {
+			height: 90px;
+			background-image: url("https://mate.ganglonggou.com/lib/images/wx_first_top1_0812.jpg");
+			background-repeat: no-repeat;
+			background-size: 100% 100%;
 		}
 	}
 </style>
