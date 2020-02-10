@@ -54,13 +54,12 @@
 <style lang="scss" scoped>
 	.goods-card-type1 {
 		background-color: white;
-		height: 100%;
-		width: 90%;
+		height: 180px;
+		//width: 95%;
 		overflow: hidden;
 		padding: 10px 3px;
 		box-sizing: border-box;
 		border-radius: 5px;
-
 		.goods-img {
 			width: 90%;
 			margin: 0 auto;
@@ -81,10 +80,10 @@
 			flex-direction: column;
 			align-content: flex-start;
 			flex-shrink: 0;
-			font-size: 11px;
+			font-size: 13px;
 			text-align: left;
-			line-height: 12px;
-			height: 23px;
+			line-height: 15px;
+			height: 28px;
 			color: rgb(62, 62, 62);
 			-webkit-line-clamp: 2;
 			overflow: hidden;
@@ -94,7 +93,7 @@
 			padding-left: 5px;
 			color: rgb(255, 68, 1);
 			font-size: 10px;
-			margin-top: 10px;
+			margin-top: 5px;
 
 			span {
 				font-size: 14px;

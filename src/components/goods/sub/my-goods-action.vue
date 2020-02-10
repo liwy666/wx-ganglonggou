@@ -8,7 +8,7 @@
 			/>
 			<van-goods-action-icon
 				icon="phone-o"
-				url="tel:400-828-2323"
+				url="tel:400-187-6188"
 				text="电话客服"
 			/>
 			<van-goods-action-icon

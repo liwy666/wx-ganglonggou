@@ -23,7 +23,6 @@
 <style lang="scss" scoped>
 	.other-shop-item-main {
 		background-color: white;
-		margin-left: 5px;
 		padding: 5px;
 		border-radius: 10px;
 		height: 190px;

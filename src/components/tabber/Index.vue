@@ -41,7 +41,7 @@
             };
         },
         created() {
-            commonShare(this, '岗隆数码', this.$store.state.local_url, 'https://img-api.ganglonggou.com/wx_share_img.png', '江苏岗隆数码-您身边的数码产品服务商');
+            commonShare(this, '岗隆购', this.$store.state.local_url, 'https://img-api.ganglonggou.com/wx_share_img.png', '江苏岗隆数码-您身边的数码产品服务商');
         },
         computed: {
             /*头部轮播*/

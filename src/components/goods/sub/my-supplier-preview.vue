@@ -7,7 +7,7 @@
 				<p class="company-name">{{this.supplier_preview_info.company_name}}</p>
 			</div>
 			<div class="button">
-				<van-button type="danger" size="small" round @click="toSupplier">进店逛逛</van-button>
+				<van-button type="danger" size="small" round @click="$router.push('/')">商城首页</van-button>
 			</div>
 		</div>
 		<div class="read-box">

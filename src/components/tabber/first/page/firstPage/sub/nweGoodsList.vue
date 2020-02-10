@@ -16,7 +16,8 @@
                 swiper_option: {
                     loop: true,
                     loopAdditionalSlides: 1,
-                    slidesPerView: 2.5,
+                    slidesPerView: 3,
+                    spaceBetween : 8,
                     autoplay: {
                         delay: 3500,
                         disableOnInteraction: false,
@@ -51,7 +52,8 @@
 </script>
 <style lang="scss" scoped>
 	.new-goods-list-main {
-		width: 100%;
-		height: 220px;
+		width: 95%;
+		margin:0 auto;
+		height: 180px;
 	}
 </style>

@@ -47,13 +47,13 @@
 <style lang="scss" scoped>
 	.top-swiper-main {
 		margin-top: -2px;
-		height: 160px;
-		background-image: url("https://mate.ganglonggou.com/lib/images/wx_first_top2_0812.jpg");
+		margin-bottom: 5px;
+		background-image: url("https://mate.ganglonggou.com/lib/images/wx_first_top2_20200208.jpg");
 		background-repeat: no-repeat;
 		background-size: 100% 100%;
 		.img-box{
 			text-align: center;
-			margin-top: 10px;
+			margin-top: 5px;
 			img{
 				width: 95%;
 				margin: 0 auto;

@@ -17,6 +17,7 @@
                     loop: true,
                     loopAdditionalSlides: 1,
                     slidesPerView: 3,
+                    spaceBetween : 8,
                     autoplay: {
                         delay: 3500,
                         disableOnInteraction: false,
@@ -51,8 +52,7 @@
 </script>
 <style lang="scss" scoped>
 	.other-shop-main {
-		width: 100%;
-		padding-top: 10px;
-		padding-bottom: 10px;
+		width: 95%;
+		margin: 0 auto;
 	}
 </style>

@@ -35,16 +35,15 @@
 		.two {
 			width: 66%;
 			margin-top: 2px;
-
+			margin-bottom: -5px;
 			img {
 				width: 100%;
 			}
 		}
 
 		.three {
+			margin-top: 2.5px;
 			width: 32%;
-			margin-top: 2px;
-
 			img {
 				width: 100%;
 			}

@@ -80,9 +80,8 @@
 		background-color: white;
 		width: 95%;
 		margin: 0 auto;
-		margin-top: 10px;
-		padding-top: 10px;
-		padding-bottom: 20px;
+		//margin-top: 10px;
+		//padding-bottom: 20px;
 		justify-content: left;
 		/*border-bottom-left-radius: 10px;*/
 		/*border-bottom-right-radius: 10px;*/
@@ -91,7 +90,8 @@
 		.item {
 			width: 18%;
 			margin-left: 2%;
-			margin-top: 20px;
+			margin-top: 10px;
+			margin-bottom: 10px;
 			text-align: center;
 
 			img {

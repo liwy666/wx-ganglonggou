@@ -2,11 +2,20 @@
 	<div class="goods-info-main">
 		<myNarBar title="商品详情"></myNarBar>
 		<!--头部商品轮播-->
-		<van-swipe :autoplay="3000" indicator-color="white">
-			<van-swipe-item v-for="(item,i) in head_imgPreview" :key="i" @click="imgPreview(head_imgPreview,i)">
-				<img :src="item"/>
-			</van-swipe-item>
-		</van-swipe>
+<!--		<van-swipe :autoplay="4000" indicator-color="orange" :speed="5000">-->
+<!--			<van-swipe-item v-for="(item,i) in head_imgPreview" :key="i" @click="imgPreview(head_imgPreview,i)">-->
+<!--				<img :src="item"/>-->
+<!--			</van-swipe-item>-->
+<!--		</van-swipe>-->
+		<div v-if="!load_extra_goods" class="goods-swiper">
+			<img :src="head_imgPreview[0]" alt="">
+		</div>
+		<swiper v-if="load_extra_goods" class="goods-swiper" :options="goods_swiper" ref="mySwiperLeft">
+			<swiper-slide v-for="(item,i) in head_imgPreview" :key="i" @click="imgPreview(head_imgPreview,i)">
+				<img :src="item">
+			</swiper-slide>
+			<div class="swiper-pagination"  slot="pagination"></div>
+		</swiper>
 		<!--价格-->
 		<div class="goods-price"
 			v-if="parseInt(goods_info.promote_start_date * 1000) > parseInt( new Date().getTime()) || parseInt(goods_info.promote_end_date * 1000) < parseInt( new Date().getTime())||goods_info.is_promote===0">
@@ -39,14 +48,14 @@
 		<van-row>
 			<van-col span="8">快递:免运费</van-col>
 			<van-col span="8">库存:{{this.goods_info.goods_stock}}</van-col>
-			<van-col span="8">销量:{{this.goods_info.goods_sales_volume}}</van-col>
+<!--			<van-col span="8">销量:{{this.goods_info.goods_sales_volume}}</van-col>-->
 		</van-row>
 		<!--分期信息-->
 		<!--<myPayInfo :pay_list="pay_list" v-if="pay_list.length >0"></myPayInfo>-->
 		<!--领券选择-->
 		<myCouponOption :coupon_list="coupon_list" v-if="coupon_list.length>0 &&load_extra_goods"></myCouponOption>
 		<!--规格选择-->
-		<van-cell title="已选" :value="goods_info.attr_desc + ',' +goods_info.goods_number +'件'" is-link
+		<van-cell title="已选"  title-class="title-class" value-class="value-class" :value="goods_info.attr_desc + ',' +goods_info.goods_number +'件'" is-link
 			@click="show_sku = !show_sku" v-if="load_extra_goods"/>
 		<!--服务选择-->
 		<myServiceOption></myServiceOption>
@@ -97,6 +106,14 @@
                 show_sku: false,
                 load_extra_goods: false,
                 supplier_preview_info: {},
+                goods_swiper:{
+                    loop:true,
+                    speed:800,
+                    pagination: {
+                        el: '.swiper-pagination',
+                    },
+				},
+				is_finish:false,
             };
         },
         computed: {
@@ -273,6 +290,7 @@
                         let share_url = (this.$store.state.local_url + "?gl_goods_id=" + this.goods_id);
                         commonShare(this, this.goods_info.goods_name, share_url, this.$store.state.goods_info.goods_attribute_img, '江苏岗隆数码-您身边的数码产品服务商');
                         this.load_extra_goods = true;
+
                     })
             }
             , imgPreview(img_url, i) {
@@ -376,6 +394,18 @@
 
 		.van-goods-action {
 			z-index: 3;
+		}
+		.goods-swiper{
+			width: 100%;
+			img{
+				width: 100%;
+			}
+		}
+		.title-class{
+			flex: 1;
+		}
+		.value-class{
+			flex: 4;
 		}
 	}
 </style>

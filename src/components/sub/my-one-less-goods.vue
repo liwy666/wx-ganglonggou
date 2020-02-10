@@ -59,11 +59,10 @@
 </script>
 <style lang="scss" scoped>
 	.goods-less-main {
-		width: 45%;
-		margin-left: 3.33%;
+		width: 47.5%;
+		margin-left: 1.5%;
 		background-color: white;
-		margin-top: 8px;
-		margin-bottom: 8px;
+		margin-bottom: 6px;
 		border-radius: 5px;
 		overflow: hidden;
 		padding: 0 10px;

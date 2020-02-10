@@ -3,9 +3,13 @@
 		<topSwiper :data="_index_ad_info.swiper_list" :to-control="toControl"></topSwiper>
 		<!--		<mallNotice v-if="_index_ad_info.mall_notice" :data="_index_ad_info.mall_notice"></mallNotice>-->
 		<navigation :classify_list="classify_list"></navigation>
-		<div v-if="_index_ad_info.lonely_banner" class="lonely-banner" @click="toControl(_index_ad_info.lonely_banner)">
-			<img :src="_index_ad_info.lonely_banner.ad_img"
+		<div v-if="_index_ad_info.lonely_banner.length === 1" class="lonely-banner"
+			@click="toControl(_index_ad_info.lonely_banner[0])">
+			<img :src="_index_ad_info.lonely_banner[0].ad_img"
 				alt=""></div>
+		<div v-if="_index_ad_info.lonely_banner.length > 1" class="lonely-banner-2">
+			<div v-for="(item,i) in _index_ad_info.lonely_banner" :key="i" @click="toControl(item)"><img :src="item.ad_img" ></div>
+		</div>
 		<p class="title"><i style="color: rgb(48,44,46)">现货</i><i
 			style="color: rgb(255,82,9)">推荐</i></p>
 		<newGoodsList :data="_index_ad_info.new_goods_list" :to-control="toControl"></newGoodsList>
@@ -45,7 +49,7 @@
                     let result = {
                         swiper_list: [],
                         mall_notice: null,
-                        lonely_banner: null,
+                        lonely_banner: [],
                         new_goods_list: [],
                         brand_align: [],
                         other_shop: [],
@@ -60,7 +64,7 @@
                                     result.mall_notice = item;
                                     break;
                                 case "孤立通栏":
-                                    result.lonely_banner = item;
+                                    result.lonely_banner.push(item);
                                     break;
                                 case "新品尝鲜-商品":
                                     result.new_goods_list.push(item);
@@ -91,7 +95,7 @@
                 switch (ad_info.ad_type) {
                     case "商品ID":
                         if (ad_info.goods_id != null && ad_info.goods_id !== '' && ad_info.goods_id !== 0) {
-                            this.$router.push({ path: 'goods/'+ad_info.goods_id})
+                            this.$router.push({path: 'goods/' + ad_info.goods_id})
                         }
                         break;
                     case "分类ID":
@@ -143,9 +147,9 @@
 <style lang="scss" scoped>
 	.first-page-main {
 		.lonely-banner {
-			width: 95%;
+			width: 90%;
 			margin: 0 auto;
-			margin-top: 10px;
+			margin-top: 8px;
 
 			img {
 				border-radius: 10px;
@@ -153,16 +157,32 @@
 			}
 		}
 
+		.lonely-banner-2 {
+			width: 95%;
+			margin:0 auto;
+			margin-top: 8px;
+			display: flex;
+			justify-content: space-between;
+			div{
+				width: 49%;
+				img {
+					width: 100%;
+					border-radius: 10px;
+				}
+			}
+
+		}
+
 		.title {
 			text-align: left;
 			padding-left: 10px;
-			margin-top: 5px;
+			margin-top: 10px;
 			margin-bottom: 5px;
 
 			i {
 				font-weight: bolder;
 				font-size: 18px;
-				letter-spacing: 2px;
+				letter-spacing: 1px;
 				font-style: normal;
 			}
 		}

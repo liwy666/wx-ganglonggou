@@ -1,5 +1,8 @@
 <template>
-	<div class="top-switch-main">
+	<transition name="top-switch-main"
+		enter-active-class="animated fadeInDown faster"
+		leave-active-class="animated fadeOutUp faster">
+	<div class="top-switch-main" v-show="!isFixed">
 		<swiper :options="swiper_options" ref="mySwiper">
 			<swiper-slide v-for="(item,i) in classify_list" :key="i">
 				<li :class="{'top-xz':i===switch_index,'animated tada infinite slow show-item':item==='现货专区'&&switch_index!==i} " @click="_updateSwitchIndex(i)">
@@ -9,6 +12,7 @@
 			</swiper-slide>
 		</swiper>
 	</div>
+	</transition>
 </template>
 <script>
     export default {
@@ -23,6 +27,7 @@
             parents_classify_list: Array,
             switch_index: Number,
             updateSwitchIndex: Function,
+            isFixed:Boolean,
         },
         computed: {
             classify_list: {
@@ -50,8 +55,8 @@
 	.top-switch-main {
 		li {
 			text-align: center;
-			height: 40px;
-			line-height: 30px;
+			height: 35px;
+			line-height: 28px;
 			color: white;
 			font-size: 14px;
 			transition: all 0.1s ease;

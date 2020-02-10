@@ -104,13 +104,17 @@
                     })
                     .then((msg) => {
                         toast1.clear();
-                        if (msg) {
-                            /*获取订单信息*/
-                            this.$store.dispatch("getOrderList", this.$store.getters.getUserToken);
-                            this.$router.push('/home');
-                        } else {
-                            this.$toast('提交售后失败')
-                        }
+                        console.log(msg);
+                        /*    if (msg) {
+								/!*获取订单信息*!/
+								this.$store.dispatch("getOrderList", this.$store.getters.getUserToken);
+								this.$router.push('/home');
+							} else {
+								this.$toast('提交售后失败')
+							}*/
+                        /*获取订单信息*/
+                        this.$store.dispatch("getOrderList", this.$store.getters.getUserToken);
+                        this.$router.push('/home');
                     })
             }
         },

@@ -4,8 +4,8 @@ import {Toast} from 'vant';
 import VueCookies from 'vue-cookies'
 
 axios.defaults.timeout = 5000;
-axios.defaults.baseURL = 'https://api.ganglonggou.com/api/v1';
-//axios.defaults.baseURL = 'https://test-api.ganglonggou.com/api/v1';
+//axios.defaults.baseURL = 'https://api.ganglonggou.com/api/v1';
+axios.defaults.baseURL = 'https://test-api.ganglonggou.com/api/v1';
 //axios.defaults.baseURL = 'http://192.168.0.37:8004/api/v1';
 
 
@@ -31,7 +31,7 @@ axios.interceptors.response.use(
     response => {
         if (response.data.error_code !== undefined) {
             if (response.data.error_code === 10002) {
-                VueCookies.remove("gl_wx_user_token");
+                VueCookies.remove("gl_wx_user_token_20200205");
                 Toast.clear();
                 Toast.fail({
                     message: '非常抱歉，我们不能获取到您的用户信息，请尝试重新进入商城',
@@ -51,7 +51,8 @@ axios.interceptors.response.use(
         }
     },
     error => {
-        Toast("发生未知错误" + error);
+        //Toast("发生未知错误" + error);
+        console.log("发生未知错误" + error);
         return false;
     }
 );

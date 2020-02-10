@@ -1,9 +1,10 @@
 <template>
 	<div class="first-main">
-		<van-sticky>
+		<van-sticky @scroll="scroll">
 			<div class="top-main">
 				<mySearch></mySearch>
 				<topSwitch :parents_classify_list="classify_list" :switch_index="switch_index"
+					:is-fixed="isFixed"
 					@updateSwitchIndex="updateSwitchIndex"></topSwitch>
 			</div>
 		</van-sticky>
@@ -45,7 +46,8 @@
                     slidesPerView: 1,
                     allowTouchMove: false,
                     autoHeight: true,
-                }
+                },
+                isFixed:false,
             };
         },
         created() {
@@ -59,7 +61,7 @@
                     this.$router.push('/goods/' + goods_id);
                 }
             }
-            commonShare(this, '岗隆数码', this.$store.state.local_url, 'https://img-api.ganglonggou.com/wx_share_img.png', '江苏岗隆数码-您身边的数码产品服务商');
+            commonShare(this, '岗隆购', this.$store.state.local_url, 'https://img-api.ganglonggou.com/wx_share_img.png', '江苏岗隆数码-您身边的数码产品服务商');
         },
         computed: {
             goods_list: {
@@ -178,6 +180,10 @@
                 this.switch_index = val;
                 console.log(val);
                 this.$refs.myBaseSwiper.swiper.slideToLoop(val);
+            },
+            scroll(info){
+               // { scrollTop: 距离顶部位置, isFixed: 是否吸顶 }
+                this.isFixed = info.isFixed;
             }
         },
     };
@@ -187,8 +193,8 @@
 		background-color: rgb(242, 242, 242);
 
 		.top-main {
-			height: 90px;
-			background-image: url("https://mate.ganglonggou.com/lib/images/wx_first_top1_0812.jpg");
+			//height: 90px;
+			background-image: url("https://mate.ganglonggou.com/lib/images/wx_first_top1_20200208.jpg");
 			background-repeat: no-repeat;
 			background-size: 100% 100%;
 		}
