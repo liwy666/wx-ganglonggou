@@ -17,7 +17,7 @@
                     loop: true,
                     loopAdditionalSlides: 1,
                     slidesPerView: 3,
-                    spaceBetween : 8,
+                    spaceBetween : 5,
                     autoplay: {
                         delay: 3500,
                         disableOnInteraction: false,

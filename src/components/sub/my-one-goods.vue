@@ -70,11 +70,9 @@
 </script>
 <style lang="scss" scoped>
 	.goods-card {
-		width: 45%;
-		margin-left: 3.33%;
+		width: 49%;
 		box-sizing: border-box;
 		background-color: white;
-		margin-top: 8px;
 		margin-bottom: 8px;
 		border-radius: 5px;
 		padding: 10px 5px;

@@ -219,9 +219,13 @@
 </script>
 <style lang="scss" scoped>
 	.goods-list-main {
+		width: 100%;
 		.goods-list-box {
+			width: 95%;
 			display: flex;
 			flex-wrap: wrap;
+			justify-content: space-between;
+			margin: 0 auto;
 		}
 	}
 

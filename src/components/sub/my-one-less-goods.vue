@@ -59,15 +59,13 @@
 </script>
 <style lang="scss" scoped>
 	.goods-less-main {
-		width: 47.5%;
-		margin-left: 1.5%;
+		width: 49%;
 		background-color: white;
 		margin-bottom: 6px;
-		border-radius: 5px;
+		border-radius: 6px;
 		overflow: hidden;
 		padding: 0 10px;
 		box-sizing: border-box;
-
 		.goods-img {
 			margin-top: 5px;
 			width: 100%;

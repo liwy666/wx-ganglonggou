@@ -149,7 +149,7 @@
 		.lonely-banner {
 			width: 90%;
 			margin: 0 auto;
-			margin-top: 8px;
+			margin-top: 12px;
 
 			img {
 				border-radius: 10px;
@@ -158,13 +158,15 @@
 		}
 
 		.lonely-banner-2 {
-			width: 95%;
+			width: 97%;
 			margin:0 auto;
-			margin-top: 8px;
+			margin-top: 12px;
+			margin-bottom: -5px;
 			display: flex;
-			justify-content: space-between;
+			//justify-content: space-between;
 			div{
-				width: 49%;
+				width: 48.5%;
+				margin-left: 5px;
 				img {
 					width: 100%;
 					border-radius: 10px;
@@ -176,7 +178,7 @@
 		.title {
 			text-align: left;
 			padding-left: 10px;
-			margin-top: 10px;
+			margin-top: 8px;
 			margin-bottom: 5px;
 
 			i {
@@ -188,8 +190,11 @@
 		}
 
 		.goods-list-box {
+			width: 95%;
 			display: flex;
 			flex-wrap: wrap;
+			justify-content: space-between;
+			margin: 0 auto;
 		}
 	}
 </style>
