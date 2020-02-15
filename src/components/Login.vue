@@ -11,8 +11,8 @@
         },
         methods: {
             Login() {
-                this.testLogin();
-                //this.wxLogin();
+                //this.testLogin();
+                this.wxLogin();
             },
             /*登录方法合集*/
             abcLogin() {

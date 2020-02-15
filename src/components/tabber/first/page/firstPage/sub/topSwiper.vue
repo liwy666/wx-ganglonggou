@@ -48,7 +48,7 @@
 	.top-swiper-main {
 		margin-top: -2px;
 		margin-bottom: 5px;
-		background-image: url("https://mate.ganglonggou.com/lib/images/wx_first_top2_20200210.png");
+		background-image: url("https://mate.ganglonggou.com/lib/images/wx_first_top2_0812.jpg");
 		background-repeat: no-repeat;
 		background-size: 100% 100%;
 		.img-box{

@@ -7,7 +7,7 @@
 				<p class="company-name">{{this.supplier_preview_info.company_name}}</p>
 			</div>
 			<div class="button">
-				<van-button type="danger" size="small" round @click="$router.push('/')">商城首页</van-button>
+				<van-button type="danger" size="small" round @click="toHome">商城首页</van-button>
 			</div>
 		</div>
 		<div class="read-box">
@@ -46,7 +46,22 @@
                 let supplier_info = JSON.parse(JSON.stringify(this.supplier_preview_info));
                 delete supplier_info.goods_list;
                 this.$router.push({path: '/supplier', query: {supplier_info: JSON.stringify(supplier_info)}})
-            }
+            },
+			toHome() {
+				let goods_id = this.GetQueryString('gl_goods_id');
+				if (goods_id != null && goods_id.length > 1 && (/(^[1-9]\d*$)/.test(parseInt(goods_id)))) {
+					/* 直接跳转*/
+					window.location.href = this.$store.state.local_url;
+				} else {
+					this.$router.push('/')
+				}
+			},
+			GetQueryString(name) {
+				let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+				let r = window.location.search.substr(1).match(reg);
+				if (r != null) return unescape(r[2]);
+				return null;
+			},
         },
     };
 </script>

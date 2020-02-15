@@ -194,7 +194,7 @@
 
 		.top-main {
 			//height: 90px;
-			background-image: url("https://mate.ganglonggou.com/lib/images/wx_first_top1_20200208.jpg");
+			background-image: url("https://mate.ganglonggou.com/lib/images/wx_first_top1_0812.jpg");
 			background-repeat: no-repeat;
 			background-size: 100% 100%;
 		}

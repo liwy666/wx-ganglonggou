@@ -4,8 +4,8 @@ import {Toast} from 'vant';
 import VueCookies from 'vue-cookies'
 
 axios.defaults.timeout = 5000;
-//axios.defaults.baseURL = 'https://api.ganglonggou.com/api/v1';
-axios.defaults.baseURL = 'https://test-api.ganglonggou.com/api/v1';
+axios.defaults.baseURL = 'https://api.ganglonggou.com/api/v1';
+//axios.defaults.baseURL = 'https://test-api.ganglonggou.com/api/v1';
 //axios.defaults.baseURL = 'http://192.168.0.37:8004/api/v1';
 
 

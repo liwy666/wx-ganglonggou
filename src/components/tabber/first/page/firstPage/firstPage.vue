@@ -147,10 +147,9 @@
 <style lang="scss" scoped>
 	.first-page-main {
 		.lonely-banner {
-			width: 90%;
+			width: 95%;
 			margin: 0 auto;
-			margin-top: 12px;
-
+			//margin-top: 12px;
 			img {
 				border-radius: 10px;
 				width: 100%;
