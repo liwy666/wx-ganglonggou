@@ -4,7 +4,7 @@ import {Toast} from 'vant';
 import VueCookies from 'vue-cookies'
 
 axios.defaults.timeout = 5000;
-axios.defaults.baseURL = 'https://api.ganglonggou.com/api/v1';
+axios.defaults.baseURL = process.env.VUE_APP_API_URL;
 //axios.defaults.baseURL = 'https://test-api.ganglonggou.com/api/v1';
 //axios.defaults.baseURL = 'http://192.168.0.37:8004/api/v1';
 
@@ -30,21 +30,30 @@ axios.interceptors.request.use(
 axios.interceptors.response.use(
     response => {
         if (response.data.error_code !== undefined) {
-            if (response.data.error_code === 10002) {
-                VueCookies.remove("gl_wx_user_token_20200205");
-                Toast.clear();
-                Toast.fail({
-                    message: '非常抱歉，我们不能获取到您的用户信息，请尝试重新进入商城',
-                    duration: 4000
-                });
-                location.reload(true);
 
-            } else {
-                Toast.fail({
-                    message: response.data.msg,
-                    duration: 2000
-                });
+            switch (response.data.error_code) {
+                case 10002:
+                    VueCookies.remove("gl_wx_user_token_042301");
+                    Toast.clear();
+                    Toast.fail({
+                        message: '非常抱歉，我们不能获取到您的用户信息，请尝试重新进入商城',
+                        duration: 4000
+                    });
+                    location.reload(true);
+                    break;
+                case 10006:
+                    VueCookies.remove("gl_wx_user_token_042301");
+                    let oldUrl = window.location.toString();
+                    let url = oldUrl.replace(window.location.search, '');
+                    window.location.href = url;
+                    break;
+                default:
+                    Toast.fail({
+                        message: response.data.msg,
+                        duration: 2000
+                    });
             }
+
             return false;
         } else {
             return response.data;

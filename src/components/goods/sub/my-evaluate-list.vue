@@ -1,22 +1,22 @@
 <template>
-	<div class="main">
-		<div class="evaluate-load" v-if="this.evaluate_count > 0">
-			<van-list
-				v-model="loading"
-				:finished="finished"
-				:error.sync="error"
-				finished-text="没有更多了"
-				error-text="请求失败，点击重新加载"
-				@load="onLoad"
-			>
-				<myEvaluateInfo v-for="(item) in evaluate_list" :key="item.id"
-					:evaluate_info="item"></myEvaluateInfo>
-			</van-list>
-		</div>
-		<div class="evaluate-no-load" v-else>
-			<p>没有相应的评价,看看其他的~~</p>
-		</div>
-	</div>
+  <div class="main">
+    <div class="evaluate-load" v-if="this.evaluate_count > 0">
+      <van-list
+          v-model="loading"
+          :finished="finished"
+          :error.sync="error"
+          finished-text="没有更多了"
+          error-text="请求失败，点击重新加载"
+          @load="onLoad"
+      >
+        <myEvaluateInfo v-for="(item) in evaluate_list" :key="item.id"
+                        :evaluate_info="item"></myEvaluateInfo>
+      </van-list>
+    </div>
+    <div class="evaluate-no-load" v-else>
+      <p>没有相应的评价,看看其他的~~</p>
+    </div>
+  </div>
 </template>
 <script>
     import myEvaluateInfo from './my-evaluate-info'
@@ -55,7 +55,11 @@
                                 this.finished = true;
                             }
                             this.loading = false;
-                            this.evaluate_list = msg;
+                            if (msg) {
+                                msg.forEach((item) => {
+                                    this.evaluate_list.push(item);
+                                })
+                            }
                         })
                 } else {
                     this.finished = true;
@@ -70,20 +74,20 @@
     };
 </script>
 <style lang="scss" scoped>
-	.evaluate-no-load {
-		width: 100%;
-		height: 600px;
-		display: flex;
-		flex-wrap: wrap;
-		align-items: center;
+  .evaluate-no-load {
+    width: 100%;
+    height: 600px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
 
-		p {
-			width: 100%;
-			text-align: center;
-			height: 100px;
-			font-size: 16px;
-			color: #7d7e80;
-			line-height: 100px;
-		}
-	}
+    p {
+      width: 100%;
+      text-align: center;
+      height: 100px;
+      font-size: 16px;
+      color: #7d7e80;
+      line-height: 100px;
+    }
+  }
 </style>

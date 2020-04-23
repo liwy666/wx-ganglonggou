@@ -98,9 +98,6 @@
             goSearch(item) {
                 if (item.click_type === '搜索关键词' && item.key_word !== "无响应") {
                     this.keyword = item.key_word ? item.key_word : item.classify_name;
-                    // let screen_goods_list = this.screenGoodsByKeyword();
-                    // console.log(item.click_type);
-                    // this.$set(this, 'screen_after_goods_list', screen_goods_list);
                     console.log(this.keyword);
                     this.$router.push({
                         path: 'goodsList',
@@ -109,7 +106,6 @@
                 } else if (item.click_type === '商品ID') {
                     this.$router.push('goods/' + item.goods_id)
                 }
-
             }
         },
         components: {

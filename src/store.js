@@ -8,7 +8,7 @@ Vue.use(Vuex);
 
 var carts_ = JSON.parse(localStorage.getItem('carts') || '[]');
 var carts_selected_ = [];
-var user_token_ = VueCookies.get("gl_wx_user_token_20200205");
+var user_token_ = VueCookies.get("gl_wx_user_token_042301");
 /*初始化选中购物车*/
 if (carts_.length > 0) {
     carts_.forEach(item => {
@@ -405,7 +405,7 @@ let store = new Vuex.Store({
          */
         setUserToken(state, user_token) {
             state.user_token = user_token;
-            VueCookies.set("gl_wx_user_token_20200205", user_token, '43200s');
+            VueCookies.set("gl_wx_user_token_042301", user_token, '43200s');
         },
 
         /**

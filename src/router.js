@@ -34,7 +34,8 @@ import balance from './components/balance/balance' //用户余额
 import balanceList from './components/balance/balance-list/balance-list' //用户余额明细
 import Article from './components/article/article' //内部文章
 import PcLogin from './components/PcLogin/PcLogin' //pc登录
-import Activity01 from './components/activity/activity01/index' //现货专区活动页
+import Activity01 from './components/activity/activity01/index'
+import ActivityStationery from "./components/activity/activity_stationery/ActivityStationery"; //现货专区活动页
 
 
 // 3. 创建路由对象
@@ -78,13 +79,14 @@ var router = new Router({
         {path: '/afterSale/:order_sn', component: afterSale},
         {path: '/goodsList', component: goodsList, meta: {keepAlive: true}},
         {path: '/pcLogin', component: PcLogin},
-        {path: '/activity01', component: Activity01,meta: {keepAlive: true}},
+        {path: '/activity01', component: Activity01, meta: {keepAlive: true}},
+        {path: '/activity_stationery', component: ActivityStationery, meta: {keepAlive: true}},
     ],
-    scrollBehavior (to, from, savedPosition) {
+    scrollBehavior(to, from, savedPosition) {
         if (savedPosition) {
             return savedPosition
         } else {
-            return { x: 0, y: 0 }
+            return {x: 0, y: 0}
         }
         // return 期望滚动到哪个的位置
     }
@@ -92,7 +94,7 @@ var router = new Router({
 
 router.beforeEach((to, from, next) => {
     localStorage.setItem('beforeUrl', from.path);// 保存来源路由
-    let user_token = VueCookies.get("gl_wx_user_token_20200205");
+    let user_token = VueCookies.get("gl_wx_user_token_042301");
     if (user_token === null && to.path !== '/login') {
         // 第一次进入项目
         localStorage.setItem('beforeLoginUrl', to.fullPath);// 保存用户进入的url
