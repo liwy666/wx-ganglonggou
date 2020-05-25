@@ -1,10 +1,10 @@
 <template>
   <div class="activity-stationery-main">
     <my-nar-bar title="惠战开学季"></my-nar-bar>
-    <img class="item" v-lazy="`${basePath}./img/activity_stationery/01.jpg`">
-    <img class="item" v-lazy="`${basePath}./img/activity_stationery/02.jpg`">
-    <img class="item" @click="toGoodsPage(679)" v-lazy="`${basePath}./img/activity_stationery/03.jpg`">
-    <img class="item" @click="toGoodsPage(678)" v-lazy="`${basePath}./img/activity_stationery/04.jpg`">
+    <img class="item" v-lazy="`${basePath}./img/activity_stationery/0101.jpeg`">
+    <img class="item" v-lazy="`${basePath}./img/activity_stationery/0201.jpeg`">
+    <img class="item" @click="toGoodsPage(679)" v-lazy="`${basePath}./img/activity_stationery/0301.jpeg`">
+    <img class="item" @click="toGoodsPage(678)" v-lazy="`${basePath}./img/activity_stationery/0401.jpeg`">
     <img class="item" @click="toGoodsPage(677)" v-lazy="`${basePath}./img/activity_stationery/05.jpg`">
     <img class="item" @click="toGoodsPage(676)" v-lazy="`${basePath}./img/activity_stationery/06.jpg`">
     <img class="item" @click="toGoodsPage(675)" v-lazy="`${basePath}./img/activity_stationery/07.jpg`">

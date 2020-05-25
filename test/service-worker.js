@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
 importScripts(
-  "precache-manifest.8845558a87d42aee48207a61a74d6ce8.js"
+  "precache-manifest.fa11c7959e06a1fff5216196aa94de8c.js"
 );
 
 workbox.core.setCacheNameDetails({prefix: "wx_ganglonggou"});
