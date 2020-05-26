@@ -50,6 +50,7 @@ Vue.use(VueLazyload);
 
 //animate
 import animated from 'animate.css';
+
 Vue.use(animated);
 
 //mint
@@ -72,7 +73,21 @@ Vue.component(Landscape.name, Landscape);
 //ganglonggou-compents
 import FirstPage from 'ganglonggou-firstpage/dist/ganglonggou-firstpage.common';
 import 'ganglonggou-firstpage/dist/ganglonggou-firstpage.css';
+
 Vue.use(FirstPage);
+import ByPage from 'ganglonggou-by-page/dist/ganglonggou-by-page.common';
+import 'ganglonggou-by-page/dist/ganglonggou-by-page.css'
+
+Vue.use(ByPage);
+import PromptGoodsPage from 'ganglonggou-prompt-goods-page/dist/ganglonggou-prompt-goods-page.common';
+import 'ganglonggou-prompt-goods-page/dist/ganglonggou-prompt-goods-page.css'
+
+Vue.use(PromptGoodsPage);
+import RecommendPage from 'ganglonggou-recommend-page/dist/ganglonggou-recommend-page.common';
+import 'ganglonggou-recommend-page/dist/ganglonggou-recommend-page.css'
+
+Vue.use(RecommendPage);
+
 
 Vue.config.productionTip = false;
 

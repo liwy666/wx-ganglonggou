@@ -12,7 +12,6 @@
 </template>
 <script>
     import {commonShare} from "../../../share";
-
     export default {
         data() {
             return {
