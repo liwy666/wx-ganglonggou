@@ -1,57 +1,26 @@
 <template>
-	<div class="first-main">
-		<van-sticky @scroll="scroll">
-			<div class="top-main">
-				<mySearch></mySearch>
-				<topSwitch :parents_classify_list="classify_list" :switch_index="switch_index"
-					:is-fixed="isFixed"
-					@updateSwitchIndex="updateSwitchIndex"></topSwitch>
-			</div>
-		</van-sticky>
-		<div class="base-swiper-main">
-			<swiper :options="base_swiper_options" ref="myBaseSwiper">
-				<swiper-slide>
-					<firstPage v-if="index_ad_list&&classify_list" :index_ad_info="index_ad_list"
-						:classify_list="classify_list"></firstPage>
-				</swiper-slide>
-				<swiper-slide v-for="(item,i) in classify_list" :key="i">
-					<classifyPage :parent_classify="item"></classifyPage>
-				</swiper-slide>
-			</swiper>
-		</div>
-	</div>
+  <div class="first-main">
+    <first-page :api-base-url="apiBaseUrl"
+                :head-open="false"
+                :show-sys="false"
+                @goods-card-click="goodsCardClick"
+                @ad-location-click="adLocationClick"
+                @search-click="searchClick"
+                @more-classify-click="moreClassifyClick"
+    />
+  </div>
 </template>
 <script>
-    import mySearch from "./sub/my-sub-search.vue";//搜索组件
-    import topSwitch from './sub/topSwitch'//头部切换
-    import firstPage from './page/firstPage/firstPage'//首页
-    import classifyPage from './page/classifyPage/classifyPage'//分类页
     import {commonShare} from "../../../share";
 
     export default {
         data() {
             return {
-                index_info: null,
-                coupon_swiper: {
-                    slidesPerView: 2.5,
-                    spaceBetween: 10,
-                },
-                radio: "1",
-                cat_index: 0,
-                show_pic: false,
-                swipe_img: [],
-                notice_text: '',
-                switch_index: 0,
-                base_swiper_options: {
-                    slidesPerView: 1,
-                    allowTouchMove: false,
-                    autoHeight: true,
-                },
-                isFixed:false,
+                apiBaseUrl: process.env.VUE_APP_API_URL + '/',
             };
         },
         created() {
-            this.getIndexAd();
+
         },
         activated() {
             /*获取Url参数信息*/
@@ -100,113 +69,69 @@
                 }
             }
         },
-        components: {
-            mySearch,//搜索组件
-            topSwitch,//头部切换
-            firstPage,//首页
-            classifyPage,//分类页
-        },
         methods: {
-            getIndexAd() {
-                this.$fetch("get_index_info", {into_type: this.$store.getters.getIntoType}).then((msg) => {
-                    if (msg) {
-                        this.index_info = msg;
-                        this.$set(this.$store.state, 'goods_list', msg.goods_list);//赋值商品列表
-                        //this.showPic();//弹窗
-                        this.$fetch("user_get_classify_ad_list", {into_type: this.$store.getters.getIntoType}).then((msg) => {
-                            if (msg) {
-                                this.$set(this.$store.state, 'classify_list', msg);
-                            }
-                        });
-						//默认展示第几项
-                        let first_page_index= this.GetQueryString('first_page_index');
-                        if(first_page_index){
-                            if ((/(^[1-9]\d*$)/.test(parseInt(first_page_index)))) {//验证正整数
-                                setTimeout(() => {
-                                    this.updateSwitchIndex(first_page_index);
-                                },1000)
-                            }
-                        }
-                    }
-                })
-            },
-            showPic() {
-                let time = localStorage.getItem('glShowPicTime') || 0;
-                if (time < parseInt(new Date().getTime())) {
-                    localStorage.setItem('glShowPicTime', parseInt(new Date().getTime()) + 86400000);
-                    this.show_pic = true;
-                }
-            },
-            /**
-             * 树状的算法
-             * @params list     代转化数组
-             * @params parentId 起始节点
-             */
-            getTrees(list, parentId) {
-                let items = {};
-                // 获取每个节点的直属子节点，*记住是直属，不是所有子节点
-                for (let i = 0; i < list.length; i++) {
-                    let key = list[i].parent_id;
-                    if (items[key]) {
-                        items[key].push(list[i]);
-                    } else {
-                        items[key] = [];
-                        items[key].push(list[i]);
-                    }
-                }
-                return this.formatTree(items, parentId);
-            },
-            /**
-             * 利用递归格式化每个节点
-             */
-            formatTree(items, parentId) {
-                let result = [];
-                if (!items[parentId]) {
-                    return result;
-                }
-                for (let t of items[parentId]) {
-                    t.children = this.formatTree(items, t.id);
-                    result.push(t);
-                }
-                return result;
-            },
             GetQueryString(name) {
                 let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
                 let r = window.location.search.substr(1).match(reg);
                 if (r != null) return unescape(r[2]);
                 return null;
             },
-            updateSwitchIndex(val) {
-                this.switch_index = val;
-                console.log(val);
-                this.$refs.myBaseSwiper.swiper.slideToLoop(val);
+            getObjectByUrl(url) {
+                const keyRex = new RegExp("(\\?|&)([^=]*)(={1}[^&]*)", 'g');
+                //const keyArray = keyRex.exec(url);
+                const keyArray = url.match(keyRex);
+                if (!keyArray || keyArray.length < 1) return null;
+                const rex = new RegExp('^(\\?|&)(.*)={1}(.*)$');
+                const object = {};
+                keyArray.forEach(item => {
+                    const resultArray = item.match(rex);
+                    object[resultArray[2]] = decodeURIComponent(resultArray[3]);
+                });
+                return object;
             },
-            scroll(info){
-               // { scrollTop: 距离顶部位置, isFixed: 是否吸顶 }
-                this.isFixed = info.isFixed;
-            }
+            getRouteByUrl(url) {
+                let rex = new RegExp('#/(.*)(\\?)?');
+                let resultArray = rex.exec(url);
+                if (resultArray === null || resultArray.length < 2) return "";
+                return resultArray[1];
+            },
+            goodsCardClick(goodsId) {
+                if (goodsId && goodsId > 0) {
+                    this.$router.push({path: 'goods/' + goodsId});
+                }
+
+            },
+            adLocationClick(addressItemData) {
+                switch (addressItemData.responseType) {
+                    case "内部链接-U":
+                        if (addressItemData.responseUrl) {
+                            let routePath = this.getRouteByUrl(addressItemData.responseUrl);
+                            let routeObj = this.getObjectByUrl(addressItemData.responseUrl);
+                            this.$router.push({path: routePath, query: routeObj});
+                        }
+                        break;
+                    case "外部链接-U":
+                        if (addressItemData.responseUrl) {
+                            window.location.href = addressItemData.responseUrl;
+                        }
+                        break;
+                    case "商品详情页-G":
+                        if (addressItemData.goodsId) {
+                            this.$router.push({path: `/goods/${addressItemData.goodsId}`})
+                        }
+                        break;
+
+                }
+            },
+            searchClick() {
+                this.$router.push('search');
+            },
+            moreClassifyClick(parentId) {
+                console.log(parentId);
+            },
+
         },
     };
 </script>
 <style lang="scss" scoped>
-	.first-main {
-		background-color: rgb(242, 242, 242);
-
-		.top-main {
-			//height: 90px;
-			background-image: url("https://mate.ganglonggou.com/lib/images/wx_first_top1_0812.jpg");
-			background-repeat: no-repeat;
-			background-size: 100% 100%;
-		}
-	}
-</style>
-<style lang="scss">
-	.md-landscape-content {
-		width: 375px;
-		text-align: center;
-
-		img {
-			width: 70%;
-		}
-	}
 </style>

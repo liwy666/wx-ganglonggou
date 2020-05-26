@@ -2,12 +2,9 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
+import 'amfe-flexible/index.js'
 
 //import './registerServiceWorker'
-
-
-//引入lib-flexible
-import 'lib-flexible';
 
 //引入功能函数和常量
 import MyCommon from './common';
@@ -42,7 +39,7 @@ import './my-scss.scss'
 
 //引入swiper
 import VueAwesomeSwiper from 'vue-awesome-swiper'
-import 'swiper/dist/css/swiper.css'
+import 'swiper/css/swiper.css'
 
 Vue.use(VueAwesomeSwiper);
 
@@ -72,6 +69,10 @@ Vue.component('md-progress', Progress);
 Vue.component(Bill.name, Bill);
 Vue.component(ResultPage.name, ResultPage);
 Vue.component(Landscape.name, Landscape);
+//ganglonggou-compents
+import FirstPage from 'ganglonggou-firstpage/dist/ganglonggou-firstpage.common';
+import 'ganglonggou-firstpage/dist/ganglonggou-firstpage.css';
+Vue.use(FirstPage);
 
 Vue.config.productionTip = false;
 
