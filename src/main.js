@@ -42,7 +42,7 @@ import './my-scss.scss'
 
 //引入swiper
 import VueAwesomeSwiper from 'vue-awesome-swiper'
-import 'swiper/dist/css/swiper.css'
+import 'swiper/css/swiper.css'
 
 Vue.use(VueAwesomeSwiper);
 
