@@ -66,7 +66,8 @@
                 }, 100)
             },
             outLogin() {
-                VueCookies.remove("gl_wx_user_token_042301");
+                const tokenName = process.env.VUE_APP_USER_TOKEN_NAME;
+                VueCookies.remove(tokenName);
                 console.log("退出登录");
             }
         },

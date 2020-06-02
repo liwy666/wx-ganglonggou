@@ -30,10 +30,10 @@ axios.interceptors.request.use(
 axios.interceptors.response.use(
     response => {
         if (response.data.error_code !== undefined) {
-
+            const tokenName = process.env.VUE_APP_USER_TOKEN_NAME;
             switch (response.data.error_code) {
                 case 10002:
-                    VueCookies.remove("gl_wx_user_token_042301");
+                    VueCookies.remove(tokenName);
                     Toast.clear();
                     Toast.fail({
                         message: '非常抱歉，我们不能获取到您的用户信息，请尝试重新进入商城',
@@ -42,7 +42,7 @@ axios.interceptors.response.use(
                     location.reload(true);
                     break;
                 case 10006:
-                    VueCookies.remove("gl_wx_user_token_042301");
+                    VueCookies.remove(tokenName);
                     let oldUrl = window.location.toString();
                     let url = oldUrl.replace(window.location.search, '');
                     window.location.href = url;

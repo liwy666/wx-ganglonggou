@@ -99,7 +99,8 @@ var router = new Router({
 
 router.beforeEach((to, from, next) => {
     localStorage.setItem('beforeUrl', from.path);// 保存来源路由
-    let user_token = VueCookies.get("gl_wx_user_token_042301");
+    const userTokenName = process.env.VUE_APP_USER_TOKEN_NAME;
+    let user_token = VueCookies.get(userTokenName);
     if (user_token === null && to.path !== '/login') {
         // 第一次进入项目
         localStorage.setItem('beforeLoginUrl', to.fullPath);// 保存用户进入的url

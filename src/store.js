@@ -8,7 +8,8 @@ Vue.use(Vuex);
 
 var carts_ = JSON.parse(localStorage.getItem('carts') || '[]');
 var carts_selected_ = [];
-var user_token_ = VueCookies.get("gl_wx_user_token_042301");
+const tokenName = process.env.VUE_APP_USER_TOKEN_NAME;
+var user_token_ = VueCookies.get(tokenName);
 /*初始化选中购物车*/
 if (carts_.length > 0) {
     carts_.forEach(item => {
@@ -24,10 +25,10 @@ let store = new Vuex.Store({
     state: {
         user_token: user_token_,//用户token
         into_type: "wx"//入口方式
-        , api_url: "https://api.ganglonggou.com"
+        , api_url: process.env.VUE_APP_API_URL2
         // , api_url: "https://test-api.ganglonggou.com"
         // , api_url: "http://192.168.0.37:8004"
-        , local_url: "https://mate.ganglonggou.com/wx-ganglonggou/"
+        , local_url: process.env.VUE_APP_LOCAL_URL
         , parent_id: 203//主类
         , goods_list: []//商品列表
         , goods_info: {
@@ -405,7 +406,9 @@ let store = new Vuex.Store({
          */
         setUserToken(state, user_token) {
             state.user_token = user_token;
-            VueCookies.set("gl_wx_user_token_042301", user_token, '43200s');
+            const tokenName = process.env.VUE_APP_USER_TOKEN_NAME;
+            console.log(tokenName);
+            VueCookies.set(tokenName, user_token, '43200s');
         },
 
         /**
