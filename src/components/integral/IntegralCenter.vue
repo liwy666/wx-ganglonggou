@@ -15,7 +15,7 @@
     import myNavBar from '../sub/my-nav-bar'
 
     export default {
-        name: "IntegralCenter",
+        name: "IntegralCenter",//积分中心
         data() {
             return {
                 baseUrl: process.env.VUE_APP_API_URL + '/'
@@ -41,7 +41,7 @@
              * 激活礼品卡（跳转到礼品卡页面）
              */
             exchange() {
-
+                this.$router.push('/card_activation');
             },
             /**
              *每日签到（跳转到每日签到页面）
@@ -53,13 +53,13 @@
              *赚积分
              */
             morePath() {
-
+                this.$router.push('/more_get_integral');
             },
             /**
              * 积分如何使用
              */
             howUse() {
-
+                this.$router.push('/how_use_integral');
             }
         },
         components: {

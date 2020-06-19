@@ -1,6 +1,6 @@
 <template>
   <div class="login-get-integral-main">
-    <my-nav-bar title="积分中心"/>
+    <my-nav-bar title="签到"/>
     <login-get-integral :base_url="baseUrl" :user_token="userToken" :getAwardsLog="getAwardsLog"/>
   </div>
 </template>
@@ -11,7 +11,7 @@
     import 'ganglonggou-login-get-integral/login-get-integral.css'
 
     export default {
-        name: "LoginGetIntegral",
+        name: "LoginGetIntegral",//签到得积分
         data() {
             return {
                 baseUrl: process.env.VUE_APP_API_URL + '/'
@@ -26,7 +26,7 @@
         },
         methods: {
             getAwardsLog() {
-
+                this.$router.push('/user_award');
             }
         },
         components: {

@@ -47,7 +47,10 @@ import BindingPhone from "./components/BindingPhone";//绑定手机号
 /*积分*/
 import IntegralCenter from "./components/integral/IntegralCenter";//积分中心
 import LoginGetIntegral from "./components/integral/LoginGetIntegral";//积分签到
-
+import CardActivation from "./components/integral/CardActivation";//积分充值
+import HowUseIntegral from "./components/integral/HowUseIntegral";//怎样使用积分
+import MoreGetIntegral from "./components/integral/MoreGetIntegral";//赚更多积分
+import UserAward from "./components/integral/UserAward";//我的奖项
 // 3. 创建路由对象
 var router = new Router({
     routes: [
@@ -97,6 +100,10 @@ var router = new Router({
         {path: '/activity_classify_page', component: ActivityClassPage, meta: {keepAlive: false}},
         {path: '/integral_center', component: IntegralCenter},
         {path: '/login_get_integral', component: LoginGetIntegral},
+        {path: '/card_activation', component: CardActivation},
+        {path: '/how_use_integral', component: HowUseIntegral},
+        {path: '/more_get_integral', component: MoreGetIntegral},
+        {path: '/user_award', component: UserAward},
 
     ],
     scrollBehavior(to, from, savedPosition) {
