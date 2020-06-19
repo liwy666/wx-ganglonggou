@@ -1,35 +1,36 @@
 <template>
-	<div class="main">
-		<myNarBar title="订单详情"></myNarBar>
-		<!--收货地址-->
-		<van-contact-card
-			:type="default_address===''? 'add' : 'edit'"
-			:name="default_address.name +'（'+default_address.province+default_address.city+default_address.county+default_address.address_detail+'）'"
-			:tel="default_address.tel"
-			add-text="添加收货人"
-			v-if="getAddressList_load"
-			@click="updDefaultAddress()"
-		/>
-		<!--商品列表-->
-		<GoodsList></GoodsList>
-		<!--支付选项-->
-		<payOption v-if="getPayList_load && getUserInfo_load" :goods_list="goods_list"></payOption>
-		<!--开票方式选项-->
-		<invoice></invoice>
-		<!--优惠券选项-->
-		<couponOption v-if="getCouponList_load"></couponOption>
-		<!--积分使用-->
-		<integralOption v-if="getUserInfo_load"></integralOption>
-		<!--费用清单-->
-		<orderList v-if="getUserInfo_load"></orderList>
-		<div class="d"></div>
-		<div class="button-box">
-			<div class="button-box-l"><span>￥</span>{{this.order_price}}</div>
-			<div class="button-box-r">
-				<van-button type="danger" size="large" @click="put_order">提交订单</van-button>
-			</div>
-		</div>
-	</div>
+  <div class="write-order">
+    <myNarBar title="订单详情"/>
+    <div class="main" v-if="pageLoadComplete">
+      <!--收货地址-->
+      <van-contact-card
+          :type="default_address===''? 'add' : 'edit'"
+          :name="default_address.name +'（'+default_address.province+default_address.city+default_address.county+default_address.address_detail+'）'"
+          :tel="default_address.tel"
+          add-text="添加收货人"
+          @click="updDefaultAddress()"
+      />
+      <!--商品列表-->
+      <GoodsList/>
+      <!--支付选项-->
+      <payOption :pay-list="payList" :order-price="parseFloat(orderPrice)"/>
+      <!--开票方式选项-->
+      <invoice/>
+      <!--优惠券选项-->
+      <couponOption :not-allow-coupons="notAllowCoupons" :allow-coupons="allowCoupons"/>
+      <!--积分使用-->
+      <integralOption :user-integral-number="userIntegralNumber" :max-integral-number="maxIntegralNumber"/>
+      <!--费用清单-->
+      <orderList/>
+      <div class="d"></div>
+      <div class="button-box">
+        <div class="button-box-l"><span>￥</span>{{this.orderPrice}}</div>
+        <div class="button-box-r">
+          <van-button type="danger" size="large" @click="submitOrder">提交订单</van-button>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 <script>
     import myNarBar from '../sub/my-nav-bar';
@@ -43,10 +44,13 @@
     export default {
         data() {
             return {
-                getPayList_load: false,
-                getAddressList_load: false,
-                getCouponList_load: false,
-                getUserInfo_load: false,
+                pageLoadComplete: false,
+                allowCoupons: [],//可用优惠券
+                notAllowCoupons: [],//不可用优惠券,
+                userIntegralNumber: 0,//用户持有积分数量
+                maxIntegralNumber: 0,//最大可使用积分数量
+                payList: [],
+                submitGoodsList: [],
             };
         },
         computed: {
@@ -55,12 +59,12 @@
                     return this.$store.getters.getDefaultAddress;
                 }
             },
-            order_price: {
+            orderPrice: {
                 get: function () {
                     return this.$store.state.write_order_info.order_price;
                 }
             },
-            goods_list: {
+            goodsList: {
                 get: function () {
                     return this.$store.getters.getCartsSelected;
                 }
@@ -88,68 +92,57 @@
                     order_price: '0'//订单价格
                 });
             }
-            this.getPayList(this.$store.state.user_token);
-            this.getCouponList(this.$store.state.user_token);
-            this.getUserInfo(this.$store.state.user_token);
-            this.getAddressList(this.$store.state.user_token);
+
+            this.goodsList.forEach(item => {
+                this.submitGoodsList.push({
+                    goodsId: item['goods_id'],
+                    goodsNumber: item['goods_number'],
+                    skuId: item['sku_id']
+                });
+            });
+            this.getSubmitOrderInfo();
         },
         methods: {
-            getInfo() {
-                let toast1 = this.$toast.loading({
-                    mask: true,
-                    message: '获取支付列表',
-                    duration: 0
-                });
-                this.$fetch('user_get_fill_in_order_v2', {user_token: this.$store.getters.getUserToken})
-                    .then((msg) => {
-                        this.msg = msg;
-                        this.$store.dispatch("getAddressList", this.$store.getters.getUserToken);
-                        this.$store.dispatch("getCouponList", this.$store.getters.getUserToken);
-                        this.$store.dispatch("getUserInfo", this.$store.getters.getUserToken);
-                        toast1.clear();
-                    })
-            },
-
             updDefaultAddress() {
                 if (this.$store.state.address_list.length === 0) {
                     this.$router.push({path: '/addressEdit', query: {address_edit: JSON.stringify({is_add: true,})}})
                 } else {
                     this.$router.push({path: '/addressList', query: {go_back: true}});
                 }
-            }
-            ,
+            },
 
-            put_order() {
+            getSubmitOrderInfo() {
+                const toast1 = this.$toast.loading({
+                    mask: true,
+                    message: '处理中',
+                    duration: 0
+                });
+                this.$post("submit_order_back", {
+                    'goodsItems': this.submitGoodsList,
+                    'userToken': this.$store.getters.getUserToken
+                }).then((data) => {
+                    if (data) {
+                        this.$set(this.$store.state, 'address_list', data['addressList']);
+                        this.allowCoupons = data['couponList']['allow'];
+                        this.notAllowCoupons = data['couponList']['notAllow'];
+                        this.$set(this.$store.state, 'user_info', data['userInfo']);
+                        this.payList = data['payList'];
+                        this.userIntegralNumber = data['userInfo']['integral'];
+                        this.maxIntegralNumber = data['allowIntegralNumber'];
+                        this.pageLoadComplete = true;
+                    }
+                    toast1.clear();
+                });
+            },
 
+            submitOrder() {
                 let write_order_info = this.$store.state.write_order_info;
                 if (this.$store.state.carts_selected.length < 1 || JSON.stringify(this.$store.state.user_info) === '{}') {
                     this.$toast("暂无法提交该订单，请稍后再试。或您已提交过订单，请前往个人中心查看");
                     return false;
                 }
-                //检查余额是否充足
-                let user_balance = -1;
-                if (write_order_info.pay_info.bystages_code === 'wx_0_balance') {
-                    user_balance = this.$store.state.user_info.wx_0_balance;
-                } else if (write_order_info.pay_info.bystages_code === 'wx_235_balance') {
-                    user_balance = this.$store.state.user_info.wx_235_balance;
-                }
-                if (parseFloat(user_balance) < this.order_price && user_balance !== -1) {
-                    this.$toast("余额不足");
-                    return false;
-                }
                 if (this.$store.state.address_list.length < 1) {
                     this.$toast("您需要添加一个收货地址");
-                    return false;
-                }
-                //检查余额分类是否满足
-                let cat_flag = true;
-                this.$store.state.carts_selected.forEach(item => {
-                    if (item.cat_id !== write_order_info.pay_info.bystages_cat_id && write_order_info.pay_info.bystages_cat_id !== 0) {
-                        cat_flag = false;
-                    }
-                });
-                if (!cat_flag) {
-                    this.$toast("订单中的商品不能使用该类型余额支付");
                     return false;
                 }
                 this.$dialog.confirm({
@@ -163,12 +156,11 @@
                     this.$post('user_submit_order', {
                         user_token: this.$store.getters.getUserToken,
                         pay_id: this.$store.state.write_order_info.pay_info.pay_id,
-                        pay_code: this.$store.state.write_order_info.pay_info.pay_code,
                         bystages_id: this.$store.state.write_order_info.pay_info.bystages_id,
                         coupon_id: this.$store.state.write_order_info.coupon_id,
                         invoice_info: this.$store.state.write_order_info.invoice_info,
                         use_integral_number: this.$store.state.write_order_info.use_integral,
-                        goods_list: this.$store.state.carts_selected
+                        goods_list: this.submitGoodsList
                     })
                         .then((msg) => {
                             if (msg) {
@@ -181,7 +173,7 @@
                                 //刷新订单表
                                 this.$store.dispatch("getOrderList", this.$store.getters.getUserToken);
                                 //导航到订单查看
-                                this.$router.push('/seeOrder/' + msg);
+                                this.$router.replace('/seeOrder/' + msg);
                             }
                             toast1.clear();
                         })
@@ -191,82 +183,6 @@
 
                 });
 
-
-            }
-            /**
-             * 获取地址列表
-             * @param state
-             */
-            , getAddressList(user_token) {
-                let toast1 = this.$toast.loading({
-                    mask: true,
-                    message: '获取地址列表',
-                    duration: 0
-                });
-                this.$fetch('user_get_address', {user_token: user_token})
-                    .then((msg) => {
-                        this.$set(this.$store.state, 'address_list', msg);
-                        this.getAddressList_load = true;
-                        toast1.clear();
-                    })
-            }
-
-            /**
-             * 获取优惠券列表
-             * @param state
-             */
-            , getCouponList(user_token) {
-                let toast1 = this.$toast.loading({
-                    mask: true,
-                    message: '获取优惠券列表',
-                    duration: 0
-                });
-                this.$fetch('user_get_coupon_list', {user_token: user_token})
-                    .then((msg) => {
-                        if (msg) {
-                            this.$set(this.$store.state, 'coupon_list', msg);
-                            this.getCouponList_load = true;
-                            toast1.clear();
-                        }
-
-                    })
-            }
-            /**
-             * 获取用户信息
-             * @param context
-             * @param user_token
-             */
-            , getUserInfo(user_token) {
-                let toast1 = this.$toast.loading({
-                    mask: true,
-                    message: '获取用户信息',
-                    duration: 0
-                });
-                this.$fetch('user_get_user_info', {user_token: user_token})
-                    .then((msg) => {
-                        this.$set(this.$store.state, 'user_info', msg);
-                        this.getUserInfo_load = true;
-                        toast1.clear();
-                    })
-
-            }
-            /**
-             * 获取支付列表
-             * @param context
-             * @param login_type
-             */
-            , getPayList(user_token) {
-                let toast1 = this.$toast.loading({
-                    mask: true,
-                    message: '获取支付列表',
-                    duration: 0
-                });
-                this.$fetch('user_get_pay_list', {user_token: user_token})
-                    .then((msg) => {
-                        this.$set(this.$store.state, 'pay_list', msg);
-                        this.getPayList_load = true;
-                        toast1.clear();
-                    })
 
             }
 
@@ -285,37 +201,42 @@
     ;
 </script>
 <style lang="scss" scoped>
-	.d {
-		margin-top: 20px;
-		width: 100%;
-		height: 50px;
-	}
+  .write-order {
+    .main {
+      .d {
+        margin-top: 20px;
+        width: 100%;
+        height: 50px;
+      }
 
-	.button-box {
-		width: 100%;
-		height: 50px;
-		bottom: 0;
-		position: fixed;
-		display: flex;
-		box-shadow: 0px 0px 1px 0px rgba(0, 0, 0, 0.1);
+      .button-box {
+        width: 100%;
+        height: 50px;
+        bottom: 0;
+        position: fixed;
+        display: flex;
+        box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.1);
 
-		.button-box-l {
-			height: 100%;
-			flex: 2;
-			line-height: 50px;
-			padding-left: 15px;
-			font-size: 24px;
-			background-color: white;
-			font-weight: bold;
-			color: red;
+        .button-box-l {
+          height: 100%;
+          flex: 2;
+          line-height: 50px;
+          padding-left: 15px;
+          font-size: 24px;
+          background-color: white;
+          font-weight: bold;
+          color: red;
 
-			span {
-				font-size: 16px;
-			}
-		}
+          span {
+            font-size: 16px;
+          }
+        }
 
-		.button-box-r {
-			flex: 1;
-		}
-	}
+        .button-box-r {
+          flex: 1;
+        }
+      }
+    }
+  }
+
 </style>

@@ -1,18 +1,20 @@
 <template>
-	<div class="main">
-		<oneGoods v-for="(item) in spike_list" :key="item.goods_id" :goods_info="item"></oneGoods>
-		<div class="md-example-child md-example-child-result-page md-example-child-result-page-0">
-			<md-result-page v-if="spike_list.length < 1"
-							text="还没有正在秒杀的商品"
-							subtext="去看看别的吧~~">
-			</md-result-page>
-		</div>
-	</div>
+  <div class="main">
+    <oneGoods v-for="(item) in spike_list" :key="item.goods_id" :goods_info="item"></oneGoods>
+    <div class="md-example-child md-example-child-result-page md-example-child-result-page-0">
+      <md-result-page v-if="spike_list.length < 1"
+                      text="还没有正在秒杀的商品"
+                      subtext="去看看别的吧~~">
+      </md-result-page>
+    </div>
+  </div>
 </template>
 
 <script>
     import oneGoods from './sub/my-one-goods';
+
     export default {
+        name: "spike",
         data() {
             return {};
         },
@@ -48,9 +50,9 @@
 </script>
 
 <style lang="scss" scoped>
-	.main {
-		.md-example-child {
-			margin-top: 10%;
-		}
-	}
+  .main {
+    .md-example-child {
+      margin-top: 10%;
+    }
+  }
 </style>

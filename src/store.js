@@ -23,11 +23,10 @@ var hits_keyword_ = JSON.parse(localStorage.getItem('hits_keyword') || '[]');
 
 let store = new Vuex.Store({
     state: {
-        user_token: user_token_,//用户token
-        into_type: "wx"//入口方式
+        user_token: user_token_//用户token
+        , into_type: "wx"//入口方式
+        , son_into_type: "wx"
         , api_url: process.env.VUE_APP_API_URL2
-        // , api_url: "https://test-api.ganglonggou.com"
-        // , api_url: "http://192.168.0.37:8004"
         , local_url: process.env.VUE_APP_LOCAL_URL
         , parent_id: 203//主类
         , goods_list: []//商品列表

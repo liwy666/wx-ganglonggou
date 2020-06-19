@@ -99,7 +99,7 @@
 				.coupon-cut-sum {
 					padding: 7px 15px;
 					color: #f44;
-					font-size: 36px;
+					font-size: 24px;
 					height: 50px;
 					font-weight: 500;
 					line-height: 50px;

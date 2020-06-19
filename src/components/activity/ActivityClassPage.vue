@@ -1,22 +1,26 @@
 <template>
   <div class="by-page-main">
-    <lucency-nav-bar title-name="9.9包邮专区"/>
-    <by-page :api-base-url="apiBaseUrl"
-             :head-open="true"
-             @goods-card-click="goodsCardClick"
-    />
+    <classify-ad-info :parent-classify-id="parentClassifyId"
+                      :api-base-url="apiBaseUrl"
+                      :head-open="true"
+                      @left-icon-click="$router.go(-1)"
+                      @goods-card-click="goodsCardClick"/>
   </div>
 </template>
 
 <script>
-    import lucencyNavBar from "../sub/lucencyNavBar";
+    import myNavBar from '../sub/my-nav-bar'
     /*9.9包邮专区*/
     export default {
         name: "ActivityByPage",
         data() {
             return {
                 apiBaseUrl: process.env.VUE_APP_API_URL + '/',
+                parentClassifyId: 0,
             }
+        },
+        created() {
+            this.parentClassifyId = this.$route.query.id;
         },
         methods: {
             goodsCardClick(goodsId) {
@@ -24,7 +28,7 @@
             }
         },
         components: {
-            'lucency-nav-bar': lucencyNavBar,
+            'my-nav-bar': myNavBar,
         }
     }
 </script>

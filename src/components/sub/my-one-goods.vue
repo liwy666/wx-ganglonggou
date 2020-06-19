@@ -119,11 +119,6 @@
 			line-height: 25px;
 			color: #7d7e80;
 
-			.van-icon {
-				height: 25px !important;
-				font-size: 12px !important;
-				line-height: 28px !important;
-			}
 		}
 
 		.goods-price-box {

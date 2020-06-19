@@ -1,15 +1,15 @@
 <template>
   <div class="prompt-goods-page-main">
-    <my-nav-bar title="现货专区"/>
+    <lucency-nav-bar title-name="现货专区"/>
     <prompt-goods-page :api-base-url="apiBaseUrl"
-                       :head-open="false"
+                       :head-open="true"
                        @goods-card-click="goodsCardClick"
     />
   </div>
 </template>
 
 <script>
-    import myNavBar from '../sub/my-nav-bar'
+   import lucencyNavBar from "../sub/lucencyNavBar";
     export default {
         name: "ActivityPromptGoodsPage",
         data() {
@@ -23,7 +23,7 @@
             }
         },
         components: {
-            'my-nav-bar': myNavBar,
+            'lucency-nav-bar': lucencyNavBar,
         }
     }
 </script>

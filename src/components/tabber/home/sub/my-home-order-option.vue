@@ -1,13 +1,23 @@
 <template>
-	<div class="main">
-		<van-cell title="我的订单" icon="notes-o" is-link value="查看全部订单" @click="toOrderList('全部')"/>
-		<van-tabbar v-model="active" :fixed="false">
-			<van-tabbar-item @click="toOrderList('待付款')" icon="after-sale" :info="wait_pay_count===0? '' : wait_pay_count">待付款</van-tabbar-item>
-			<van-tabbar-item @click="toOrderList('待收货')" icon="logistics" :info="wait_SignFor_count===0? '' : wait_SignFor_count">待收货</van-tabbar-item>
-			<van-tabbar-item @click="toEvaluateList" icon="comment-o" :info="wait_evaluate_count===0? '' : wait_evaluate_count">待评价</van-tabbar-item>
-			<van-tabbar-item @click="toOrderList('售后')" icon="todo-list-o" :info="service_count===0? '' : service_count">退货/售后</van-tabbar-item>
-		</van-tabbar>
-	</div>
+  <div class="home-order-option-main">
+    <van-cell title="我的订单" icon="notes-o" is-link value="查看全部订单" @click="toOrderList('全部')"/>
+    <van-tabbar v-model="active" :fixed="false">
+      <van-tabbar-item @click="toOrderList('待付款')" icon="after-sale" :info="wait_pay_count===0? '' : wait_pay_count">
+        待付款
+      </van-tabbar-item>
+      <van-tabbar-item @click="toOrderList('待收货')"
+                       icon="logistics"
+                       :info="wait_SignFor_count===0? '' : wait_SignFor_count">待收货
+      </van-tabbar-item>
+      <van-tabbar-item @click="toEvaluateList"
+                       icon="comment-o"
+                       :info="wait_evaluate_count===0? '' : wait_evaluate_count">待评价
+      </van-tabbar-item>
+      <van-tabbar-item @click="toOrderList('售后')" icon="todo-list-o" :info="service_count===0? '' : service_count">
+        退货/售后
+      </van-tabbar-item>
+    </van-tabbar>
+  </div>
 </template>
 
 <script>
@@ -88,9 +98,9 @@
         },
         methods: {
             toOrderList(type_name) {
-                this.$router.push('/orderList/'+type_name);
+                this.$router.push('/orderList/' + type_name);
             },
-            toEvaluateList(){
+            toEvaluateList() {
                 this.$router.push('/evaluateList');
             }
         },
@@ -98,11 +108,15 @@
 </script>
 
 <style lang="scss" scoped>
-	.main {
-		margin-top: 25px;
-		
-		.van-cell:not(:last-child)::after {
-			border: 0px !important;
-		}
-	}
+  .home-order-option-main {
+    margin-top: 25px;
+
+    .van-icon {
+      line-height: 24px;
+    }
+
+    .van-cell:not(:last-child)::after {
+      border: 0 !important;
+    }
+  }
 </style>

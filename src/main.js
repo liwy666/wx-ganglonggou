@@ -3,6 +3,7 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import 'amfe-flexible/index.js'
+import glToolFunction from 'ganglong-tool-function'
 
 //import './registerServiceWorker'
 
@@ -10,6 +11,7 @@ import 'amfe-flexible/index.js'
 import MyCommon from './common';
 
 Vue.prototype.$MyCommon = MyCommon;
+Vue.prototype.$toolFuntion = glToolFunction;
 
 //引入vant
 import Vant from 'vant';
@@ -87,6 +89,11 @@ import RecommendPage from 'ganglonggou-recommend-page/dist/ganglonggou-recommend
 import 'ganglonggou-recommend-page/dist/ganglonggou-recommend-page.css'
 
 Vue.use(RecommendPage);
+
+import ClassifyAdPage from 'ganglonggou-classify-ad-info/dist/ganglonggou-classify-ad-info.common';
+import 'ganglonggou-classify-ad-info/dist/ganglonggou-classify-ad-info.css';
+
+Vue.use(ClassifyAdPage);
 
 
 Vue.config.productionTip = false;

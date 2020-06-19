@@ -1,28 +1,28 @@
 <template>
-	<div class="main">
-		<myNarBar v-if="nar_bar_flag" title="购物车"></myNarBar>
-		<div class="evaluate-load">
-			<van-list
-							v-model="loading"
-							:finished="finished"
-							:error.sync="error"
-							finished-text=""
-							error-text="请求失败，点击重新加载"
-							@load="onLoad"
-			>
-				<myOneCart v-for="(item,i) in old_carts" :cart_info="item" :key="i"></myOneCart>
-			</van-list>
-		</div>
-		<div class="d"></div>
-		<div class="settle-accounts-box">
-			<div class="settle-accounts-price">合计：<span>￥{{this.$store.getters.getCartsSelectedPrice}}</span></div>
-			<div class="settle-accounts-button">
-				<van-button type="danger" size="large" @click="goSettleAccounts">
-					去结算（{{this.$store.getters.getCartsSelectedCount}}）
-				</van-button>
-			</div>
-		</div>
-	</div>
+  <div class="main">
+    <myNarBar v-if="nar_bar_flag" title="购物车"></myNarBar>
+    <div class="evaluate-load">
+      <van-list
+          v-model="loading"
+          :finished="finished"
+          :error.sync="error"
+          finished-text=""
+          error-text="请求失败，点击重新加载"
+          @load="onLoad"
+      >
+        <myOneCart v-for="(item,i) in old_carts" :cart_info="item" :key="i"></myOneCart>
+      </van-list>
+    </div>
+    <div class="d"></div>
+    <div class="settle-accounts-box">
+      <div class="settle-accounts-price">合计：<span>￥{{this.$store.getters.getCartsSelectedPrice}}</span></div>
+      <div class="settle-accounts-button">
+        <van-button type="danger" size="large" @click="goSettleAccounts">
+          去结算（{{this.$store.getters.getCartsSelectedCount}}）
+        </van-button>
+      </div>
+    </div>
+  </div>
 
 </template>
 
@@ -31,6 +31,7 @@
     import myOneCart from './sub/my-one-cart'
 
     export default {
+        name: "cart",
         data() {
             return {
                 count: 0,
@@ -98,7 +99,7 @@
                         }
                     });
                     if (flag) {
-                        this.$router.push( {path:'/writeOrder',query:{is_init:true}});
+                        this.$router.push({path: '/writeOrder', query: {is_init: true}});
                     }
                 } else {
                     this.$toast("还未选中商品哦~~")
@@ -113,32 +114,32 @@
 </script>
 
 <style lang="scss" scoped>
-	.settle-accounts-box {
-		height: 50px;
-		background-color: white;
-		position: fixed;
-		bottom: 50px;
-		width: 100%;
-		display: flex;
-		
-		.settle-accounts-price {
-			line-height: 50px;
-			text-align: center;
-			font-size: 16px;
-			flex: 1;
-			
-			span {
-				font-weight: bold;
-			}
-		}
-		
-		.settle-accounts-button {
-			flex: 1;
-		}
-	}
-	
-	.d {
-		width: 100%;
-		height: 50px;
-	}
+  .settle-accounts-box {
+    height: 50px;
+    background-color: white;
+    position: fixed;
+    bottom: 50px;
+    width: 100%;
+    display: flex;
+
+    .settle-accounts-price {
+      line-height: 50px;
+      text-align: center;
+      font-size: 16px;
+      flex: 1;
+
+      span {
+        font-weight: bold;
+      }
+    }
+
+    .settle-accounts-button {
+      flex: 1;
+    }
+  }
+
+  .d {
+    width: 100%;
+    height: 50px;
+  }
 </style>

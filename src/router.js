@@ -1,6 +1,9 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import VueCookies from 'vue-cookies'
+import {fetch} from './http.js'
+import glToolFunction from 'ganglong-tool-function';
+import {Toast} from 'vant';
 
 Vue.use(Router);
 
@@ -38,8 +41,12 @@ import Activity01 from './components/activity/activity01/index'
 import ActivityStationery from "./components/activity/activity_stationery/ActivityStationery"; //现货专区活动页
 import ActivityByPage from "./components/activity/ActivityByPage";//包邮专区
 import ActivityPromptGoodsPage from "./components/activity/ActivityPromptGoodsPage";//现货专区
-import ActivityRecommendPage from "./components/activity/ActivityRecommendPage";
-
+import ActivityRecommendPage from "./components/activity/ActivityRecommendPage";//推荐商品
+import ActivityClassPage from "./components/activity/ActivityClassPage";//分类详情
+import BindingPhone from "./components/BindingPhone";//绑定手机号
+/*积分*/
+import IntegralCenter from "./components/integral/IntegralCenter";//积分中心
+import LoginGetIntegral from "./components/integral/LoginGetIntegral";//积分签到
 
 // 3. 创建路由对象
 var router = new Router({
@@ -81,11 +88,16 @@ var router = new Router({
         {path: '/afterSale/:order_sn', component: afterSale},
         {path: '/goodsList', component: goodsList, meta: {keepAlive: true}},
         {path: '/pcLogin', component: PcLogin},
+        {path: '/binding_phone', component: BindingPhone},
         {path: '/activity01', component: Activity01, meta: {keepAlive: true}},
         {path: '/activity_stationery', component: ActivityStationery, meta: {keepAlive: true}},
         {path: '/activity_by', component: ActivityByPage, meta: {keepAlive: true}},
         {path: '/activity_prompt_goods', component: ActivityPromptGoodsPage, meta: {keepAlive: true}},
         {path: '/activity_recommend', component: ActivityRecommendPage, meta: {keepAlive: true}},
+        {path: '/activity_classify_page', component: ActivityClassPage, meta: {keepAlive: false}},
+        {path: '/integral_center', component: IntegralCenter},
+        {path: '/login_get_integral', component: LoginGetIntegral},
+
     ],
     scrollBehavior(to, from, savedPosition) {
         if (savedPosition) {
@@ -97,17 +109,71 @@ var router = new Router({
     }
 });
 
-router.beforeEach((to, from, next) => {
+/**
+ * 检查用户是否登陆
+ * @param to
+ * @param from
+ * @param next
+ * @returns {boolean}
+ */
+function checkUserIsLogin(to, from, next) {
     localStorage.setItem('beforeUrl', from.path);// 保存来源路由
     const userTokenName = process.env.VUE_APP_USER_TOKEN_NAME;
     let user_token = VueCookies.get(userTokenName);
     if (user_token === null && to.path !== '/login') {
         // 第一次进入项目
         localStorage.setItem('beforeLoginUrl', to.fullPath);// 保存用户进入的url
-        next('/login');
         return false
     }
-    next()
+    return true;
+}
+
+
+/**
+ * 检查用户是否绑定手机号
+ * @param to
+ * @param from
+ * @param next
+ * @returns {boolean}
+ */
+async function checkUserBindingPhone(to, from, next) {
+    const needPath = ['/writeOrder', '/card_activation'];
+    if (!needPath.includes(to.path)) return true;
+    const userTokenName = process.env.VUE_APP_USER_TOKEN_NAME;
+    let userToken = VueCookies.get(userTokenName);
+    let checkFlag = false;
+    Toast.loading({
+        mask: true,
+        message: '检查用户状态',
+        duration: 0
+    });
+    await fetch('user_get_user_info', {user_token: userToken}).then((userInfo) => {
+
+        if (glToolFunction.verificationPhoneNumber(userInfo['phone'])) {
+            checkFlag = true;
+        } else {
+            //未绑定手机号
+            localStorage.setItem('beforeBindingPhoneUrl', to.fullPath);// 保存用户进入的url
+        }
+        Toast.clear();
+    });
+    return checkFlag;
+}
+
+router.beforeEach(async (to, from, next) => {
+
+    //检查用户登陆
+    if (!checkUserIsLogin(to, from, next)) {
+        next('/login');
+        return false;
+    }
+    //检查用户是否绑定手机号
+    if (!await checkUserBindingPhone(to, from, next)) {
+        next('/binding_phone');
+        return false;
+    }
+
+    next();
 });
 
 

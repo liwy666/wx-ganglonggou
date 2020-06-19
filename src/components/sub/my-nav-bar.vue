@@ -1,13 +1,14 @@
 <template>
-	<div>
-		<van-nav-bar class="my-nav-bar" :title="title" left-arrow @click-left="onClickLeft" @click-right="onClickRight">
-			<van-icon name="shop" slot="right"/>
-		</van-nav-bar>
-		<div class="d"></div>
-	</div>
+  <div>
+    <van-nav-bar class="my-nav-bar" :title="title" left-arrow @click-left="onClickLeft" @click-right="onClickRight">
+      <van-icon name="shop" slot="right"/>
+    </van-nav-bar>
+    <div class="d"></div>
+  </div>
 </template>
 <script>
     export default {
+        name: "MyNavBar",
         data() {
             return {};
         },
@@ -24,7 +25,7 @@
             },
             onClickLeft() {
                 if (window.history.length <= 1) {
-                    this.$router.push({path:'/'});
+                    this.$router.push({path: '/'});
                     return false
                 } else {
                     this.$router.go(-1)
@@ -48,14 +49,14 @@
     };
 </script>
 <style lang="scss" scoped>
-	.my-nav-bar {
-		width: 100%;
-		position: fixed;
-		z-index: 999 !important;
-	}
+  .my-nav-bar {
+    width: 100%;
+    position: fixed;
+    z-index: 999 !important;
+  }
 
-	.d {
-		width: 100%;
-		height: 45px;
-	}
+  .d {
+    width: 100%;
+    height: 45px;
+  }
 </style>

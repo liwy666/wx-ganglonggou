@@ -1,15 +1,16 @@
 <template>
-	<div class="main">
-		<div class="my-skeleton" v-show="loading">
-			<van-skeleton title :row="20" animate :loading="loading"/>
-		</div>
-		<div class="article-body" v-show="!loading">
-			<img v-for="(item,i) in article_body" :key="i" v-lazy="item">
-		</div>
-	</div>
+  <div class="main">
+    <div class="my-skeleton" v-show="loading">
+      <van-skeleton title :row="20" animate :loading="loading"/>
+    </div>
+    <div class="article-body" v-show="!loading">
+      <img v-for="(item,i) in article_body" :key="i" v-lazy="item">
+    </div>
+  </div>
 </template>
 <script>
     export default {
+        name: "about-mall",
         data() {
             return {
                 article_body: [],
@@ -44,19 +45,19 @@
     };
 </script>
 <style lang="scss" scoped>
-	.main {
+  .main {
 
-		.my-skeleton {
-			background-color: white;
-			padding-top: 30px;
-			padding-bottom: 30px;
-		}
+    .my-skeleton {
+      background-color: white;
+      padding-top: 30px;
+      padding-bottom: 30px;
+    }
 
-		.article-body {
-			img {
-				display: block;
-				width: 100%;
-			}
-		}
-	}
+    .article-body {
+      img {
+        display: block;
+        width: 100%;
+      }
+    }
+  }
 </style>

@@ -13,14 +13,17 @@
       <div class="home-head-bottom">剩余{{this.$store.state.integral_name +'：'+this.user_info.integral}}</div>
     </div>
     <!--订单选项-->
-    <orderOption></orderOption>
+    <orderOption/>
     <div class="option-body">
-      <!--地址选项-->
       <van-cell title="地址列表" icon="location-o" is-link value="查看地址" to="/addressList"/>
       <!--优惠券选项-->
       <van-cell title="我的优惠券" icon="coupon-o" is-link value="查看拥有优惠券" to="/couponList"/>
+
+      <!--积分中心-->
+      <van-cell title="积分中心" icon="gem-o" is-link value="查看积分明细" to="/integral_center"/>
       <van-cell title="退出登录" @click="outLogin"
                 v-if="vueAppMode === 'test'||vueAppMode === 'development' "/>
+      <!--地址选项-->
       <!--余额选项,展示关闭-->
       <!--<van-cell title="我的余额" icon="balance-pay" is-link value="查看我的余额" to="/balance"/>-->
     </div>
@@ -79,6 +82,8 @@
 
 <style lang="scss" scoped>
   .main {
+    width: 414px;
+
     .home-head {
       background-color: $main-color0;
       height: 150px;
@@ -119,7 +124,7 @@
             position: fixed;
             top: 20px;
             right: 20px;
-            font-size: 25px !important;
+            //font-size: 25px !important;
           }
         }
       }
@@ -137,6 +142,10 @@
 
     .option-body {
       margin-top: 40px;
+
+      .van-icon {
+        line-height: 24px;
+      }
     }
   }
 </style>

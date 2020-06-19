@@ -8,11 +8,15 @@
                 @search-click="searchClick"
                 @more-classify-click="moreClassifyClick"
     />
+    <back-top-button/>
   </div>
 </template>
 <script>
     import {commonShare} from "../../../share";
+    import backTopButton from "../../sub/backTopButton";
+
     export default {
+        name: "first",
         data() {
             return {
                 apiBaseUrl: process.env.VUE_APP_API_URL + '/',
@@ -30,43 +34,6 @@
                 }
             }
             commonShare(this, '岗隆购', this.$store.state.local_url, 'https://img-api.ganglonggou.com/wx_share_img.png', '江苏岗隆数码-您身边的数码产品服务商');
-        },
-        computed: {
-            goods_list: {
-                get: function () {
-                    let result = [];
-                    if (JSON.stringify(this.get_info) !== '{}') {
-                        if (this.get_info.cat_list.length > 0 && this.get_info.goods_list.length > 0) {
-                            let cat_id = this.get_info.cat_list[this.cat_index].cat_id;
-                            this.get_info.goods_list.forEach(item => {
-                                if (item.cat_id === cat_id) {
-                                    result.push(item);
-                                }
-                            })
-                        }
-                    }
-                    return result;
-                }
-            },
-            classify_list: {
-                get: function () {
-                    let result = [];
-                    let classify_list = this.$store.state.classify_list;
-                    if (classify_list.length > 1) {
-                        result = this.getTrees(classify_list, 0);
-                    }
-                    return result;
-                }
-            },
-            index_ad_list: {
-                get: function () {
-                    let result = null;
-                    if (this.index_info) {
-                        result = this.index_info.ad_list;
-                    }
-                    return result;
-                }
-            }
         },
         methods: {
             GetQueryString(name) {
@@ -98,7 +65,6 @@
                 if (goodsId && goodsId > 0) {
                     this.$router.push({path: 'goods/' + goodsId});
                 }
-
             },
             adLocationClick(addressItemData) {
                 switch (addressItemData.responseType) {
@@ -126,9 +92,12 @@
                 this.$router.push('search');
             },
             moreClassifyClick(parentId) {
-                console.log(parentId);
+                this.$router.push({path: 'activity_classify_page', query: {id: parentId}});
             },
 
+        },
+        components: {
+            'back-top-button': backTopButton,
         },
     };
 </script>

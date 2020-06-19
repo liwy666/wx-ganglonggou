@@ -34,6 +34,7 @@
     import {commonShare} from "../../share";
 
     export default {
+        name: "index",
         data() {
             return {
                 fixed: true,

@@ -1,8 +1,12 @@
 <template>
-	<div class="main">
-		<myNarBar title="优惠券"></myNarBar>
-		<oneCoupon v-for="(item) in coupon_list" :key="item.coupon_id" view_number allow_get :coupon_info="item"></oneCoupon>
-	</div>
+  <div class="main">
+    <myNarBar title="领券中心"/>
+    <oneCoupon v-for="(item) in coupon_list"
+               :key="item.coupon_id"
+               view_number
+               allow_get
+               :coupon_info="item"/>
+  </div>
 </template>
 <script>
     import myNarBar from '../sub/my-nav-bar'

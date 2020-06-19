@@ -1,13 +1,13 @@
 <template>
-	<div class="main">
-		<div class="l">{{this.title}}</div>
-		<div class="r">
-			<span>{{this.time.d}}</span><i>天</i>
-			<span>{{this.time.h}}</span><i>时</i>
-			<span>{{this.time.m}}</span><i>分</i>
-			<span>{{this.time.s}}</span><i>秒</i>
-		</div>
-	</div>
+  <div class="count-down-main">
+    <div class="l">{{this.title}}</div>
+    <div class="r">
+      <span>{{this.time.d}}</span><i>天</i>
+      <span>{{this.time.h}}</span><i>时</i>
+      <span>{{this.time.m}}</span><i>分</i>
+      <span>{{this.time.s}}</span><i>秒</i>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -24,7 +24,7 @@
 
             };
         },
-        props: ["end_time","title"],
+        props: ["end_time", "title"],
         computed: {},
         created() {
             let time = setInterval(() => {
@@ -66,32 +66,38 @@
 </script>
 
 <style lang="scss" scoped>
-	.main{
-		width: 100%;
-		height: 50px;
-		background-image: linear-gradient(45deg,#e83051,#f19483);
-		.l{
-			color: white;
-			font-size: 12px;
-			padding: 5px;
-		}
-		.r{
-			display: flex;
-			span{
-				display: block;
-				background-color: white;
-				width: 20px;
-				height: 20px;
-				line-height: 20px;
-				text-align: center;
-				margin-left: 5px;
-				color: red;
-			}
-			i{
-				color: white;
-				font-style: normal;
-				margin-left: 5px;
-			}
-		}
-	}
+  .count-down-main {
+    width: 100%;
+    height: 50px;
+    background-image: linear-gradient(45deg, #e83051, #f19483);
+
+    .l {
+      color: white;
+      font-size: 12px;
+      padding: 5px;
+    }
+
+    .r {
+      display: flex;
+
+      span {
+        display: block;
+        background-color: white;
+        font-size: 14px;
+        width: 20px;
+        height: 20px;
+        line-height: 20px;
+        text-align: center;
+        margin-left: 5px;
+        color: red;
+      }
+
+      i {
+        color: white;
+        font-style: normal;
+        margin-left: 5px;
+        font-size: 14px;
+      }
+    }
+  }
 </style>

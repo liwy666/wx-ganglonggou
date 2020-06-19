@@ -1,31 +1,31 @@
 <template>
-	<div class="mian">
-		<p class="title">费用清单</p>
-		<div class="order-list-body">
-			<van-row>
-				<van-col span="12"><p class="list-name">订单总金额：</p></van-col>
-				<van-col span="12"><p class="list-price">￥{{this.goods_list_price}}</p></van-col>
-			</van-row>
-			<van-row>
-				<van-col span="12"><p class="list-name">使用优惠券减免：</p></van-col>
-				<van-col span="12"><p class="list-price">-￥{{this.coupon_price}}</p></van-col>
-			</van-row>
-			<van-row>
-				<van-col span="12"><p class="list-name">使用积分减免：</p></van-col>
-				<van-col span="12"><p class="list-price">-￥{{this.integral_price}}</p></van-col>
-			</van-row>
-			<van-row>
-				<van-col span="12"><p class="list-name">支付方式减免：</p></van-col>
-				<van-col span="12"><p class="list-price">-￥{{this.pay_price}}</p></van-col>
-			</van-row>
-			<van-row>
-				<van-col span="12"><p class="list-name">结算金额：</p></van-col>
-				<van-col span="12"><p class="list-price" style="color: red;font-weight: bold">￥{{this.order_price_}}</p>
-				</van-col>
-			</van-row>
-		</div>
-	
-	</div>
+  <div class="order-list-main">
+    <p class="title">费用清单</p>
+    <div class="order-list-body">
+      <van-row>
+        <van-col span="12"><p class="list-name">订单总金额：</p></van-col>
+        <van-col span="12"><p class="list-price">￥{{this.goods_list_price}}</p></van-col>
+      </van-row>
+      <van-row>
+        <van-col span="12"><p class="list-name">使用优惠券减免：</p></van-col>
+        <van-col span="12"><p class="list-price">-￥{{this.coupon_price}}</p></van-col>
+      </van-row>
+      <van-row>
+        <van-col span="12"><p class="list-name">使用积分减免：</p></van-col>
+        <van-col span="12"><p class="list-price">-￥{{this.integral_price}}</p></van-col>
+      </van-row>
+      <van-row>
+        <van-col span="12"><p class="list-name">支付方式减免：</p></van-col>
+        <van-col span="12"><p class="list-price">-￥{{this.pay_price}}</p></van-col>
+      </van-row>
+      <van-row>
+        <van-col span="12"><p class="list-name">结算金额：</p></van-col>
+        <van-col span="12"><p class="list-price" style="color: red;font-weight: bold">￥{{this.order_price_}}</p>
+        </van-col>
+      </van-row>
+    </div>
+
+  </div>
 </template>
 
 <script>
@@ -80,33 +80,33 @@
 </script>
 
 <style lang="scss" scoped>
-	.mian {
-		margin-top: 20px;
-		
-		.title {
-			padding-left: 10px;
-			font-size: 14px;
-			color: #323233;
-		}
-		
-		.order-list-body {
-			background-color: white;
-			margin-top: 5px;
-			
-			p {
-				font-size: 14px;
-			}
-			
-			.list-price {
-				padding-right: 50px;
-				text-align: right;
-			}
-			
-			.list-name {
-				padding-left: 20px;
-				text-align: left;
-				font-weight: bold;
-			}
-		}
-	}
+  .order-list-main {
+    margin-top: 20px;
+
+    .title {
+      padding-left: 10px;
+      font-size: 14px;
+      color: #323233;
+    }
+
+    .order-list-body {
+      background-color: white;
+      margin-top: 5px;
+      padding: 15px 0;
+
+      p {
+        font-size: 14px;
+      }
+
+      .list-price {
+        padding-right: 50px;
+        text-align: right;
+      }
+
+      .list-name {
+        padding-left: 20px;
+        text-align: left;
+      }
+    }
+  }
 </style>
