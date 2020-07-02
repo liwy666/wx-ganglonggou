@@ -6,8 +6,8 @@
 		</van-uploader>
 		<van-cell-group>
 			<van-field v-model="user_info.user_name" placeholder="请输入用户名" label="用户名" :error-message="user_name_error"/>
-			<van-field v-model="user_info.phone" placeholder="请输入用户名" label="手机号" :error-message="phone_error"/>
-			<van-field v-model="user_info.email" placeholder="请输入用户名" label="邮箱号" :error-message="email_error"/>
+			<van-field v-model="user_info.phone" placeholder="" readonly label="手机号" :error-message="phone_error"/>
+<!--			<van-field v-model="user_info.email" placeholder="请输入用户名" label="邮箱号" :error-message="email_error"/>-->
 			<van-button size="large" type="danger" @click="pudUserInfo">确认修改</van-button>
 		</van-cell-group>
 	</div>
@@ -79,13 +79,13 @@
             }
             ,
             pudUserInfo() {
-                if (this.user_info.user_name.length < 4 || this.user_info.user_name.length > 20) {
+                if (this.user_info.user_name.length < 3 || this.user_info.user_name.length > 20) {
                     this.user_name_error = "名称长度不符合规范";
                     return false;
                 } else {
                     this.user_name_error = "";
                 }
-                let mobileRegex = /^(((1[3456789][0-9]{1})|(15[0-9]{1}))+\d{8})$/;
+               /* let mobileRegex = /^(((1[3456789][0-9]{1})|(15[0-9]{1}))+\d{8})$/;
                 if (!mobileRegex.test(this.user_info.phone)) {
                     this.phone_error = "请输入正确手机号";
                     return false;
@@ -98,7 +98,7 @@
                     return false;
                 } else {
                     this.email_error = "";
-                }
+                }*/
 
                 let toast1 = this.$toast.loading({
                     mask: true,

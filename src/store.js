@@ -221,6 +221,7 @@ let store = new Vuex.Store({
          * @param goods_info
          */
         addCart(state, goods_info) {
+            console.log(goods_info);
             let data = JSON.parse(JSON.stringify(state.carts));
             // 假设 在购物车中，没有找到对应的商品
             let flag = false;
@@ -264,10 +265,6 @@ let store = new Vuex.Store({
                 localStorage.setItem('carts', JSON.stringify(state.carts));
                 // 当 更新 carts 之后，把 carts 数组，存储到 本地的 localStorage 中
                 localStorage.setItem('carts', JSON.stringify(state.carts));
-                Toast.success({
-                    message: '添加成功',
-                    duration: 800
-                });
             } else {
                 Toast.fail({
                     message: '哎呀，库存不足了',

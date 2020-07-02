@@ -11,7 +11,7 @@
         },
         methods: {
             Login() {
-                if (process.env.NODE_ENV === 'development') {
+                if (process.env.VUE_APP_MODE === 'development') {
                     this.testLogin();
                 } else {
                     this.wxLogin();

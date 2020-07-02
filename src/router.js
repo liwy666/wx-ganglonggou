@@ -20,6 +20,7 @@ import Home from './components/tabber/home/Home'//个人中心
 import AllCoupon from './components/coupon/AllCoupon' //优惠券列表
 import Goods from './components/goods/Index'//商品详情
 import supplier from './components/supplier/Supplier'//商品详情
+import goodsEvaluateList from "./components/evaluateList/EvaluateList";//评价页面
 import myIframe from './components/sub/my-iframe'//页中页
 import writeOrder from './components/order-form/write-order'//填写订单
 import addressList from './components/address/address'//地址列表
@@ -72,6 +73,7 @@ var router = new Router({
         },
         {path: '/login', component: Login},
         {path: '/goods/:goods_id', component: Goods},
+        {path: '/goods_evaluate_list', component: goodsEvaluateList},
         {path: '/allCoupon/', component: AllCoupon},
         {path: '/supplier', component: supplier, meta: {keepAlive: true}},
         {path: '/article/:article_id', component: Article},

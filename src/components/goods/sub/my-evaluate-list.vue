@@ -22,6 +22,7 @@
     import myEvaluateInfo from './my-evaluate-info'
 
     export default {
+        name: "EvaluateList",
         data() {
             return {
                 loading: false,
