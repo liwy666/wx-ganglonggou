@@ -1,15 +1,14 @@
 <template>
   <div class="by-page-main">
-    <lucency-nav-bar title-name="9.9包邮专区"/>
     <by-page :api-base-url="apiBaseUrl"
-             :head-open="true"
+             :head-open="false"
              @goods-card-click="goodsCardClick"
+             @back-click="$router.go(-1)"
     />
   </div>
 </template>
 
 <script>
-    import lucencyNavBar from "../sub/lucencyNavBar";
     /*9.9包邮专区*/
     export default {
         name: "ActivityByPage",
@@ -22,9 +21,6 @@
             goodsCardClick(goodsId) {
                 this.$router.push(`goods/${goodsId}`);
             }
-        },
-        components: {
-            'lucency-nav-bar': lucencyNavBar,
         }
     }
 </script>

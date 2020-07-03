@@ -136,22 +136,26 @@
                 return clientHeight;
             }
             , toSearch(info) {
-                let key_word = '';
-                if (info.key_word !== '' && info.key_word != null) {
-                    key_word = info.key_word;
+                if (info.click_type === '商品ID' && info.goods_id > 0) {
+                    this.$router.push(`/goods/${info.goods_id}`);
                 } else {
-                    key_word = info.classify_name;
-                }
-                key_word = key_word.toUpperCase();
-                key_word = key_word.replace(/\s*/g, "");
-                this.$router.push({
-                    path: 'goodsList', query: {
-                        type: 'search',
-                        cat_id: -1,
-                        keyword: key_word,
+                    let key_word = '';
+                    if (info.key_word !== '' && info.key_word != null) {
+                        key_word = info.key_word;
+                    } else {
+                        key_word = info.classify_name;
                     }
-                })
-                ;
+                    key_word = key_word.toUpperCase();
+                    key_word = key_word.replace(/\s*/g, "");
+                    this.$router.push({
+                        path: 'goodsList', query: {
+                            type: 'search',
+                            cat_id: -1,
+                            keyword: key_word,
+                        }
+                    });
+                }
+
             }
         },
         components: {

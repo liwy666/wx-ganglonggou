@@ -1,8 +1,15 @@
 <template>
-	<div class="main">
-		<myNarBar title="我的优惠券"></myNarBar>
-		<oneCoupon v-for="(item) in coupon_list" :key="item.coupon_id" :coupon_info="item" :allow_get="false" :view_number="false"></oneCoupon>
-	</div>
+  <div class="have-coupons-page">
+    <myNarBar title="我的优惠券"></myNarBar>
+    <div class="have-coupons-main">
+      <one-coupon v-for="(item) in coupon_list"
+                  :key="item.coupon_id"
+                  :coupon-info="item"
+                  :allow-get="false"
+      />
+    </div>
+
+  </div>
 </template>
 <script>
     import oneCoupon from './sub/one-coupon';
@@ -25,9 +32,17 @@
         methods: {},
         components: {
             myNarBar,//导航栏
-            oneCoupon,//单个优惠券
+            'one-coupon': oneCoupon,//单个优惠券
         },
     };
 </script>
 <style lang="scss" scoped>
+  .have-coupons-page {
+    width: 100vw;
+
+    .have-coupons-main {
+      width: 389px;
+      margin: 10px auto;
+    }
+  }
 </style>

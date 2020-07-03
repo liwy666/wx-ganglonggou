@@ -40,6 +40,7 @@ import Article from './components/article/article' //内部文章
 import PcLogin from './components/PcLogin/PcLogin' //pc登录
 import Activity01 from './components/activity/activity01/index'
 import ActivityStationery from "./components/activity/activity_stationery/ActivityStationery"; //现货专区活动页
+import ActivityEveryDay from "./components/activity/ActivityEveryDay";//每日特价
 import ActivityByPage from "./components/activity/ActivityByPage";//包邮专区
 import ActivityPromptGoodsPage from "./components/activity/ActivityPromptGoodsPage";//现货专区
 import ActivityRecommendPage from "./components/activity/ActivityRecommendPage";//推荐商品
@@ -97,6 +98,7 @@ var router = new Router({
         {path: '/activity01', component: Activity01, meta: {keepAlive: true}},
         {path: '/activity_stationery', component: ActivityStationery, meta: {keepAlive: true}},
         {path: '/activity_by', component: ActivityByPage, meta: {keepAlive: true}},
+        {path: '/activity_every_day', component: ActivityEveryDay, meta: {keepAlive: true}},
         {path: '/activity_prompt_goods', component: ActivityPromptGoodsPage, meta: {keepAlive: true}},
         {path: '/activity_recommend', component: ActivityRecommendPage, meta: {keepAlive: true}},
         {path: '/activity_classify_page', component: ActivityClassPage, meta: {keepAlive: false}},

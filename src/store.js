@@ -221,7 +221,6 @@ let store = new Vuex.Store({
          * @param goods_info
          */
         addCart(state, goods_info) {
-            console.log(goods_info);
             let data = JSON.parse(JSON.stringify(state.carts));
             // 假设 在购物车中，没有找到对应的商品
             let flag = false;

@@ -39,6 +39,7 @@
     display: flex;
     position: fixed;
     width: 100vw;
+    height: 50px;
     justify-content: space-between;
     align-items: center;
     padding: 15px 10px;
@@ -46,15 +47,21 @@
 
     .left {
       flex: 1;
-
+      height: 100%;
+      i {
+        height: 100%;
+        line-height: 50px;
+      }
     }
 
     .title-name {
+      height: 100%;
       flex: 2;
       color: white;
       text-align: center;
       font-size: 18px;
       font-weight: bolder;
+      line-height: 50px;
     }
 
     .right {

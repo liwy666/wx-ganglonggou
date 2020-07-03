@@ -1,16 +1,17 @@
 <template>
-	<div class="main" v-if="this.user_info !== null">
-		<myNarBar title="修改用户资料"></myNarBar>
-		<van-uploader :after-read="onRead" :max-size="1000000" @oversize="overSize">
-			<div class="user-img"><img :src="user_info.user_img" alt=""></div>
-		</van-uploader>
-		<van-cell-group>
-			<van-field v-model="user_info.user_name" placeholder="请输入用户名" label="用户名" :error-message="user_name_error"/>
-			<van-field v-model="user_info.phone" placeholder="" readonly label="手机号" :error-message="phone_error"/>
-<!--			<van-field v-model="user_info.email" placeholder="请输入用户名" label="邮箱号" :error-message="email_error"/>-->
-			<van-button size="large" type="danger" @click="pudUserInfo">确认修改</van-button>
-		</van-cell-group>
-	</div>
+  <div class="main" v-if="this.user_info !== null">
+    <myNarBar title="修改用户资料"></myNarBar>
+    <van-uploader :after-read="onRead" :max-size="1000000" @oversize="overSize">
+      <div class="user-img"><img :src="user_info.user_img" alt=""></div>
+    </van-uploader>
+    <van-cell-group>
+      <van-field v-model="user_info.user_name" placeholder="请输入用户名" label="用户名" :error-message="user_name_error"/>
+      <van-field v-model="user_info.phone" placeholder="" readonly label="手机号" :error-message="phone_error"/>
+      <!--			<van-field v-model="user_info.email" placeholder="请输入用户名" label="邮箱号" :error-message="email_error"/>-->
+      <van-button size="large" type="danger" @click="pudUserInfo">确认修改</van-button>
+    </van-cell-group>
+    <van-field :value="userToken" label="用户token" placeholder="" v-if="vueAppMode!=='production'"/>
+  </div>
 </template>
 
 <script>
@@ -22,6 +23,8 @@
                 user_name_error: '',
                 phone_error: '',
                 email_error: '',
+                userToken: '',
+                vueAppMode: process.env.VUE_APP_MODE,
             };
         },
         computed: {
@@ -34,9 +37,9 @@
                         result.phone = this.$store.state.user_info.phone;
                         result.email = this.$store.state.user_info.email;
                         return result;
-                    }else {
-                        return  null;
-					}
+                    } else {
+                        return null;
+                    }
 
                 },
                 set: function () {
@@ -49,6 +52,7 @@
             if (this.$store.state.user_info === null) {
                 this.$store.dispatch("getUserInfo", this.$store.getters.getUserToken);
             }
+            this.userToken = this.$store.getters.getUserToken;
         },
         activated() {
         },
@@ -65,10 +69,10 @@
                 param.append('portrait_img', file2, file2.name);//通过append向form对象添加数据
                 this.$imgUpload('user_upd_portrait', param)
                     .then((msg) => {
-                        if(msg){
-                            this.$set(this.user_info,'user_img',msg.goods_img);
-							this.$forceUpdate();
-						}
+                        if (msg) {
+                            this.$set(this.user_info, 'user_img', msg.goods_img);
+                            this.$forceUpdate();
+                        }
                         toast1.clear();
                     })
             }
@@ -85,20 +89,20 @@
                 } else {
                     this.user_name_error = "";
                 }
-               /* let mobileRegex = /^(((1[3456789][0-9]{1})|(15[0-9]{1}))+\d{8})$/;
-                if (!mobileRegex.test(this.user_info.phone)) {
-                    this.phone_error = "请输入正确手机号";
-                    return false;
-                } else {
-                    this.phone_error = "";
-                }
-                mobileRegex = /^(\w-*\.*)+@(\w-?)+(\.\w{2,})+$/;
-                if (!mobileRegex.test(this.user_info.email)) {
-                    this.email_error = "请输入正确邮箱号";
-                    return false;
-                } else {
-                    this.email_error = "";
-                }*/
+                /* let mobileRegex = /^(((1[3456789][0-9]{1})|(15[0-9]{1}))+\d{8})$/;
+                 if (!mobileRegex.test(this.user_info.phone)) {
+                     this.phone_error = "请输入正确手机号";
+                     return false;
+                 } else {
+                     this.phone_error = "";
+                 }
+                 mobileRegex = /^(\w-*\.*)+@(\w-?)+(\.\w{2,})+$/;
+                 if (!mobileRegex.test(this.user_info.email)) {
+                     this.email_error = "请输入正确邮箱号";
+                     return false;
+                 } else {
+                     this.email_error = "";
+                 }*/
 
                 let toast1 = this.$toast.loading({
                     mask: true,
@@ -113,12 +117,12 @@
                     email: this.user_info.email,
                 })
                     .then((msg) => {
-                        if(msg){
+                        if (msg) {
                             //刷新用户信息
                             this.$store.dispatch("getUserInfo", this.$store.getters.getUserToken);
                             this.$router.go(-1);
                             this.$toast("修改成功");
-						}
+                        }
                         toast1.clear();
                     })
             }
@@ -132,16 +136,17 @@
 </script>
 
 <style lang="scss" scoped>
-	.main {
-		.user-img {
-			width: 100%;
-			height: 100px;
-			text-align: center;
-			margin: 10px;
-			overflow: hidden;
-			img {
-				height: 100%;
-			}
-		}
-	}
+  .main {
+    .user-img {
+      width: 100%;
+      height: 100px;
+      text-align: center;
+      margin: 10px;
+      overflow: hidden;
+
+      img {
+        height: 100%;
+      }
+    }
+  }
 </style>

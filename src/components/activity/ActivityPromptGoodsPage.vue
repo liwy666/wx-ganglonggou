@@ -1,15 +1,14 @@
 <template>
   <div class="prompt-goods-page-main">
-    <lucency-nav-bar title-name="现货专区"/>
     <prompt-goods-page :api-base-url="apiBaseUrl"
-                       :head-open="true"
+                       :head-open="false"
                        @goods-card-click="goodsCardClick"
+                       @back-click="$router.go(-1)"
     />
   </div>
 </template>
 
 <script>
-   import lucencyNavBar from "../sub/lucencyNavBar";
     export default {
         name: "ActivityPromptGoodsPage",
         data() {
@@ -22,9 +21,7 @@
                 this.$router.push(`goods/${goodsId}`);
             }
         },
-        components: {
-            'lucency-nav-bar': lucencyNavBar,
-        }
+        components: {}
     }
 </script>
 

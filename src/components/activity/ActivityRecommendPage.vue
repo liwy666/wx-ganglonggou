@@ -1,16 +1,16 @@
 <template>
   <div class="recommend-page">
-    <lucency-nav-bar title-name="推荐好货"/>
     <recommend-page :api-base-url="apiBaseUrl"
-                    :head-open="true"
+                    :head-open="false"
                     @ad-location-click="adLocationClick"
                     @goods-card-click="goodsCardClick"
+                    @back-click="$router.go(-1)"
     />
   </div>
 </template>
 
 <script>
-    import lucencyNavBar from "../sub/lucencyNavBar";
+
     /*推荐好货*/
     export default {
         name: "ActivityRecommendPage",
@@ -65,9 +65,7 @@
                 }
             },
         },
-        components: {
-            'lucency-nav-bar': lucencyNavBar,
-        }
+        components: {}
     }
 </script>
 

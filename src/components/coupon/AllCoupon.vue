@@ -1,11 +1,12 @@
 <template>
-  <div class="main">
+  <div class="all-coupon-page">
     <myNarBar title="领券中心"/>
-    <oneCoupon v-for="(item) in coupon_list"
-               :key="item.coupon_id"
-               view_number
-               allow_get
-               :coupon_info="item"/>
+    <div class="all-coupon-main">
+      <oneCoupon v-for="(item) in coupon_list"
+                 :key="item.coupon_id"
+                 :coupon-info="item"/>
+    </div>
+
   </div>
 </template>
 <script>
@@ -48,4 +49,13 @@
     };
 </script>
 <style lang="scss" scoped>
+  .all-coupon-page {
+    width: 100vw;
+    .all-coupon-main {
+      width: 389px;
+      margin: 10px auto;
+      overflow: hidden;
+    }
+  }
+
 </style>

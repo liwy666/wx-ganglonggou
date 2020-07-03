@@ -7,6 +7,7 @@
                 @ad-location-click="adLocationClick"
                 @search-click="searchClick"
                 @more-classify-click="moreClassifyClick"
+                @every-day-box-click="$router.push('/activity_every_day')"
     />
     <back-top-button/>
   </div>
