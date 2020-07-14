@@ -3,7 +3,7 @@
     <first-page :api-base-url="apiBaseUrl"
                 :head-open="false"
                 :show-sys="false"
-                @goods-card-click="goodsCardClick"
+                @goods-card-click="(goodsInfo)=>{this.$MyCommon.goodsCardClick(this,goodsInfo)}"
                 @ad-location-click="adLocationClick"
                 @search-click="searchClick"
                 @more-classify-click="moreClassifyClick"
@@ -61,11 +61,6 @@
                 let resultArray = rex.exec(url);
                 if (resultArray === null || resultArray.length < 2) return "";
                 return resultArray[1];
-            },
-            goodsCardClick(goodsId) {
-                if (goodsId && goodsId > 0) {
-                    this.$router.push({path: 'goods/' + goodsId});
-                }
             },
             adLocationClick(addressItemData) {
                 switch (addressItemData.responseType) {

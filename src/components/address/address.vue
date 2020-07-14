@@ -1,13 +1,13 @@
 <template>
-	<div class="main">
-		<myNarBar title="地址管理"></myNarBar>
-		<van-address-list
-			v-model="chosenAddressId"
-			:list="address_list"
-			@add="onAdd"
-			@edit="onEdit"
-		/>
-	</div>
+  <div class="user-address-main">
+    <myNarBar title="地址管理"></myNarBar>
+    <van-address-list
+        v-model="chosenAddressId"
+        :list="address_list"
+        @add="onAdd"
+        @edit="onEdit"
+    />
+  </div>
 
 </template>
 
@@ -101,13 +101,10 @@
         },
     };
 </script>
-
 <style lang="scss" scoped>
-	.van-address-list__add {
-		position: fixed !important;
-	}
-
-	.van-address-item__edit {
-		position: absolute !important;
-	}
+  .user-address-main {
+		.van-address-item__edit{
+			position: absolute !important;
+		}
+  }
 </style>

@@ -3,7 +3,9 @@
     <every-day-page :api-base-url="apiBaseUrl"
                     :head-open="false"
                     @ad-location-click="adLocationClick"
-                    @goods-card-click="goodsCardClick"
+                    @goods-card-click="(goodsInfo)=>{
+                        this.$MyCommon.goodsCardClick(this,goodsInfo);
+                    }"
                     @back-click="$router.go(-1)"/>
   </div>
 </template>

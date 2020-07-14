@@ -1,3 +1,5 @@
+import Router from 'vue-router'
+
 export default {
     //公共常量
     //岗隆
@@ -153,5 +155,19 @@ export default {
             r.push(array[i]);
         }
         return r;
-    }
+    },
+
+    /**
+     *商品卡片点击
+     * @param goodsInfo
+     */
+    goodsCardClick(vm,goodsInfo) {
+        const router = new Router();
+        if (goodsInfo.goodsId && goodsInfo.goodsId > 0) {
+            vm.$router.push({
+                path: '/goods/' + goodsInfo.goodsId,
+                query: {goodsName: goodsInfo.goodsName, goodsImg: goodsInfo.goodsImg}
+            });
+        }
+    },
 }

@@ -3,7 +3,7 @@
       :api-base-url="baseApiUrl"
       :show-right-button="false"
       :goods-name="goodsName"
-      :goods-main-img="goodsMainImg"
+      :goods-main-img="goodsImg"
       :sku-id="skuId"
       :is-open="false"
       :cart-number="cartNumber"
@@ -11,7 +11,9 @@
       :goods-id="goodsId"
       @coupon-click="couponClick"
       @get-more-evaluate="getMoreEvaluate"
-      @goods-card-click="goodsCardClick"
+      @goods-card-click="(goodsInfo)=>{
+          this.$MyCommon.goodsCardClick(this,goodsInfo);
+      }"
       @online-customer-service="onlineCustomerService"
       @phone-service="phoneService"
       @shop-car-click="shopCarClick"
@@ -20,6 +22,7 @@
       @page-complete="pageComplete"
       @back-button-click="backButtonClick"
       @image-preview="showImagePreview"
+      @sku-switched="skuSwitched"
   />
 </template>
 
@@ -35,7 +38,7 @@
             return {
                 baseApiUrl: process.env.VUE_APP_API_URL,
                 goodsName: "",
-                goodsMainImg: "",
+                goodsImg: "",
                 goodsId: "472",
                 skuId: 0,
                 cartNumber: 0,
@@ -43,6 +46,8 @@
         },
         created() {
             const goodsId = this.$route.params.goods_id;
+            this.goodsName = this.$route.query.goodsName ? this.$route.query.goodsName : "";
+            this.goodsImg = this.$route.query.goodsImg ? this.$route.query.goodsImg : "";
             this.initGoodsPage(goodsId);
         },
         beforeRouteUpdate(to) {
@@ -113,13 +118,8 @@
                 this.$router.push('/writeOrder');
             },
             //页面准备完成
-            pageComplete(cartInfo) {
-                let share_url = (this.$store.state.local_url + "?gl_goods_id=" + this.goodsId);
-                commonShare(this,
-                    cartInfo.goods_name,
-                    share_url,
-                    cartInfo.goods_attribute_img,
-                    '江苏岗隆数码-您身边的数码产品服务商');
+            pageComplete() {
+                console.log('商品页面加载完成');
             },
             //返回按钮点击
             backButtonClick() {
@@ -127,6 +127,15 @@
             },
             showImagePreview(imgSrc) {
                 ImagePreview([imgSrc]);
+            },
+            //sku切换
+            skuSwitched(cartInfo) {
+                let share_url = (this.$store.state.local_url + "?gl_goods_id=" + this.goodsId);
+                commonShare(this,
+                    cartInfo.goods_name,
+                    share_url,
+                    cartInfo.goods_attribute_img,
+                    '江苏岗隆数码-您身边的数码产品服务商');
             }
         },
         components: {
