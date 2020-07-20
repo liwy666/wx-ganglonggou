@@ -13,7 +13,7 @@ var user_token_ = VueCookies.get(tokenName);
 /*初始化选中购物车*/
 if (carts_.length > 0) {
     carts_.forEach(item => {
-        if (item.selected === true) {
+        if (item.selected) {
             carts_selected_.push(item);
         }
     })
@@ -226,9 +226,12 @@ let store = new Vuex.Store({
             let flag = false;
             /* 购物车初始化*/
             goods_info.cart_is = true;//购物车有效
-            goods_info.selected = true;//购物车被选中
+
+            if (!goods_info.hasOwnProperty('selected')) {
+                goods_info.selected = true;//购物车被选中
+            }
             data.some(item => {
-                if (item.goods_id === goods_info.goods_id && item.sku_id === goods_info.sku_id) {
+                if (item.goods_id.toString() === goods_info.goods_id.toString() && item.sku_id === goods_info.sku_id) {
                     item.goods_number = parseInt(item.goods_number) + parseInt(goods_info.goods_number);
                     flag = true;
                     return true
@@ -303,18 +306,11 @@ let store = new Vuex.Store({
         /**
          * 更新购物车数量
          * @param state
+         * @param cartInfo {previewCart: {goodsId: 384, skuId: 31128},number:2}
          */
-        updCartNumber(state, cart_info) {
-
-            let index = (state.carts.findIndex(item => item.goods_id === cart_info.goods_id && item.sku_id === cart_info.sku_id));
-            Vue.set(state.carts[index], 'goods_number', cart_info.goods_number);
-            //更新购物车价格,积分
-            state.carts.forEach(item => {
-                Vue.set(item, 'goods_price', (item.goods_number * item.one_goods_price).toFixed(2));
-                Vue.set(item, 'give_integral', (item.goods_number * item.one_give_integral));
-                Vue.set(item, 'integral', (item.goods_number * item.one_integral));
-            });
-
+        updCartNumber(state, cartInfo) {
+            const index = state.carts.findIndex(item => item.goods_id.toString() === cartInfo.previewCart.goodsId.toString() && item.sku_id === cartInfo.previewCart.skuId);
+            Vue.set(state.carts[index], 'goods_number', cartInfo.number);
             //遍历购物车，puse到carts_selected中
             state.carts_selected = [];
             state.carts.forEach(item => {
@@ -329,11 +325,11 @@ let store = new Vuex.Store({
         /**
          * 删除购物车
          * @param state
-         * @param cart_info
+         * @param cartInfo
          */
-        delCart(state, cart_info) {
+        delCart(state, cartInfo) {
 
-            state.carts.splice(state.carts.findIndex(item => item.goods_id === cart_info.goods_id && item.sku_id === cart_info.sku_id), 1);
+            state.carts.splice(state.carts.findIndex(item => item.goods_id.toString() === cartInfo.goodsId.toString() && item.sku_id === cartInfo.skuId), 1);
 
             // 当 更新 carts 之后，把 carts 数组，存储到 本地的 localStorage 中
             localStorage.setItem('carts', JSON.stringify(state.carts));
@@ -345,19 +341,16 @@ let store = new Vuex.Store({
                     state.carts_selected.push(item);
                 }
             })
-
         },
 
         /**
          * 切换购物车选中状态
          * @param state
-         * @param cart_info
+         * @param cartInfo {previewCart: {goodsId: 384, skuId: 31128},state: true}
          */
-        updCartSelected(state, cart_info) {
-            let index = (state.carts.findIndex(item => item.goods_id === cart_info.goods_id && item.sku_id === cart_info.sku_id));
-            cart_info.selected = !cart_info.selected;
-            state.carts[index].selected = cart_info.selected;
-
+        updCartSelected(state, cartInfo) {
+            const index = state.carts.findIndex(item => item.goods_id.toString() === cartInfo.previewCart.goodsId.toString() && item.sku_id === cartInfo.previewCart.skuId);
+            state.carts[index].selected = cartInfo.state;
             //遍历购物车，puse到carts_selected中
             state.carts_selected = [];
             state.carts.forEach(item => {
@@ -368,7 +361,6 @@ let store = new Vuex.Store({
 
             // 当 更新 carts 之后，把 carts 数组，存储到 本地的 localStorage 中
             localStorage.setItem('carts', JSON.stringify(state.carts));
-
         },
 
         /**
@@ -704,7 +696,6 @@ let store = new Vuex.Store({
                 state.carts.forEach(function () {
                     c++;
                 });
-
             }
             return c
         },

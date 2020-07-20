@@ -44,7 +44,7 @@
             pageLoadFail(errorMsg) {
                 console.log(`页面加载失败:${errorMsg}`);
             },
-            writeOrderSuccess(resultObject) {
+            writeOrderSuccess(orderSn) {
                 //删除购物车
                 const cartsSelected = this.$store.getters.getCartsSelected;
                 cartsSelected.forEach(item => {
@@ -55,7 +55,7 @@
                 //刷新订单表
                 this.$store.dispatch("getOrderList", this.$store.getters.getUserToken);
                 //导航到订单查看
-                this.$router.replace('/seeOrder/' + resultObject.orderSn);
+                this.$router.replace('/seeOrder/' + orderSn);
             },
             writeOrderFail(errorMsg) {
                 this.$toast(`提交订单失败:${errorMsg}`);
