@@ -2,7 +2,7 @@
   <div class="prompt-goods-page-main">
     <prompt-goods-page :api-base-url="apiBaseUrl"
                        :head-open="false"
-                       @goods-card-click="goodsCardClick"
+                       @goods-card-click="(goodsInfo)=>{this.$MyCommon.goodsCardClick(this,goodsInfo)}"
                        @back-click="$router.go(-1)"
     />
   </div>

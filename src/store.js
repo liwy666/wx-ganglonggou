@@ -279,7 +279,7 @@ let store = new Vuex.Store({
         /**
          * 更新购物车
          * @param state
-         * @param item
+         * @param goods_info
          */
         updCart(state, goods_info) {
             //更新购物车

@@ -111,10 +111,13 @@
                 //    添加当前商品到购物车
                 this.$store.commit('addCart', cartInfo);
                 //更新购物车数量
-                this.$store.commit("updCartNumber", cartInfo);
+                this.$store.commit("updCartNumber", {
+                    previewCart: {goodsId: cartInfo.goods_id, skuId: cartInfo.sku_id},
+                    number: cartInfo.goods_number
+                });
                 //打开此件商品开关
                 this.$store.commit("openCartSelected", cartInfo);
-                //    跳转提交页面
+                //跳转提交页面
                 this.$router.push('/writeOrder');
             },
             //页面准备完成

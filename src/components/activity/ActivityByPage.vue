@@ -2,7 +2,7 @@
   <div class="by-page-main">
     <by-page :api-base-url="apiBaseUrl"
              :head-open="false"
-             @goods-card-click="goodsCardClick"
+             @goods-card-click="(goodsInfo)=>{this.$MyCommon.goodsCardClick(this,goodsInfo)}"
              @back-click="$router.go(-1)"
     />
   </div>
@@ -17,11 +17,6 @@
                 apiBaseUrl: process.env.VUE_APP_API_URL + '/',
             }
         },
-        methods: {
-            goodsCardClick(goodsId) {
-                this.$router.push(`goods/${goodsId}`);
-            }
-        }
     }
 </script>
 

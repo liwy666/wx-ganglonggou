@@ -1,7 +1,7 @@
 <template>
   <shop-carts-components :api-base-url="apiBaseUrl"
                          :head-open="false"
-                         :show-back-button="true"
+                         :show-back-button="false"
                          :carts-preview="cartsPreview"
                          @add-cart="addCart"
                          @delete-cart="deleteCart"
@@ -59,11 +59,11 @@
             },
             //添加购物车
             addCart(cartInfo) {
+                console.log(cartInfo);
                 this.$store.commit('addCart', cartInfo);
             },
             //删除购物车
             deleteCart(cartInfo) {
-                console.log(cartInfo.goodsId);
                 this.$store.commit('delCart', cartInfo);
             },
             //更新购物车数量

@@ -57,7 +57,7 @@
                 return object;
             },
             getRouteByUrl(url) {
-                let rex = new RegExp('#/(.*)(\\?)?');
+                let rex = new RegExp('#/([^?]*)');
                 let resultArray = rex.exec(url);
                 if (resultArray === null || resultArray.length < 2) return "";
                 return resultArray[1];

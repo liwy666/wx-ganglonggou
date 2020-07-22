@@ -10,7 +10,7 @@
       </div>
       <div class="base-box">
         <div class="base" v-for="(item,i) in classify_list" :key="item.id" v-show="i===active_key">
-          <div class="title" v-if="item.bar_img"><img :src="item.bar_img" alt="" @click="toSearch(item)">
+          <div class="title" v-if="item.bar_img"><img :src="item.bar_img" alt="" @click="toGoodsPage(item)">
           </div>
           <div style="height:1rem" v-if="!item.bar_img"></div>
           <div class="body">
@@ -155,7 +155,9 @@
                         }
                     });
                 }
-
+            }
+            ,toGoodsPage(info) {
+                this.$router.push(`/goods/${info.goods_id}`);
             }
         },
         components: {

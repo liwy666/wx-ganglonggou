@@ -30,7 +30,11 @@
              * @param msg true是激活成功，false是激活失败
              */
             activationCase(msg) {
-
+                if (msg) {
+                    this.$dialog.alert({
+                        message: '礼品卡激活成功',
+                    })
+                }
             }
         },
         components: {
