@@ -328,7 +328,10 @@ let store = new Vuex.Store({
          * @param cartInfo
          */
         delCart(state, cartInfo) {
-            console.log(cartInfo);
+
+            if (!cartInfo.hasOwnProperty('goods_id')) {
+                cartInfo.goods_id = cartInfo.goodsId;
+            }
             state.carts.splice(state.carts.findIndex(item => item.goods_id.toString() === cartInfo.goods_id.toString() && item.sku_id === cartInfo.skuId), 1);
 
             // 当 更新 carts 之后，把 carts 数组，存储到 本地的 localStorage 中
