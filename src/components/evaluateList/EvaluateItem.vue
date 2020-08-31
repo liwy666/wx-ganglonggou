@@ -5,10 +5,7 @@
         <div class="evaluate-user-head">
           <div class="evaluate-user-head-l"><img :src="evaluate_info.user_img" alt=""></div>
           <div class="evaluate-user-head-m">
-            <p class="evaluate-user-name">{{this.evaluate_info.user_name}}</p>
-            <p>
-              <van-rate v-model="this.evaluate_info.rate" readonly/>
-            </p>
+            <div class="evaluate-user-name">{{this.evaluate_info.user_name}}</div>
           </div>
           <div class="evaluate-user-head-r">
             {{this.evaluate_info.create_time.substring(0,10)}}
@@ -18,9 +15,11 @@
         <div class="evaluate-desc">{{this.evaluate_info.sku_desc}}</div>
       </div>
       <div class="evaluate-img"></div>
+      <div class="rate-box">
+        <van-rate v-model="this.evaluate_info.rate" readonly size="15px"/>
+      </div>
       <div class="evaluate-admin" v-if="evaluate_info.parent_id !== 0">
         <span>&nbsp;&nbsp;&nbsp;&nbsp;岗隆数码：</span>
-
       </div>
     </div>
   </div>
@@ -63,7 +62,6 @@
 
         .evaluate-user-head-l {
           flex: 1;
-          border-radius: 50%;
           overflow: hidden;
 
           img {
@@ -74,10 +72,12 @@
         .evaluate-user-head-m {
           margin-left: 5px;
           flex: 4;
-
           .evaluate-user-name {
             font-size: 12px;
             font-weight: bold;
+          }
+          .rate-box{
+
           }
         }
 
