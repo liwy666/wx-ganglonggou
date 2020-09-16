@@ -126,7 +126,12 @@
             },
             //返回按钮点击
             backButtonClick() {
-                this.$router.go(-1);
+                if (window.history.length <= 1) {
+                    this.$router.push({path: '/'});
+                    return false
+                } else {
+                    this.$router.go(-1)
+                }
             },
             showImagePreview(imgSrc) {
                 ImagePreview([imgSrc]);
